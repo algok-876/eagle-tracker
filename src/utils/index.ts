@@ -1,19 +1,49 @@
 /**
- * 创建HtmlElement
- * @param tag 标签名
- * @returns
+ * 解析错误类型
+ * @param errorMessage 原始错误字符串
+ * @returns 错误类型
  */
-export function h(tag: string) {
-  return document.createElement(tag);
+export function parseTypeError(errorMessage: string) {
+  const regex = /TypeError|SyntaxError|RangeError|URIError|ReferenceError/;
+  const match = errorMessage.match(regex);
+
+  if (match) {
+    return match[0];
+  }
+  return 'unknown error';
 }
 
 /**
-   * 通过style标签向目标DOM添加css样式
-   * @param target 目标DOM
-   * @param style 样式
-   */
-export function addStyleDom(target: HTMLElement, style: string) {
-  const styleDom = h('style');
-  styleDom.textContent = style;
-  target.append(styleDom);
+ * 防抖函数
+ * @param func 需要防抖的函数
+ * @param delay 延迟执行的时间
+ * @param callback 函数执行后的回调函数
+ * @returns 防抖后的函数
+ */
+export function debounce(func: Function, delay: number, callback?: Function) {
+  let timer;
+  return (...args: any[]) => {
+    const context = this;
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+      func.apply(context, args);
+      if (callback) {
+        callback();
+      }
+    }, delay);
+  };
+}
+
+/**
+ *  判断两个错误日志是否是来源于同一个错误
+ * @param first 第一个错误
+ * @param second 第二个错误
+ * @returns 判断结果
+ */
+// TODO 判断逻辑很粗略，后序视具体情况更改
+export function isSameErrorLog(first: IErrorLog, second: IErrorLog) {
+  return first.type === second.type
+    && first.lineno === second.lineno
+    && first.colno === second.colno;
 }
