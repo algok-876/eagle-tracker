@@ -1,3 +1,5 @@
+import { StackFrame } from 'stacktrace-js';
+
 export interface IBasicErrorLog {
   /**
   * 页面标题
@@ -7,14 +9,6 @@ export interface IBasicErrorLog {
    * 错误类型
    */
   errorType: 'jsError' | 'promiseError' | 'resourceError'
-  /**
-   * 行号
-   */
-  lineno: number
-  /**
-   * 列号
-   */
-  colno: number
   /**
    * 发生错误的时间戳
    */
@@ -45,7 +39,7 @@ export interface IJsErrorLog extends IBasicErrorLog {
   /**
    * 错误堆栈
    */
-  stack: string,
+  stack: StackFrame[],
 }
 
 export interface IPromiseErrorLog extends IBasicErrorLog {

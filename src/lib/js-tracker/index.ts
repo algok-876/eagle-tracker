@@ -1,3 +1,4 @@
+import StackTrace from 'stacktrace-js';
 import { debounce, isSameErrorLog, parseTypeError } from '../../utils';
 import {
   ITrackerOption, IErrorLog, IPromiseErrorLog, IJsErrorLog,
@@ -28,7 +29,8 @@ export default class Tracker {
       // Tracker.errorList.length = 0;
     });
     // 监听全局error事件
-    window.addEventListener('error', (event) => {
+    window.addEventListener('error', (async (event) => {
+      const stack = await StackTrace.fromError(event.error);
       // 收集错误信息
       const errorLog: IJsErrorLog = {
         title: document.title,
@@ -36,26 +38,20 @@ export default class Tracker {
         mechanism: 'onerror',
         message: event.error.message,
         url: `${window.location.href}${window.location.pathname}`,
-        lineno: event.lineno,
-        colno: event.colno,
         timestamp: Date.now(),
         filename: event.filename,
-        stack: event.error.stack,
+        stack,
         type: parseTypeError(event.message),
       };
       Tracker.handleError(errorLog);
-    }, true);
+    }), true);
     window.addEventListener('unhandledrejection', (event) => {
-      const line = 0;
-      const column = 0;
       const { reason } = event;
       const errorLog: IPromiseErrorLog = {
         title: document.title,
         errorType: 'promiseError',
         mechanism: 'onerror',
         url: `${window.window.location.href}${window.window.location.pathname}`,
-        lineno: line,
-        colno: column,
         timestamp: Date.now(),
         type: event.type,
         reason,
