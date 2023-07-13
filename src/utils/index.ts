@@ -1,3 +1,4 @@
+import Config from '../lib/config';
 /**
  * 解析错误类型
  * @param errorMessage 原始错误字符串
@@ -46,4 +47,10 @@ export function isSameErrorLog(first: IErrorLog, second: IErrorLog) {
   return first.type === second.type
     && first.lineno === second.lineno
     && first.colno === second.colno;
+}
+
+export function debugLogger(...args: any[]) {
+  if (Config.get().is_test) {
+    console.info(...args);
+  }
 }

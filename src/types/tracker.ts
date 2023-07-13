@@ -1,4 +1,4 @@
-interface IBasicErrorLog {
+export interface IBasicErrorLog {
   /**
   * 页面标题
   */
@@ -29,7 +29,7 @@ interface IBasicErrorLog {
   mechanism: 'onerror' | 'onunhandledrejection'
 }
 
-interface IJsErrorLog extends IBasicErrorLog {
+export interface IJsErrorLog extends IBasicErrorLog {
   /**
    * 发生错误的代码文件
    */
@@ -48,7 +48,7 @@ interface IJsErrorLog extends IBasicErrorLog {
   stack: string,
 }
 
-interface IPromiseErrorLog extends IBasicErrorLog {
+export interface IPromiseErrorLog extends IBasicErrorLog {
   type: string
   /**
    * promise被拒绝的原因
@@ -57,9 +57,9 @@ interface IPromiseErrorLog extends IBasicErrorLog {
 }
 
 /** 统一错误信息类型 */
-type IErrorLog = IJsErrorLog | IPromiseErrorLog
+export type IErrorLog = IJsErrorLog | IPromiseErrorLog
 
-interface IDefOption {
+export interface ITrackerOption {
   concat: boolean,
   /**
    * 错误处理间隔时间
