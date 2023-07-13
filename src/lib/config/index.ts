@@ -1,5 +1,4 @@
 import { merge, cloneDeep, get } from 'lodash-es';
-import { IGlobalConfig } from '../../types/config';
 import { debugLogger } from '../../utils';
 
 // 默认配置

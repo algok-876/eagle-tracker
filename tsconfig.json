@@ -14,11 +14,9 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "downlevelIteration": true,
-    "types": [
-    ]
   },
   "include": [
-    "src/**/*",
+    "./src/**/*",
    ],
   "exclude": [
     "node_modules"

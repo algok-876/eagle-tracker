@@ -1,6 +1,4 @@
-import { ITrackerOption } from './tracker';
-
-export interface IGlobalConfig {
+interface IGlobalConfig {
   pid: '',
   uuid: '',
   ucid: '',

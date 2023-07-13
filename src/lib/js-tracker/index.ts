@@ -1,8 +1,5 @@
 import StackTrace from 'stacktrace-js';
 import { debounce, isSameErrorLog, parseTypeError } from '../../utils';
-import {
-  ITrackerOption, IErrorLog, IPromiseErrorLog, IJsErrorLog,
-} from '../../types/tracker';
 
 export default class Tracker {
   private static options: ITrackerOption = {
@@ -65,7 +62,7 @@ export default class Tracker {
    * @param sampling 采样率
    * @returns {boolean}
    */
-  private static needReport(sampling: number = 1) {
+  private static needReport(sampling = 1) {
     return Math.random() < (sampling || 1);
   }
 

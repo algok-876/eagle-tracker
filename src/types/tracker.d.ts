@@ -1,6 +1,5 @@
-import { StackFrame } from 'stacktrace-js';
-
-export interface IBasicErrorLog {
+// import { StackFrame } from 'stacktrace-js';
+interface IBasicErrorLog {
   /**
   * 页面标题
   */
@@ -23,7 +22,7 @@ export interface IBasicErrorLog {
   mechanism: 'onerror' | 'onunhandledrejection'
 }
 
-export interface IJsErrorLog extends IBasicErrorLog {
+interface IJsErrorLog extends IBasicErrorLog {
   /**
    * 发生错误的代码文件
    */
@@ -39,10 +38,10 @@ export interface IJsErrorLog extends IBasicErrorLog {
   /**
    * 错误堆栈
    */
-  stack: StackFrame[],
+  stack: StackTrace.StackFrame[],
 }
 
-export interface IPromiseErrorLog extends IBasicErrorLog {
+interface IPromiseErrorLog extends IBasicErrorLog {
   type: string
   /**
    * promise被拒绝的原因
@@ -51,9 +50,9 @@ export interface IPromiseErrorLog extends IBasicErrorLog {
 }
 
 /** 统一错误信息类型 */
-export type IErrorLog = IJsErrorLog | IPromiseErrorLog
+type IErrorLog = IJsErrorLog | IPromiseErrorLog
 
-export interface ITrackerOption {
+interface ITrackerOption {
   concat: boolean,
   /**
    * 错误处理间隔时间

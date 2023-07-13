@@ -1,7 +1,7 @@
 /**
  * 注释信息
  */
-export interface DataItem {
+interface DataItem {
     /**
      * 唯一标识
      */
