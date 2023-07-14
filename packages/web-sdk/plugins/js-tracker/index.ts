@@ -1,8 +1,11 @@
 import StackTrace from 'stacktrace-js';
-import { debounce, isSameErrorLog, parseTypeError } from '../../utils';
+import { merge } from 'lodash-es';
+import { debounce, isSameErrorLog } from '../../utils';
+import Eagle from '../../index';
 
 export default class Tracker {
-  private static options: ITrackerOption = {
+  private options: ITrackerOption = {
+    enable: true,
     maxError: 16,
     sampling: 1,
     delay: 2000,
@@ -11,20 +14,36 @@ export default class Tracker {
   };
 
   // 错误日志列表
-  private static errorList: IErrorLog[] = [];
+  private errorList: IErrorLog[] = [];
 
-  private static report: (log: IErrorLog[]) => void;
+  // 防抖版本的上报回调
+  private report: (log: IErrorLog[]) => void;
 
-  // 初始化错误监听
-  static init(opt?: Partial<ITrackerOption>) {
+  // 插件挂载的宿主
+  private host: Eagle;
+
+  /**
+   * 错误监控类
+   * @param host 插件宿主
+   * @param opt 插件配置
+   */
+  constructor(host: Eagle, opt?: Partial<ITrackerOption>) {
+    this.host = host;
     // 覆盖默认配置
-    Object.assign(Tracker.options, opt);
-    const { report, delay } = Tracker.options;
+    this.options = merge(this.options, opt);
+    const { report, delay } = this.options;
     // 包装一下report的防抖版本，用于延迟上报错误的场景
-    Tracker.report = debounce(report, delay, () => {
+    this.report = debounce(report, delay, () => {
       // 上报成功后清空错误列表，避免重复上报
       // Tracker.errorList.length = 0;
     });
+    // 不监控错误
+    if (!this.options.enable) {
+      if (this.host.configInstance.get().is_test) {
+        this.host.debugLogger('[测试环境]已关闭监控JS运行时错误，如需开启请设置record.tracker.enable为true');
+      }
+      return;
+    }
     // 监听全局error事件
     window.addEventListener('error', (async (event) => {
       const stack = await StackTrace.fromError(event.error);
@@ -38,9 +57,9 @@ export default class Tracker {
         timestamp: Date.now(),
         filename: event.filename,
         stack,
-        type: parseTypeError(event.message),
+        type: this.host.parseTypeError(event.message),
       };
-      Tracker.handleError(errorLog);
+      this.handleError(errorLog);
     }), true);
     window.addEventListener('unhandledrejection', (event) => {
       const { reason } = event;
@@ -53,7 +72,7 @@ export default class Tracker {
         type: event.type,
         reason,
       };
-      Tracker.handleError(errorLog);
+      this.handleError(errorLog);
     });
   }
 
@@ -62,7 +81,7 @@ export default class Tracker {
    * @param sampling 采样率
    * @returns {boolean}
    */
-  private static needReport(sampling = 1) {
+  private needReport(sampling = 1) {
     return Math.random() < (sampling || 1);
   }
 
@@ -70,16 +89,16 @@ export default class Tracker {
    * 将错误信息加入错误列表中
    * @param errorLog 错误信息
    */
-  private static pushError(errorLog: IErrorLog) {
-    const exists = Tracker.errorList.findLastIndex((val) => isSameErrorLog(val, errorLog));
+  private pushError(errorLog: IErrorLog) {
+    const exists = this.errorList.findLastIndex((val) => isSameErrorLog(val, errorLog));
     // 相同的错误已存在错误列表中，不用重复上报
-    if (exists >= 0 && Tracker.errorList.length !== 0) {
+    if (exists >= 0 && this.errorList.length !== 0) {
       return;
     }
 
-    if (Tracker.needReport(Tracker.options.sampling)
-      && Tracker.errorList.length < Tracker.options.maxError) {
-      Tracker.errorList.push(errorLog);
+    if (this.needReport(this.options.sampling)
+      && this.errorList.length < this.options.maxError) {
+      this.errorList.push(errorLog);
     }
   }
 
@@ -88,18 +107,18 @@ export default class Tracker {
    * @param errorLog 错误信息
    * @returns
    */
-  private static handleError(errorLog: IErrorLog) {
+  private handleError(errorLog: IErrorLog) {
     // 采样率决定不需要上报
-    if (!Tracker.needReport()) {
+    if (!this.needReport()) {
       return;
     }
-    const { concat, report } = Tracker.options;
+    const { concat, report } = this.options;
     // 是否立即上报
     if (!concat) {
       report(errorLog);
     } else {
-      Tracker.pushError(errorLog);
-      Tracker.report(Tracker.errorList);
+      this.pushError(errorLog);
+      this.report(this.errorList);
     }
   }
 }

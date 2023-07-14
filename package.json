@@ -9,7 +9,7 @@
     "serve": "vite",
     "build": "run-s build:*",
     "build:source": "vite build",
-    "build:type": "tsup src/index.ts --dts-only",
+    "build:type": "tsup packages/web-sdk/index.ts packages/mp-sdk/index.ts --dts-only",
     "lint": "eslint src --fix --ext .ts"
   },
   "keywords": [],
@@ -17,6 +17,7 @@
   "license": "ISC",
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.3.1",
+    "@types/node": "^20.4.2",
     "@typescript-eslint/eslint-plugin": "^5.17.0",
     "@typescript-eslint/parser": "^5.17.0",
     "eslint": "^8.12.0",
@@ -30,7 +31,7 @@
     "tslib": "^2.3.1",
     "tsup": "^5.12.2",
     "typescript": "^4.6.3",
-    "vite": "^2.9.1"
+    "vite": "^4.3.9"
   },
   "dependencies": {
     "@types/lodash-es": "^4.17.7",

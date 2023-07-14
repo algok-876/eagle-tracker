@@ -1,4 +1,4 @@
-import Config from '../lib/config';
+import Config from '../plugins/config';
 /**
  * 解析错误类型
  * @param errorMessage 原始错误字符串
@@ -44,13 +44,5 @@ export function debounce(func: Function, delay: number, callback?: Function) {
  */
 // TODO 判断逻辑很粗略，后序视具体情况更改
 export function isSameErrorLog(first: IErrorLog, second: IErrorLog) {
-  return first.type === second.type
-    && first.lineno === second.lineno
-    && first.colno === second.colno;
-}
-
-export function debugLogger(...args: any[]) {
-  if (Config.get().is_test) {
-    console.info(...args);
-  }
+  return first.type === second.type;
 }

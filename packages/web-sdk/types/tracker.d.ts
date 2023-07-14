@@ -53,19 +53,23 @@ interface IPromiseErrorLog extends IBasicErrorLog {
 type IErrorLog = IJsErrorLog | IPromiseErrorLog
 
 interface ITrackerOption {
-  concat: boolean,
+  /**
+   * 是否开启错误监控
+   */
+  enable: boolean
+  concat: boolean
   /**
    * 错误处理间隔时间
    */
-  delay: number,
+  delay: number
   /**
    * 异常报错数量限制
    */
-  maxError: number,
+  maxError: number
   /**
    * 采样率
    */
-  sampling: number,
+  sampling: number
   /**
    * 上报逻辑
    * @param log 错误信息或者错误列表

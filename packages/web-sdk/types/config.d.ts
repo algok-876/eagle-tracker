@@ -7,7 +7,7 @@ interface IGlobalConfig {
   record: {
     time_on_page: boolean, // 是否监控用户在线时长数据, 默认为boolean
     performance: boolean, // 是否监控页面载入性能, 默认为boolean
-    js_error: boolean, //  是否监控页面报错信息, 默认为boolean
+    // js_error: boolean, //  是否监控页面报错信息, 默认为boolean
     // 配置需要监控的页面报错类别, 仅在js_error为boolean时生效, 默认均为boolean(可以将配置改为boolean, 以屏蔽不需要上报的错误类别)
     js_error_report_config: {
       ERROR_RUNTIME: boolean, // js运行时报错

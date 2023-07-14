@@ -15,8 +15,11 @@
     "noImplicitReturns": true,
     "downlevelIteration": true,
   },
+  "lib": [
+    "node"
+  ],
   "include": [
-    "./src/**/*",
+    "./packages/**/*",
    ],
   "exclude": [
     "node_modules"
