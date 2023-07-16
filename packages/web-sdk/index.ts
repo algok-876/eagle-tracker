@@ -30,7 +30,7 @@ export default class Eagle extends Core {
       },
     });
     this.vitalsInstance = new WebVitals(this, (data) => {
-      console.log(data);
+      this.transportInstance.log(TransportCategory.PERF, data);
     });
   }
 }

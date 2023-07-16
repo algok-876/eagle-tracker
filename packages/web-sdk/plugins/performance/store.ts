@@ -11,14 +11,14 @@ export enum metricsName {
   RF = 'resource-flow',
 }
 
-export interface IMetrics {
-  [prop: string | number]: any;
-}
+export type IMetrics = number | any
 
-// Map 暂存数据
 export default class metricsStore {
   state: Map<metricsName | string, IMetrics>;
 
+  /**
+   * Map 暂存数据
+   */
   constructor() {
     this.state = new Map<metricsName | string, IMetrics>();
   }

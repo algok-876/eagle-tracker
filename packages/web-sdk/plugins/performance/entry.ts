@@ -8,21 +8,6 @@ export const getFCP = (): PerformanceEntry | undefined => {
   return entry;
 };
 
-export interface MPerformanceNavigationTiming {
-  FP?: number;
-  TTI?: number;
-  DomReady?: number;
-  Load?: number;
-  FirstByte?: number;
-  DNS?: number;
-  TCP?: number;
-  SSL?: number;
-  TTFB?: number;
-  Trans?: number;
-  DomParse?: number;
-  Res?: number;
-}
-
 // 获取 NT
 export const getNavigationTiming = (): MPerformanceNavigationTiming | undefined => {
   const resolveNavigationTiming = (entry: PerformanceNavigationTiming):

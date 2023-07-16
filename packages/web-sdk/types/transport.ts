@@ -3,7 +3,7 @@ import { TransportCategory } from './enum';
 /**
  * 上报的数据类型
  */
-export type TransportData = IErrorLog
+export type TransportData = IErrorLog | PerformanceData | ResourceItem
 
 /**
  * 上报数据的最终形式

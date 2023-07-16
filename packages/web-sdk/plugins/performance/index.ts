@@ -1,12 +1,28 @@
 import MetricsStore, { metricsName, IMetrics } from './store';
 import { getFP, getFCP, getNavigationTiming } from './entry';
 import Eagle from '../../index';
+import { TransportCategory } from '../../types/enum';
 
-export interface PerformanceEntryHandler {
+interface PerformanceEntryHandler {
   (entry: PerformanceEntryList): void;
 }
 
-export const afterLoad = (callback: any) => {
+/**
+ * 在load事件执行回调
+ * @param callback 事件回调
+ */
+const load = (callback: any) => {
+  window.addEventListener('load', callback, {
+    once: true,
+    capture: true,
+  });
+};
+
+/**
+ * 在load事件之后执行回调
+ * @param callback 事件回调
+ */
+const afterLoad = (callback: any) => {
   if (document.readyState === 'complete') {
     setTimeout(callback);
   } else {
@@ -33,10 +49,16 @@ export default class WebVitals {
 
   host: Eagle;
 
-  constructor(host: Eagle, report: (data: any) => void) {
+  /**
+   * 收集web性能数据
+   * @param host 插件数组
+   * @param report 上报回调
+   */
+  constructor(host: Eagle, report: (data: PerformanceData) => void) {
     this.host = host;
     this.metrics = new MetricsStore();
-    afterLoad(() => {
+
+    load(() => {
       this.initLCP();
       this.initFP();
       this.initFCP();
@@ -45,9 +67,17 @@ export default class WebVitals {
       this.initFID();
       this.initNavigationTiming();
       this.initResourceFlow();
-      setTimeout(() => {
-        report(this.metrics.getValues());
-      }, 2000);
+    });
+
+    afterLoad(() => {
+      const origin = this.metrics.getValues();
+      const data: PerformanceData = {
+        fp: origin[metricsName.FP],
+        fcp: origin[metricsName.FCP],
+        lcp: origin[metricsName.LCP],
+        nav: origin[metricsName.NT],
+      };
+      report(data);
     });
   }
 
@@ -60,34 +90,20 @@ export default class WebVitals {
   // 初始化 FP 的获取以及返回
   initFP = (): void => {
     const entry = getFP();
-    const metrics = {
-      startTime: entry?.startTime.toFixed(2),
-      entry,
-    } as IMetrics;
-
-    this.metrics.set(metricsName.FP, metrics);
+    this.metrics.set(metricsName.FP, entry?.startTime);
   };
 
   // 初始化 FCP 的获取以及返回
   initFCP = (): void => {
     const entry = getFCP();
-    const metrics = {
-      startTime: entry?.startTime.toFixed(2),
-      entry,
-    } as IMetrics;
-
-    this.metrics.set(metricsName.FCP, metrics);
+    this.metrics.set(metricsName.FCP, entry?.startTime);
   };
 
   // 初始化 LCP 的获取以及返回
   initLCP = (): void => {
     observe('largest-contentful-paint', (entryList) => {
       const entry = entryList[0];
-      const metrics = {
-        startTime: entry?.startTime.toFixed(2),
-        entry,
-      } as IMetrics;
-      this.metrics.set(metricsName.LCP, metrics);
+      this.metrics.set(metricsName.LCP, entry.startTime);
     });
   };
 
@@ -99,19 +115,17 @@ export default class WebVitals {
       const delay = entry.processingStart - entry.startTime;
       this.metrics.set(metricsName.FID, {
         delay,
-        entry,
+        meta: entry,
       });
     });
   };
 
   // 初始化 CLS 的获取以及返回
   initCLS = (): void => {
-    // ... 详情代码在下文
   };
 
   // 初始化 NT 的获取以及返回
   initNavigationTiming = (): void => {
-    // ... 详情代码在下文
     const navigationTiming = getNavigationTiming();
     const metrics = navigationTiming as IMetrics;
     this.metrics.set(metricsName.NT, metrics);
@@ -119,6 +133,16 @@ export default class WebVitals {
 
   // 初始化 RF 的获取以及返回
   initResourceFlow = (): void => {
-    // ... 详情代码在下文
+    const entry = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
+    const data: ResourceItem[] = entry.map((item) => ({
+      name: item.name,
+      loadTime: item.duration,
+      contentDownloadTime: item.responseEnd - item.responseStart,
+      totalTransTime: item.responseEnd - item.requestStart,
+      size: item.encodedBodySize,
+      type: item.initiatorType,
+    }));
+    // 资源数据单独上报
+    this.host.transportInstance.log(TransportCategory.RS, data, true);
   };
 }
