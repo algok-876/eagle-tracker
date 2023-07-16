@@ -2,7 +2,7 @@ import StackTrace from 'stacktrace-js';
 import { merge } from 'lodash-es';
 import { debounce } from '../../utils';
 import Eagle from '../../index';
-import { TransportType } from '../../types/enum';
+import { ErrorType } from '../../types/enum';
 
 export default class Tracker {
   private options: ITrackerOption = {
@@ -63,7 +63,7 @@ export default class Tracker {
       // 收集错误信息
       const errorLog: IJsErrorLog = {
         title: document.title,
-        errorType: 'jsError',
+        errorType: ErrorType.JS,
         mechanism: 'onerror',
         message: event.error.message,
         url: `${window.location.href}${window.location.pathname}`,
@@ -71,7 +71,7 @@ export default class Tracker {
         filename: event.filename,
         stack,
         errorUid: this.host.getErrorUid(
-          this.getJSUidInput(TransportType.JS, event.message, event.filename),
+          this.getJSUidInput(ErrorType.JS, event.message, event.filename),
         ),
         type: this.host.parseTypeError(event.message),
       };
@@ -89,12 +89,12 @@ export default class Tracker {
       const { reason } = event;
       const errorLog: IPromiseErrorLog = {
         title: document.title,
-        errorType: 'promiseError',
+        errorType: ErrorType.UJ,
         mechanism: 'onunhandledrejection',
         url: `${window.window.location.href}${window.window.location.pathname}`,
         timestamp: Date.now(),
         type: event.type,
-        errorUid: this.host.getErrorUid(this.getPromiseUidInput(TransportType.UJ, event.reason)),
+        errorUid: this.host.getErrorUid(this.getPromiseUidInput(ErrorType.UJ, event.reason)),
         reason,
       };
       this.handleError(errorLog);

@@ -8,13 +8,7 @@
     <title>Document</title>
     <script type="module">
         import Eagle from './packages/web-sdk/index'
-        new Eagle({
-            tracker: {
-                report(errorList) {
-                    console.log(errorList);
-                },
-            },
-        })
+        new Eagle({})
         // 触发Proise错误
         function a() {
             b()

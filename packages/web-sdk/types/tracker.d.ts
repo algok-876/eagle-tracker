@@ -7,7 +7,7 @@ interface IBasicErrorLog {
   /**
    * 错误类型
    */
-  errorType: 'jsError' | 'promiseError' | 'resourceError'
+  errorType: 'js-error' | 'promise-error' | 'api-error'
   /**
    * 发生错误的时间戳
    */
