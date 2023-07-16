@@ -16,16 +16,35 @@
             },
         })
         // 触发Proise错误
-        Promise.reject(888)
         function a() {
-            console.log(hhh)
+            b()
         }
-        a()
+        function b() {
+            console.log(jjj)
+        }
         // 触发ReferenceError
-        console.log(jjj)
+
+        function triggerPromiseError() {
+            Promise.reject({
+                a: 111
+            })
+        }
+
+        function triggerJSError() {
+            a()
+        }
+
+        document.querySelector('#p').addEventListener('click', () => {
+            triggerPromiseError()
+        })
+        document.querySelector('#j').addEventListener('click', () => {
+            triggerJSError()
+        })
     </script>
 </head>
 
 <body>
+    <button id="p">触发Promise错误</button>
+    <button id="j">触发JS错误</button>
 </body>
 </html>

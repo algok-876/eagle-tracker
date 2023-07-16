@@ -19,7 +19,11 @@ interface IBasicErrorLog {
   /**
    * 捕获到错误的事件
    */
-  mechanism: 'onerror' | 'onunhandledrejection'
+  mechanism: 'onerror' | 'onunhandledrejection',
+  /**
+   * 错误的标识码
+   */
+  errorUid: string
 }
 
 interface IJsErrorLog extends IBasicErrorLog {

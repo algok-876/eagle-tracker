@@ -1,7 +1,8 @@
 import StackTrace from 'stacktrace-js';
 import { merge } from 'lodash-es';
-import { debounce, isSameErrorLog } from '../../utils';
+import { debounce } from '../../utils';
 import Eagle from '../../index';
+import { TransportType } from '../../types/enum';
 
 export default class Tracker {
   private options: ITrackerOption = {
@@ -12,6 +13,9 @@ export default class Tracker {
     concat: true,
     report: () => { },
   };
+
+  // 存放已上报过或者正处在errorList中的错误uid
+  private uidList: string[] = [];
 
   // 错误日志列表
   private errorList: IErrorLog[] = [];
@@ -42,10 +46,19 @@ export default class Tracker {
       if (this.host.configInstance.get().is_test) {
         this.host.debugLogger('[测试环境]已关闭监控JS运行时错误，如需开启请设置record.tracker.enable为true');
       }
-      return;
+    } else {
+      this.initJsError();
+      this.intitPromiseError();
     }
-    // 监听全局error事件
+  }
+
+  /**
+   * 初始化jserror
+   */
+  initJsError() {
     window.addEventListener('error', (async (event) => {
+      // 阻止错误冒泡，避免在控制台出现
+      event.preventDefault();
       const stack = await StackTrace.fromError(event.error);
       // 收集错误信息
       const errorLog: IJsErrorLog = {
@@ -57,23 +70,49 @@ export default class Tracker {
         timestamp: Date.now(),
         filename: event.filename,
         stack,
+        errorUid: this.host.getErrorUid(
+          this.getJSUidInput(TransportType.JS, event.message, event.filename),
+        ),
         type: this.host.parseTypeError(event.message),
       };
       this.handleError(errorLog);
     }), true);
+  }
+
+  /**
+   * 初始化promise错误监控
+   */
+  intitPromiseError() {
     window.addEventListener('unhandledrejection', (event) => {
+      // 阻止错误冒泡，避免在控制台出现
+      event.preventDefault();
       const { reason } = event;
       const errorLog: IPromiseErrorLog = {
         title: document.title,
         errorType: 'promiseError',
-        mechanism: 'onerror',
+        mechanism: 'onunhandledrejection',
         url: `${window.window.location.href}${window.window.location.pathname}`,
         timestamp: Date.now(),
         type: event.type,
+        errorUid: this.host.getErrorUid(this.getPromiseUidInput(TransportType.UJ, event.reason)),
         reason,
       };
       this.handleError(errorLog);
-    });
+    }, true);
+  }
+
+  /**
+   * 获取用于生成js错误标识码输入
+   */
+  getJSUidInput(type: TransportType, message: string, filename: string) {
+    return `${type}-${message}-${filename}`;
+  }
+
+  /**
+   * 获取用于生成Promise错误标识码输入
+   */
+  getPromiseUidInput(type: TransportType, reason: any) {
+    return `${type}-${reason}`;
   }
 
   /**
@@ -90,15 +129,10 @@ export default class Tracker {
    * @param errorLog 错误信息
    */
   private pushError(errorLog: IErrorLog) {
-    const exists = this.errorList.findLastIndex((val) => isSameErrorLog(val, errorLog));
-    // 相同的错误已存在错误列表中，不用重复上报
-    if (exists >= 0 && this.errorList.length !== 0) {
-      return;
-    }
-
     if (this.needReport(this.options.sampling)
       && this.errorList.length < this.options.maxError) {
       this.errorList.push(errorLog);
+      this.uidList.push(errorLog.errorUid);
     }
   }
 
@@ -110,6 +144,10 @@ export default class Tracker {
   private handleError(errorLog: IErrorLog) {
     // 采样率决定不需要上报
     if (!this.needReport()) {
+      return;
+    }
+    // 在同一次会话中，重复的错误无需上报多次
+    if (this.uidList.indexOf(errorLog.errorUid) >= 0) {
       return;
     }
     const { concat, report } = this.options;
