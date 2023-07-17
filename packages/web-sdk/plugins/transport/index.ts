@@ -21,6 +21,7 @@ export default class Transport {
    */
   format(category: TransportCategory, context: TransportData) {
     const structure: TransportStructure = {
+      pid: this.host.configInstance.get('pid'),
       context,
       env: 'env',
       timestamp: new Date().getTime(),
@@ -81,7 +82,9 @@ export default class Transport {
   }
 
   private send(transportStr: string) {
-    const dest = 'https://test.com/dig';
+    console.log('report');
+
+    const dest = 'http://weiwei.com/log/log.png';
     const img = new Image();
     img.src = `${dest}?d=${encodeURIComponent(transportStr)}`;
   }

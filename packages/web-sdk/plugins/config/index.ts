@@ -3,22 +3,23 @@ import Eagle from '../../index';
 
 // 默认配置
 export const DEFAULT_CONFIG: Partial<IGlobalConfig> = {
-  ucid: '',
-  uuid: '',
-  is_test: true,
+  pid: '',
+  uid: '',
+  isTest: true,
   record: {
-    time_on_page: true,
-    performance: true,
-    // js_error: true,
-    js_error_report_config: {
-      ERROR_RUNTIME: true,
-      ERROR_SCRIPT: true,
-      ERROR_STYLE: true,
-      ERROR_IMAGE: true,
-      ERROR_AUDIO: true,
-      ERROR_VIDEO: true,
-      ERROR_CONSOLE: true,
-      ERROR_TRY_CATCH: true,
+    timeOnPage: true,
+    performance: {
+      resource: true,
+      timing: true,
+    },
+    error: {
+      script: true,
+      vue: true,
+      audio: true,
+      video: true,
+      runtime: true,
+      css: true,
+      img: true,
     },
   },
   tracker: {
@@ -60,7 +61,11 @@ export default class Config {
     }
   }
 
-  get() {
+  getALL() {
     return this.config;
+  }
+
+  get(path: string) {
+    return get(this.config, path, get(DEFAULT_CONFIG, path));
   }
 }

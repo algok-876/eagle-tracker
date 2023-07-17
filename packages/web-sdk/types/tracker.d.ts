@@ -74,10 +74,4 @@ interface ITrackerOption {
    * 采样率
    */
   sampling: number
-  /**
-   * 上报逻辑
-   * @param log 错误信息或者错误列表
-   * @returns
-   */
-  report: (log: IErrorLog | IErrorLog[]) => void
 }

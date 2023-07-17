@@ -9,6 +9,7 @@ export type TransportData = IErrorLog | PerformanceData | ResourceItem
  * 上报数据的最终形式
  */
 export interface TransportStructure {
+  pid: string,
   /**
    * 上报数据的类型
    */

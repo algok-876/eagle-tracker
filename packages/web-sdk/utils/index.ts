@@ -21,14 +21,13 @@ export function parseTypeError(errorMessage: string) {
  * @param callback 函数执行后的回调函数
  * @returns 防抖后的函数
  */
-export function debounce(func: Function, delay: number, callback?: Function) {
-  let timer;
+export function debounce(func: Function, delay: number, callback?: Function, context?: any) {
+  let timer: any;
   return (...args: any[]) => {
-    const context = this;
     clearTimeout(timer);
 
     timer = setTimeout(() => {
-      func.apply(context, args);
+      func.apply(context || this, args);
       if (callback) {
         callback();
       }

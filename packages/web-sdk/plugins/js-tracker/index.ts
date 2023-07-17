@@ -1,8 +1,8 @@
 import StackTrace from 'stacktrace-js';
 import { merge } from 'lodash-es';
-import { debounce } from '../../utils';
 import Eagle from '../../index';
-import { ErrorType } from '../../types/enum';
+import { ErrorType, TransportCategory } from '../../types/enum';
+import { debounce } from '../../utils';
 
 export default class Tracker {
   private options: ITrackerOption = {
@@ -11,7 +11,6 @@ export default class Tracker {
     sampling: 1,
     delay: 2000,
     concat: true,
-    report: () => { },
   };
 
   // 存放已上报过或者正处在errorList中的错误uid
@@ -21,7 +20,7 @@ export default class Tracker {
   private errorList: IErrorLog[] = [];
 
   // 防抖版本的上报回调
-  private report: (log: IErrorLog[]) => void;
+  private report;
 
   // 插件挂载的宿主
   private host: Eagle;
@@ -35,15 +34,14 @@ export default class Tracker {
     this.host = host;
     // 覆盖默认配置
     this.options = merge(this.options, opt);
-    const { report, delay } = this.options;
+    const { delay } = this.options;
     // 包装一下report的防抖版本，用于延迟上报错误的场景
-    this.report = debounce(report, delay, () => {
-      // 上报成功后清空错误列表，避免重复上报
-      // Tracker.errorList.length = 0;
-    });
+    this.report = debounce(this.host.transportInstance.log, delay, () => {
+
+    }, this.host.transportInstance);
     // 不监控错误
     if (!this.options.enable) {
-      if (this.host.configInstance.get().is_test) {
+      if (this.host.configInstance.get('isTest')) {
         this.host.debugLogger('[测试环境]已关闭监控JS运行时错误，如需开启请设置record.tracker.enable为true');
       }
     } else {
@@ -58,7 +56,9 @@ export default class Tracker {
   initJsError() {
     window.addEventListener('error', (async (event) => {
       // 阻止错误冒泡，避免在控制台出现
-      event.preventDefault();
+      if (!this.host.configInstance.get('isTest')) {
+        event.preventDefault();
+      }
       const stack = await StackTrace.fromError(event.error);
       // 收集错误信息
       const errorLog: IJsErrorLog = {
@@ -85,7 +85,9 @@ export default class Tracker {
   intitPromiseError() {
     window.addEventListener('unhandledrejection', (event) => {
       // 阻止错误冒泡，避免在控制台出现
-      event.preventDefault();
+      if (!this.host.configInstance.get('isTest')) {
+        event.preventDefault();
+      }
       const { reason } = event;
       const errorLog: IPromiseErrorLog = {
         title: document.title,
@@ -104,14 +106,14 @@ export default class Tracker {
   /**
    * 获取用于生成js错误标识码输入
    */
-  getJSUidInput(type: TransportType, message: string, filename: string) {
+  getJSUidInput(type: ErrorType, message: string, filename: string) {
     return `${type}-${message}-${filename}`;
   }
 
   /**
    * 获取用于生成Promise错误标识码输入
    */
-  getPromiseUidInput(type: TransportType, reason: any) {
+  getPromiseUidInput(type: ErrorType, reason: any) {
     return `${type}-${reason}`;
   }
 
@@ -150,13 +152,13 @@ export default class Tracker {
     if (this.uidList.indexOf(errorLog.errorUid) >= 0) {
       return;
     }
-    const { concat, report } = this.options;
+    const { concat } = this.options;
     // 是否立即上报
     if (!concat) {
-      report(errorLog);
+      this.host.transportInstance.log(TransportCategory.ERROR, errorLog);
     } else {
       this.pushError(errorLog);
-      this.report(this.errorList);
+      this.report(TransportCategory.ERROR, this.errorList);
     }
   }
 }

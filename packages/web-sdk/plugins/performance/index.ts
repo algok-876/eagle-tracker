@@ -54,7 +54,7 @@ export default class WebVitals {
    * @param host 插件数组
    * @param report 上报回调
    */
-  constructor(host: Eagle, report: (data: PerformanceData) => void) {
+  constructor(host: Eagle) {
     this.host = host;
     this.metrics = new MetricsStore();
 
@@ -77,7 +77,7 @@ export default class WebVitals {
         lcp: origin[metricsName.LCP],
         nav: origin[metricsName.NT],
       };
-      report(data);
+      this.host.transportInstance.log(TransportCategory.PERF, data);
     });
   }
 
