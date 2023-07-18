@@ -24,6 +24,7 @@
         "no-console": "off",
         "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "class-methods-use-this": "off"
+        "class-methods-use-this": "off",
+        "@typescript-eslint/ban-types": "off"
     }
 }

@@ -47,6 +47,7 @@ export default class Tracker {
     } else {
       this.initJsError();
       this.intitPromiseError();
+      this.initHttpError();
     }
   }
 
@@ -104,6 +105,125 @@ export default class Tracker {
   }
 
   /**
+   * 初始化Http错误监控
+   */
+  initHttpError() {
+    const loadHandler = (reqInfo: IHttplog) => {
+      if (reqInfo.status < 400) return;
+
+      const errorLog: IErrorLog = {
+        title: document.title,
+        errorType: ErrorType.API,
+        mechanism: 'onloadend',
+        url: `${window.window.location.href}${window.window.location.pathname}`,
+        timestamp: Date.now(),
+        meta: reqInfo,
+        errorUid: this.host.getErrorUid(this.getHttpUidInput(
+          ErrorType.API,
+          reqInfo.response,
+          reqInfo.statusText,
+          reqInfo.status,
+        )),
+      };
+
+      this.handleError(errorLog);
+    };
+
+    // 代理XMLHttpRequest和fetch，拦截错误
+    this.proxyXMLHttpRequest(loadHandler);
+    this.proxyFetch(loadHandler);
+  }
+
+  /**
+   * 覆盖XMLHttpRequest
+   * @param loadHandler 请求结束时 回调
+   * @param sendHandler 请求开始前 回调
+   */
+  private proxyXMLHttpRequest(
+    loadHandler: (data: IHttplog) => void,
+    sendHandler?: (xhr: XMLHttpRequest) => void,
+  ) {
+    if (!window.XMLHttpRequest || typeof window.XMLHttpRequest !== 'function') {
+      return;
+    }
+    // 保存原始XMLHttpRequest
+    const OriginXMLHttpRequest = window.XMLHttpRequest;
+    // 重写XMLHttpRequest
+    (window as any).XMLHttpRequest = function CustomXMLHttpRequest() {
+      const xhr = new OriginXMLHttpRequest();
+      const { open, send } = xhr;
+      // 收集http请求相关信息
+      const metrics = {} as IHttplog;
+
+      // 重写open方法收集请求方式、请求url
+      xhr.open = (method: string, url: string | URL) => {
+        metrics.method = method;
+        metrics.url = url;
+        open.call(xhr, method, url, true);
+      };
+
+      // 重写send方法收集请求体、请求开始时间
+      xhr.send = (body) => {
+        metrics.body = body;
+        metrics.requestTime = new Date().getTime();
+        if (typeof sendHandler === 'function') sendHandler(xhr);
+        send.call(xhr, body);
+      };
+
+      // 监听请求结束事件，收集状态，响应，响应时间 并调用外部结束回调
+      xhr.addEventListener('loadend', () => {
+        const { status, statusText, response } = xhr;
+        metrics.status = status;
+        metrics.statusText = statusText;
+        metrics.response = response;
+        metrics.responseTime = new Date().getTime();
+        if (typeof loadHandler === 'function') loadHandler(metrics);
+      });
+
+      return xhr;
+    };
+  }
+
+  /**
+   * 覆盖fetch方法
+   * @param loadHandler 请求结束时 回调
+   * @param sendHandler 请求开始前 回调
+   */
+  private proxyFetch(
+    loadHandler: (data: IHttplog) => void,
+    sendHandler?: (init?: RequestInit) => void,
+  ) {
+    if (!window.fetch || typeof window.fetch !== 'function') {
+      return;
+    }
+
+    const originFetch = window.fetch;
+    (window as any).fetch = async (input: any, init: RequestInit | undefined) => {
+      if (typeof sendHandler === 'function') sendHandler(init);
+      const metrics = {} as IHttplog;
+
+      metrics.method = init?.method || '';
+      metrics.url = (typeof input === 'string' ? input : input?.url) || '';
+      metrics.body = init?.body || '';
+      metrics.requestTime = Date.now();
+
+      return originFetch.call(window, input, init).then(async (response) => {
+        const res = response.clone();
+
+        metrics.status = res.status;
+        metrics.statusText = res.statusText;
+        metrics.response = await res.text();
+        metrics.responseTime = Date.now();
+
+        if (typeof loadHandler === 'function') {
+          loadHandler(metrics);
+        }
+        return response;
+      });
+    };
+  }
+
+  /**
    * 获取用于生成js错误标识码输入
    */
   getJSUidInput(type: ErrorType, message: string, filename: string) {
@@ -115,6 +235,13 @@ export default class Tracker {
    */
   getPromiseUidInput(type: ErrorType, reason: any) {
     return `${type}-${reason}`;
+  }
+
+  /**
+   * 获取用于生成Http错误标识码输入
+   */
+  getHttpUidInput(type: ErrorType, value: any, statusText: string, status: number) {
+    return `${type}-${value}-${statusText}-${status}`;
   }
 
   /**

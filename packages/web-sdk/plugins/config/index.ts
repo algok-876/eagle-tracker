@@ -20,6 +20,7 @@ export const DEFAULT_CONFIG: Partial<IGlobalConfig> = {
       runtime: true,
       css: true,
       img: true,
+      http: true,
     },
   },
   tracker: {
@@ -28,7 +29,6 @@ export const DEFAULT_CONFIG: Partial<IGlobalConfig> = {
     sampling: 1,
     delay: 2000,
     concat: true,
-    report: () => { },
   },
 };
 export default class Config {

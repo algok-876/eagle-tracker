@@ -1,4 +1,3 @@
-// import { StackFrame } from 'stacktrace-js';
 interface IBasicErrorLog {
   /**
   * 页面标题
@@ -19,7 +18,7 @@ interface IBasicErrorLog {
   /**
    * 捕获到错误的事件
    */
-  mechanism: 'onerror' | 'onunhandledrejection',
+  mechanism: 'onerror' | 'onunhandledrejection' | 'onloadend',
   /**
    * 错误的标识码
    */
@@ -53,8 +52,23 @@ interface IPromiseErrorLog extends IBasicErrorLog {
   reason: string
 }
 
+interface IHttplog {
+  method: string;
+  url: string | URL;
+  body: Document | XMLHttpRequestBodyInit | null | undefined | ReadableStream;
+  requestTime: number;
+  responseTime: number;
+  status: number;
+  statusText: string;
+  response?: any;
+}
+
+interface IHttpErrorLog extends IBasicErrorLog {
+  meta: IHttplog
+}
+
 /** 统一错误信息类型 */
-type IErrorLog = IJsErrorLog | IPromiseErrorLog
+type IErrorLog = IJsErrorLog | IPromiseErrorLog | IHttpErrorLog
 
 interface ITrackerOption {
   /**

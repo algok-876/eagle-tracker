@@ -52,7 +52,11 @@ interface IGlobalConfig {
       /**
        * vue运行时报错
        */
-      vue: boolean
+      vue: boolean,
+      /**
+       * http请求错误
+       */
+      http: boolean
     }
   }
   tracker: ITrackerOption

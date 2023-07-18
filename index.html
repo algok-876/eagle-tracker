@@ -34,12 +34,63 @@
         document.querySelector('#j').addEventListener('click', () => {
             triggerJSError()
         })
+        document.querySelector('#h').addEventListener('click', () => {
+            var xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+
+            xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+                console.log(this.responseText);
+            }
+            });
+
+            xhr.open("GET", "http://jsonplaceholder.typicode.com/post");
+
+            xhr.send();
+        })
+        document.querySelector('#f').addEventListener('click', () => {
+            fetch('http://jsonplaceholder.typicode.com/post').then(response => {
+                response.json().then(res => {
+                    console.log(res)
+                })
+            })
+        })
     </script>
 </head>
 
 <body>
     <button id="p">触发Promise错误</button>
     <button id="j">触发JS错误</button>
+    <button id="h">触发Http(xhr)错误</button>
+    <button id="f">触发Http(fetch)错误</button>
     <img src="http://www.baidu.com" />
+
+
+    <div id="app">
+        <p>{{ message }}</p>
+        <button @click="err">触发vue组件内的错误</button>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp } = Vue
+        const app = createApp({
+            data() {
+                return {
+                    message: 'Hello Vue!'
+                }
+            },
+            methods: {
+                err() {
+                    console.log(component)
+                }
+            }
+        }).mount('#app')
+        console.log(app.config)
+        app.config.errorHandler = (err, instance, info) => {
+            console.log('出现错误了')
+            // 处理错误，例如：报告给一个服务
+            console.log(err, instance, info)
+        }
+    </script>
 </body>
 </html>
