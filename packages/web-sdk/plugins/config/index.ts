@@ -1,6 +1,14 @@
 import { merge, cloneDeep, get } from 'lodash-es';
 import Eagle from '../../index';
 
+type DeepKeys<T> = T extends object
+  ? {
+    [K in keyof T]-?: K extends string | number
+    ? `${K}` | `${K}.${DeepKeys<T[K]>}`
+    : never;
+  }[keyof T]
+  : never;
+
 // 默认配置
 export const DEFAULT_CONFIG: Partial<IGlobalConfig> = {
   pid: '',
@@ -44,6 +52,11 @@ export default class Config {
     this.host = host;
   }
 
+  /**
+   * 更新配置
+   * @param customConfig 配置对象
+   * @param isOverwrite 是否覆盖默认配置，默认是递归合并配置
+   */
   set(customConfig: Partial<IGlobalConfig>, isOverwrite = false) {
     if (isOverwrite) {
       this.config = cloneDeep(customConfig);
@@ -61,11 +74,20 @@ export default class Config {
     }
   }
 
+  /**
+   * 获取全局配置对象
+   * @returns 全局配置对象
+   */
   getALL() {
     return this.config;
   }
 
-  get(path: string) {
+  /**
+   * 获取配置项
+   * @param path 目标值的路径
+   * @returns 路径对应的值
+   */
+  get(path: DeepKeys<IGlobalConfig>): any {
     return get(this.config, path, get(DEFAULT_CONFIG, path));
   }
 }

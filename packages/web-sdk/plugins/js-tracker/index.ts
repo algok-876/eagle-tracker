@@ -37,7 +37,7 @@ export default class Tracker {
     const { delay } = this.options;
     // 包装一下report的防抖版本，用于延迟上报错误的场景
     this.report = debounce(this.host.transportInstance.log, delay, () => {
-
+      this.errorList.length = 0;
     }, this.host.transportInstance);
     // 不监控错误
     if (!this.options.enable) {
@@ -55,6 +55,10 @@ export default class Tracker {
    * 初始化jserror
    */
   initJsError() {
+    // 不上报错误数据
+    if (!this.host.configInstance.get('record.error.runtime')) {
+      return;
+    }
     window.addEventListener('error', (async (event) => {
       // 阻止错误冒泡，避免在控制台出现
       if (!this.host.configInstance.get('isTest')) {
@@ -84,6 +88,9 @@ export default class Tracker {
    * 初始化promise错误监控
    */
   intitPromiseError() {
+    if (!this.host.configInstance.get('record.error.runtime')) {
+      return;
+    }
     window.addEventListener('unhandledrejection', (event) => {
       // 阻止错误冒泡，避免在控制台出现
       if (!this.host.configInstance.get('isTest')) {
@@ -108,6 +115,10 @@ export default class Tracker {
    * 初始化Http错误监控
    */
   initHttpError() {
+    // 不上报http错误数据
+    if (!this.host.configInstance.get('record.error.http')) {
+      return;
+    }
     const loadHandler = (reqInfo: IHttplog) => {
       if (reqInfo.status < 400) return;
 

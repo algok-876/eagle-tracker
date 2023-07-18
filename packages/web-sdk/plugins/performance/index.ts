@@ -70,6 +70,10 @@ export default class WebVitals {
     });
 
     afterLoad(() => {
+      // 不上报性能数据
+      if (!this.host.configInstance.get('record.performance.timing')) {
+        return;
+      }
       const origin = this.metrics.getValues();
       const data: PerformanceData = {
         fp: origin[metricsName.FP],
@@ -133,6 +137,10 @@ export default class WebVitals {
 
   // 初始化 RF 的获取以及返回
   initResourceFlow = (): void => {
+    // 不上报资源加载情况
+    if (!this.host.configInstance.get('record.performance.resource')) {
+      return;
+    }
     const entry = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
     const data: ResourceItem[] = entry.map((item) => ({
       name: item.name,
