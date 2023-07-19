@@ -1,4 +1,3 @@
-import Config from '../plugins/config';
 /**
  * 解析错误类型
  * @param errorMessage 原始错误字符串
@@ -33,15 +32,4 @@ export function debounce(func: Function, delay: number, callback?: Function, con
       }
     }, delay);
   };
-}
-
-/**
- *  判断两个错误日志是否是来源于同一个错误
- * @param first 第一个错误
- * @param second 第二个错误
- * @returns 判断结果
- */
-// TODO 判断逻辑很粗略，后序视具体情况更改
-export function isSameErrorLog(first: IErrorLog, second: IErrorLog) {
-  return first.type === second.type;
 }
