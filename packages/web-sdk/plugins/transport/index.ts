@@ -82,7 +82,7 @@ export default class Transport {
   }
 
   private send(transportStr: string) {
-    const dest = 'http://weiwei.com/log/log.png';
+    const dest = 'http://weiwei8848.com/log/log.png';
     const img = new Image();
     img.src = `${dest}?d=${encodeURIComponent(transportStr)}`;
   }

@@ -1,5 +1,5 @@
 import { merge, cloneDeep, get } from 'lodash-es';
-import Eagle from '../../index';
+import Eagle from '../../types/eagle';
 
 type DeepKeys<T> = T extends object
   ? {

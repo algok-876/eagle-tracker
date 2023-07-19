@@ -1,6 +1,6 @@
 import StackTrace from 'stacktrace-js';
 import { merge } from 'lodash-es';
-import { debounce } from '@eagle/utils';
+import { debounce } from '@eagle-tracker/utils';
 import Eagle from '../../index';
 import { ErrorType, TransportCategory } from '../../types/enum';
 

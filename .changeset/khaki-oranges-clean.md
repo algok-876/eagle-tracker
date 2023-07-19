@@ -1,5 +1,0 @@
----
-"@eagle/core": major
----
-
-test
