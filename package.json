@@ -6,17 +6,26 @@
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "prepare": "husky install",
     "clean": "rimraf dist packages/*/dist",
     "clean:dep": "rimraf dist packages/*/node_modules examples/*/node_modules",
     "lint": "eslint src --fix --ext .ts",
     "build:rollup": "rollup -c",
-    "publish": "changeset publish"
+    "publish": "changeset publish",
+    "commit": "git-cz"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
+    "@commitlint/cli": "^17.6.7",
+    "@commitlint/config-conventional": "^17.6.7",
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
@@ -24,11 +33,14 @@
     "@types/node": "^20.4.2",
     "@typescript-eslint/eslint-plugin": "^5.17.0",
     "@typescript-eslint/parser": "^5.17.0",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
     "esbuild-register": "^3.4.2",
     "eslint": "^8.12.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-import": "^2.25.4",
+    "husky": "^8.0.3",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
     "rollup": "^3.26.3",
