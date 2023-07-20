@@ -1,4 +1,6 @@
-interface IGlobalConfig {
+import { ITrackerOption } from './tracker';
+
+export interface IGlobalConfig {
   /**
    * 项目id
    */
@@ -59,5 +61,12 @@ interface IGlobalConfig {
       http: boolean
     }
   }
-  tracker: ITrackerOption
+  tracker: ITrackerOption,
+  famework: {
+    /**
+     * 是否是vue环境
+     */
+    vue: boolean,
+    app: any
+  }
 }

@@ -1,5 +1,6 @@
 import { merge, cloneDeep, get } from 'lodash-es';
-import Eagle from '../../types/eagle';
+import Eagle from '../../index';
+import { IGlobalConfig } from '../../types';
 
 type DeepKeys<T> = T extends object
   ? {
@@ -37,6 +38,10 @@ export const DEFAULT_CONFIG: Partial<IGlobalConfig> = {
     sampling: 1,
     delay: 2000,
     concat: true,
+  },
+  famework: {
+    vue: false,
+    app: null,
   },
 };
 export default class Config {

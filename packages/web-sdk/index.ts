@@ -5,6 +5,7 @@ import Tracker from './plugins/js-tracker';
 import Core from './core';
 import WebVitals from './plugins/performance';
 import Transport from './plugins/transport';
+import { IGlobalConfig } from './types';
 
 export default class Eagle extends Core {
   trackerInstance: Tracker;
@@ -25,3 +26,5 @@ export default class Eagle extends Core {
     this.vitalsInstance = new WebVitals(this);
   }
 }
+
+export * from './types';

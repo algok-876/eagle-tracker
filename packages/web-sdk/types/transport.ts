@@ -1,4 +1,6 @@
 import { TransportCategory } from './enum';
+import { IErrorLog } from './tracker';
+import { PerformanceData, ResourceItem } from './performance';
 
 /**
  * 上报的数据类型

@@ -1,6 +1,8 @@
 import Eagle from '../../index';
 import { TransportCategory } from '../../types/enum';
-import { TransportStructure, TransportData } from '../../types/transport';
+import {
+  TransportStructure, TransportData, PerformanceData, IErrorLog, ResourceItem,
+} from '../../types';
 
 export default class Transport {
   private host: Eagle;

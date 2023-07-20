@@ -40,4 +40,10 @@ export default [
     iifeName: 'EagleTrackerUtils',
     name: 'utils',
   },
+  {
+    iifeName: 'EagleTrackerVue3',
+    name: 'vue3',
+    display: 'EagleVue3',
+    external: ['@eagle-tracker/core'],
+  },
 ] as Array<Partial<IPackage>>;

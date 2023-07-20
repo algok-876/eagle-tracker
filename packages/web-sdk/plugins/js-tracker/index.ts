@@ -3,6 +3,9 @@ import { merge } from 'lodash-es';
 import { debounce } from '@eagle-tracker/utils';
 import Eagle from '../../index';
 import { ErrorType, TransportCategory } from '../../types/enum';
+import {
+  ITrackerOption, IErrorLog, IJsErrorLog, IHttplog, IPromiseErrorLog,
+} from '../../types';
 
 export default class Tracker {
   private options: ITrackerOption = {

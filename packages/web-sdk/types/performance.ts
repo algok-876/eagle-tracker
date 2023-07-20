@@ -1,4 +1,4 @@
-interface MPerformanceNavigationTiming {
+export interface MPerformanceNavigationTiming {
   FP?: number;
   TTI?: number;
   DomReady?: number;
@@ -13,14 +13,14 @@ interface MPerformanceNavigationTiming {
   Res?: number;
 }
 
-interface PerformanceData {
+export interface PerformanceData {
   fp: number,
   fcp: number,
   lcp: number,
   nav: MPerformanceNavigationTiming
 }
 
-interface ResourceItem {
+export interface ResourceItem {
   /**
    * 资源名称
    */

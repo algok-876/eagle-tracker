@@ -1,3 +1,5 @@
+import { MPerformanceNavigationTiming } from '../../types';
+
 export const getFP = (): PerformanceEntry | undefined => {
   const [entry] = performance.getEntriesByName('first-paint');
   return entry;

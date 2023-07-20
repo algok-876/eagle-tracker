@@ -1,4 +1,4 @@
-interface IBasicErrorLog {
+export interface IBasicErrorLog {
   /**
   * 页面标题
   */
@@ -25,7 +25,7 @@ interface IBasicErrorLog {
   errorUid: string
 }
 
-interface IJsErrorLog extends IBasicErrorLog {
+export interface IJsErrorLog extends IBasicErrorLog {
   /**
    * 发生错误的代码文件
    */
@@ -44,7 +44,7 @@ interface IJsErrorLog extends IBasicErrorLog {
   stack: StackTrace.StackFrame[],
 }
 
-interface IPromiseErrorLog extends IBasicErrorLog {
+export interface IPromiseErrorLog extends IBasicErrorLog {
   type: string
   /**
    * promise被拒绝的原因
@@ -52,7 +52,7 @@ interface IPromiseErrorLog extends IBasicErrorLog {
   reason: string
 }
 
-interface IHttplog {
+export interface IHttplog {
   method: string;
   url: string | URL;
   body: Document | XMLHttpRequestBodyInit | null | undefined | ReadableStream;
@@ -63,14 +63,14 @@ interface IHttplog {
   response?: any;
 }
 
-interface IHttpErrorLog extends IBasicErrorLog {
+export interface IHttpErrorLog extends IBasicErrorLog {
   meta: IHttplog
 }
 
 /** 统一错误信息类型 */
-type IErrorLog = IJsErrorLog | IPromiseErrorLog | IHttpErrorLog
+export type IErrorLog = IJsErrorLog | IPromiseErrorLog | IHttpErrorLog
 
-interface ITrackerOption {
+export interface ITrackerOption {
   /**
    * 是否开启错误监控
    */

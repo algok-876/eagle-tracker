@@ -1,7 +1,7 @@
 import MetricsStore, { metricsName, IMetrics } from './store';
 import { getFP, getFCP, getNavigationTiming } from './entry';
 import Eagle from '../../index';
-import { TransportCategory } from '../../types/enum';
+import { TransportCategory, PerformanceData, ResourceItem } from '../../types';
 
 interface PerformanceEntryHandler {
   (entry: PerformanceEntryList): void;
