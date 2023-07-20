@@ -33,3 +33,18 @@ export function debounce(func: Function, delay: number, callback?: Function, con
     }, delay);
   };
 }
+
+/**
+ * 向控制台输出信息
+ * @param args 任意信息
+ */
+export function econsole(...args: any[]) {
+  console.group(
+    '%c EagleTracker',
+    'background-color: #e0005a ; color: #ffffff ; font-weight: bold ; padding: 4px ;',
+  );
+  args.forEach((log) => {
+    console.log(log);
+  });
+  console.groupEnd();
+}

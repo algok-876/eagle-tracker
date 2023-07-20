@@ -1,11 +1,24 @@
+import { econsole } from '@eagle-tracker/utils';
 import Eagle from '../../index';
-import { TransportCategory } from '../../types/enum';
 import {
-  TransportStructure, TransportData, PerformanceData, IErrorLog, ResourceItem,
+  TransportStructure, TransportData, PerformanceData, IErrorLog, ResourceItem, TransportCategory,
 } from '../../types';
+
+/**
+ * 上报策略
+ */
+interface IReportStrategies {
+  [TransportCategory.CUS]?: boolean
+  [TransportCategory.ERROR]?: boolean
+  [TransportCategory.PERF]?: boolean
+  [TransportCategory.PV]?: boolean
+  [TransportCategory.RS]?: boolean
+}
 
 export default class Transport {
   private host: Eagle;
+
+  private reportStrategies: IReportStrategies;
 
   /**
    * 数据上报插件
@@ -13,6 +26,11 @@ export default class Transport {
    */
   constructor(host: Eagle) {
     this.host = host;
+    this.reportStrategies = {
+      [TransportCategory.ERROR]: this.host.configInstance.get('record.error.runtime') === true,
+      [TransportCategory.PERF]: this.host.configInstance.get('record.performance.timing') === true,
+      [TransportCategory.RS]: this.host.configInstance.get('record.performance.resource') === true,
+    };
   }
 
   /**
@@ -63,12 +81,24 @@ export default class Transport {
   log(category: TransportCategory.CUS, context: any): void
 
   log(category: TransportCategory, context: TransportData | TransportData[], once = false) {
+    // 测试时不上报数据
+    if (this.host.configInstance.get('isTest') === true) {
+      econsole('测试模式，跳过上报该数据 ===>', `类别: ${category}`, context);
+      return;
+    }
+    // 判断该类型的数据是否需要上报  等于undefined认为无该配置项可以上报
+    if (this.reportStrategies[category] !== undefined
+      && this.reportStrategies[category] === false) {
+      econsole('根据配置项，跳过该数据 ===>', `类别: ${category}`, context);
+      return;
+    }
     // TODO 这里可能需要根据全局配置过滤一下上报的数据
     if (once) {
       const transportStr = this.format(category, context as TransportData);
       this.send(transportStr);
       return;
     }
+
     // 将单个log装成数组，兼容满足批量上报需求
     const data: TransportData[] = [];
     if (!Array.isArray(context)) {
@@ -86,6 +116,6 @@ export default class Transport {
   private send(transportStr: string) {
     const dest = 'http://weiwei8848.com/log/log.png';
     const img = new Image();
-    img.src = `${dest}?d=${encodeURIComponent(transportStr)}`;
+    img.src = `${dest}?data=${encodeURIComponent(transportStr)}`;
   }
 }
