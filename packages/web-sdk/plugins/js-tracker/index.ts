@@ -17,7 +17,7 @@ export default class Tracker {
   };
 
   // 存放已上报过或者正处在errorList中的错误uid
-  private uidList: string[] = [];
+  private errorSet = new Set<string>();
 
   // 错误日志列表
   private errorList: IErrorLog[] = [];
@@ -267,7 +267,11 @@ export default class Tracker {
       // 被errorHandler拦截的错误不会出现在控制台中，所以需要额外打印出来
       if (typeof console !== 'undefined' && typeof console.error === 'function') console.error(err);
 
-      this.host.transportInstance.log(TransportCategory.VUEERROR, errorLog);
+      // 上报
+      if (!this.errorSet.has(errorLog.errorUid)) {
+        this.host.transportInstance.log(TransportCategory.VUEERROR, errorLog);
+        this.errorSet.add(errorLog.errorUid);
+      }
 
       // 这一步是执行一遍原有的错误处理函数，防止破坏业务侧的代码
       if (typeof originErrorHandler === 'function') {
@@ -303,7 +307,6 @@ export default class Tracker {
     if (this.needReport(this.options.sampling)
       && this.errorList.length < this.options.maxError) {
       this.errorList.push(errorLog);
-      this.uidList.push(errorLog.errorUid);
     }
   }
 
@@ -318,9 +321,10 @@ export default class Tracker {
       return;
     }
     // 在同一次会话中，重复的错误无需上报多次
-    if (this.uidList.indexOf(errorLog.errorUid) >= 0) {
+    if (this.errorSet.has(errorLog.errorUid)) {
       return;
     }
+    this.errorSet.add(errorLog.errorUid);
     const { concat } = this.options;
     // 是否立即上报
     if (!concat) {

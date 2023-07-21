@@ -1,7 +1,8 @@
 import { econsole } from '@eagle-tracker/utils';
 import Eagle from '../../index';
 import {
-  TransportStructure, TransportData, PerformanceData, IErrorLog, ResourceItem, TransportCategory, IVueErrorLog,
+  TransportStructure, TransportData, PerformanceData, IErrorLog,
+  ResourceItem, TransportCategory, IVueErrorLog,
 } from '../../types';
 
 /**
@@ -99,6 +100,7 @@ export default class Transport {
       econsole('根据配置项，跳过该数据 ===>', `类别: ${category}`, context);
       return;
     }
+
     // TODO 这里可能需要根据全局配置过滤一下上报的数据
     if (once) {
       const transportStr = this.format(category, context as TransportData);
