@@ -1,11 +1,11 @@
 // import { get } from 'lodash-es';
-import Config from './plugins/config';
-import Tracker from './plugins/js-tracker';
+import Config from './src/plugins/config';
+import Tracker from './src/plugins/js-tracker';
 // import { debugLogger } from './utils';
-import Core from './core';
-import WebVitals from './plugins/performance';
-import Transport from './plugins/transport';
-import { IGlobalConfig } from './types';
+import Core from './src/core';
+import WebVitals from './src/plugins/performance';
+import Transport from './src/plugins/transport';
+import { IGlobalConfig } from './src/types';
 
 export default class Eagle extends Core {
   trackerInstance: Tracker;
@@ -35,4 +35,5 @@ export default class Eagle extends Core {
   }
 }
 
-export * from './types';
+export * from './src/types';
+export const a = 100;

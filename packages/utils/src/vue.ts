@@ -1,4 +1,4 @@
-import { ViewModel } from './types';
+import { ViewModel } from '../types';
 
 // 获取报错组件名
 const classifyRE = /(?:^|[-_])(\w)/g;

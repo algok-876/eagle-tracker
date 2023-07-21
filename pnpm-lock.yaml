@@ -7,16 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@types/lodash-es':
-        specifier: ^4.17.7
-        version: 4.17.7
-      lodash-es:
-        specifier: ^4.17.21
-        version: 4.17.21
-      stacktrace-js:
-        specifier: ^2.0.2
-        version: 2.0.2
     devDependencies:
       '@changesets/cli':
         specifier: ^2.26.2
@@ -148,6 +138,15 @@ importers:
       '@eagle-tracker/utils':
         specifier: workspace:*
         version: link:../utils
+      '@types/lodash-es':
+        specifier: ^4.17.7
+        version: 4.17.7
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      stacktrace-js:
+        specifier: ^2.0.2
+        version: 2.0.2
 
 packages:
 

@@ -1,7 +1,7 @@
 import StackTrace from 'stacktrace-js';
 import { merge } from 'lodash-es';
 import { debounce, formatComponentName } from '@eagle-tracker/utils';
-import Eagle from '../../index';
+import Eagle from '../../../index';
 import { ErrorType, TransportCategory } from '../../types/enum';
 import {
   ITrackerOption, IErrorLog, IJsErrorLog, IHttplog, IPromiseErrorLog, IVueErrorLog,

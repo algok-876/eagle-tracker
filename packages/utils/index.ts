@@ -49,4 +49,4 @@ export function econsole(...args: any[]) {
   console.groupEnd();
 }
 
-export * from './vue';
+export * from './src/vue';

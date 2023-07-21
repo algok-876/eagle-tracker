@@ -13,7 +13,7 @@
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
     },
-    "./*": "./*"
+    "./*": "./*.ts"
   },
   "files": [
     "dist"
@@ -22,6 +22,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@eagle-tracker/utils": "workspace:*"
+    "@eagle-tracker/utils": "workspace:*",
+    "@types/lodash-es": "^4.17.7",
+    "lodash-es": "^4.17.21",
+    "stacktrace-js": "^2.0.2"
   }
 }

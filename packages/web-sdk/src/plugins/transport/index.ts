@@ -1,5 +1,5 @@
 import { econsole } from '@eagle-tracker/utils';
-import Eagle from '../../index';
+import Eagle from '../../../index';
 import {
   TransportStructure, TransportData, PerformanceData, IErrorLog,
   ResourceItem, TransportCategory, IVueErrorLog,
