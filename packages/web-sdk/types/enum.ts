@@ -11,9 +11,13 @@ export const enum ErrorType {
    */
   UJ = 'promise-error',
   /**
-   * 性能相关数据
+   * api错误
    */
-  API = 'api-error'
+  API = 'api-error',
+  /**
+   * vue错误
+   */
+  VUE = 'vue-error'
 }
 
 export const enum TransportCategory {
@@ -23,6 +27,7 @@ export const enum TransportCategory {
   PERF = 'perf',
   // 报错数据
   ERROR = 'error',
+  VUEERROR = 'vue-error',
   // 自定义行为
   CUS = 'custom',
   RS = 'resource'

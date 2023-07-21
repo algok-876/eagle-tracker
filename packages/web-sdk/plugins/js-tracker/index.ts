@@ -1,10 +1,10 @@
 import StackTrace from 'stacktrace-js';
 import { merge } from 'lodash-es';
-import { debounce } from '@eagle-tracker/utils';
+import { debounce, formatComponentName } from '@eagle-tracker/utils';
 import Eagle from '../../index';
 import { ErrorType, TransportCategory } from '../../types/enum';
 import {
-  ITrackerOption, IErrorLog, IJsErrorLog, IHttplog, IPromiseErrorLog,
+  ITrackerOption, IErrorLog, IJsErrorLog, IHttplog, IPromiseErrorLog, IVueErrorLog,
 } from '../../types';
 
 export default class Tracker {
@@ -79,7 +79,7 @@ export default class Tracker {
         filename: event.filename,
         stack,
         errorUid: this.host.getErrorUid(
-          this.getJSUidInput(ErrorType.JS, event.message, event.filename),
+          this.getErrorUidInput(ErrorType.JS, event.message, event.filename),
         ),
         type: this.host.parseTypeError(event.message),
       };
@@ -107,7 +107,7 @@ export default class Tracker {
         url: `${window.window.location.href}${window.window.location.pathname}`,
         timestamp: Date.now(),
         type: event.type,
-        errorUid: this.host.getErrorUid(this.getPromiseUidInput(ErrorType.UJ, event.reason)),
+        errorUid: this.host.getErrorUid(this.getErrorUidInput(ErrorType.UJ, event.reason)),
         reason,
       };
       this.handleError(errorLog);
@@ -132,7 +132,7 @@ export default class Tracker {
         url: `${window.window.location.href}${window.window.location.pathname}`,
         timestamp: Date.now(),
         meta: reqInfo,
-        errorUid: this.host.getErrorUid(this.getHttpUidInput(
+        errorUid: this.host.getErrorUid(this.getErrorUidInput(
           ErrorType.API,
           reqInfo.response,
           reqInfo.statusText,
@@ -238,24 +238,52 @@ export default class Tracker {
   }
 
   /**
-   * 获取用于生成js错误标识码输入
+   * 监控vue运行时错误
+   * @returns 返回错误处理函数
    */
-  getJSUidInput(type: ErrorType, message: string, filename: string) {
-    return `${type}-${message}-${filename}`;
+  vueErrorhandler() {
+    // 获取vue的app实例，从配置中获取
+    const app = this.host.configInstance.get('famework.app');
+    // 业务中注册的vue错误处理函数
+    const originErrorHandler = app.config.errorHandler;
+
+    // 处理函数
+    const handler = async (err: Error, vm: any, info: any) => {
+      const stack = await StackTrace.fromError(err);
+      const errorLog: IVueErrorLog = {
+        title: document.title,
+        errorType: ErrorType.VUE,
+        mechanism: 'vueErrorhandler',
+        message: err.message,
+        url: `${window.location.href}${window.location.pathname}`,
+        timestamp: Date.now(),
+        stack,
+        hook: info,
+        errorUid: this.host.getErrorUid(
+          this.getErrorUidInput(ErrorType.VUE, err.message, info),
+        ),
+        componentName: formatComponentName(vm, true),
+      };
+      // 被errorHandler拦截的错误不会出现在控制台中，所以需要额外打印出来
+      if (typeof console !== 'undefined' && typeof console.error === 'function') console.error(err);
+
+      this.host.transportInstance.log(TransportCategory.VUEERROR, errorLog);
+
+      // 这一步是执行一遍原有的错误处理函数，防止破坏业务侧的代码
+      if (typeof originErrorHandler === 'function') {
+        originErrorHandler.call(this, err, vm, info);
+      }
+    };
+    return handler;
   }
 
   /**
-   * 获取用于生成Promise错误标识码输入
+   * 生成用于getErrorUid的输入
+   * @param args 各个分量
+   * @returns 用-连接各个分量的字符串
    */
-  getPromiseUidInput(type: ErrorType, reason: any) {
-    return `${type}-${reason}`;
-  }
-
-  /**
-   * 获取用于生成Http错误标识码输入
-   */
-  getHttpUidInput(type: ErrorType, value: any, statusText: string, status: number) {
-    return `${type}-${value}-${statusText}-${status}`;
+  getErrorUidInput(...args: (string | number)[]) {
+    return args.join('-');
   }
 
   /**

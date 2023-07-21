@@ -1,7 +1,7 @@
 import { econsole } from '@eagle-tracker/utils';
 import Eagle from '../../index';
 import {
-  TransportStructure, TransportData, PerformanceData, IErrorLog, ResourceItem, TransportCategory,
+  TransportStructure, TransportData, PerformanceData, IErrorLog, ResourceItem, TransportCategory, IVueErrorLog,
 } from '../../types';
 
 /**
@@ -72,6 +72,13 @@ export default class Transport {
    * @param once 只上报一次，不分开上报
    */
   log(category: TransportCategory.RS, context: ResourceItem[], once?: boolean): void
+
+  /**
+   * 上报vue错误
+   * @param category 数据分类
+   * @param context 上报数据
+   */
+  log(category: TransportCategory.VUEERROR, context: IVueErrorLog): void
 
   /**
    * 上报自定义数据

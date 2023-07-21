@@ -6,7 +6,7 @@ export interface IBasicErrorLog {
   /**
    * 错误类型
    */
-  errorType: 'js-error' | 'promise-error' | 'api-error'
+  errorType: 'js-error' | 'promise-error' | 'api-error' | 'vue-error'
   /**
    * 发生错误的时间戳
    */
@@ -16,9 +16,9 @@ export interface IBasicErrorLog {
    */
   url: string
   /**
-   * 捕获到错误的事件
+   * 捕获到错误的途径
    */
-  mechanism: 'onerror' | 'onunhandledrejection' | 'onloadend',
+  mechanism: 'onerror' | 'onunhandledrejection' | 'onloadend' | 'vueErrorhandler',
   /**
    * 错误的标识码
    */
@@ -37,7 +37,7 @@ export interface IJsErrorLog extends IBasicErrorLog {
   /**
    * js错误类型 类似TypeError SyntaxError
    */
-  type: string
+  type?: string
   /**
    * 错误堆栈
    */
@@ -53,14 +53,24 @@ export interface IPromiseErrorLog extends IBasicErrorLog {
 }
 
 export interface IHttplog {
-  method: string;
-  url: string | URL;
-  body: Document | XMLHttpRequestBodyInit | null | undefined | ReadableStream;
-  requestTime: number;
-  responseTime: number;
-  status: number;
-  statusText: string;
-  response?: any;
+  method: string
+  url: string | URL
+  body: Document | XMLHttpRequestBodyInit | null | undefined | ReadableStream
+  requestTime: number
+  responseTime: number
+  status: number
+  statusText: string
+  response?: any
+}
+
+/**
+ * vue错误信息
+ */
+export interface IVueErrorLog extends IBasicErrorLog {
+  message: string,
+  componentName?: string
+  hook: string
+  stack: StackTrace.StackFrame[]
 }
 
 export interface IHttpErrorLog extends IBasicErrorLog {
@@ -68,7 +78,7 @@ export interface IHttpErrorLog extends IBasicErrorLog {
 }
 
 /** 统一错误信息类型 */
-export type IErrorLog = IJsErrorLog | IPromiseErrorLog | IHttpErrorLog
+export type IErrorLog = IJsErrorLog | IPromiseErrorLog | IHttpErrorLog | IVueErrorLog
 
 export interface ITrackerOption {
   /**

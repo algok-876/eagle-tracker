@@ -25,6 +25,14 @@ export default class Eagle extends Core {
     this.trackerInstance = new Tracker(this, this.configInstance.get('tracker'));
     this.vitalsInstance = new WebVitals(this);
   }
+
+  /**
+   * 获取vue错误处理函数
+   * @returns vue错误处理函数
+   */
+  getVueErrorhandler() {
+    return this.trackerInstance.vueErrorhandler();
+  }
 }
 
 export * from './types';
