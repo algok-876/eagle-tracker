@@ -2,10 +2,9 @@ import './style.css'
 import Eagle from '@eagle-tracker/core/index'
 
 const instance = new Eagle({
-  isTest: true
+  isTest: false
 })
-const instance2 = new Eagle()
-console.log(instance === instance2)
+
 
 document.querySelector('#app').innerHTML = `
 <button id="p">触发Promise错误</button>

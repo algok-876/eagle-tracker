@@ -18,6 +18,8 @@ export default class Eagle extends Core {
 
   transportInstance!: Transport;
 
+  private isStart = false;
+
   constructor(config: Partial<IGlobalConfig> = {}) {
     // 如果已经实例化过了，就返回唯一的实例
     if (typeof sdkInstance === 'object' && sdkInstance instanceof Eagle) {
@@ -28,11 +30,22 @@ export default class Eagle extends Core {
     super();
     // 挂载插件
     this.configInstance = new Config(this);
-    this.configInstance.set(config); // 更新配置
+    // 更新配置
+    this.configInstance.set(config);
     this.transportInstance = new Transport(this);
+    sdkInstance = this;
+  }
+
+  /**
+   * 启动
+   */
+  start() {
+    if (this.isStart) {
+      return;
+    }
     this.trackerInstance = new Tracker(this, this.configInstance.get('tracker'));
     this.vitalsInstance = new WebVitals(this);
-    sdkInstance = this;
+    this.isStart = true;
   }
 
   /**
