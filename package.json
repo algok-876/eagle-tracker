@@ -9,7 +9,7 @@
     "prepare": "husky install",
     "clean": "rimraf dist packages/*/dist",
     "clean:dep": "rimraf dist packages/*/node_modules examples/*/node_modules",
-    "lint": "eslint src --fix --ext .ts",
+    "lint": "eslint packages/**/*.ts --fix --ext .ts",
     "build:rollup": "rollup -c",
     "publish": "changeset publish",
     "commit": "git-cz",

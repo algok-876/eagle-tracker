@@ -1,11 +1,12 @@
 import StackTrace from 'stacktrace-js';
 import { merge } from 'lodash-es';
-import { debounce, formatComponentName } from '@eagle-tracker/utils';
+import { debounce, formatComponentName, econsole } from '@eagle-tracker/utils';
 import Eagle from '../../../index';
 import { ErrorType, TransportCategory } from '../../types/enum';
 import {
   ITrackerOption, IErrorLog, IJsErrorLog, IHttplog, IPromiseErrorLog, IVueErrorLog,
 } from '../../types';
+import { LifeCycleName } from '../../types/core';
 
 export default class Tracker {
   private options: ITrackerOption = {
@@ -45,7 +46,7 @@ export default class Tracker {
     // 不监控错误
     if (!this.options.enable) {
       if (this.host.configInstance.get('isTest')) {
-        this.host.debugLogger('[测试环境]已关闭监控JS运行时错误，如需开启请设置record.tracker.enable为true');
+        econsole('[测试环境]已关闭监控JS运行时错误，如需开启请设置record.tracker.enable为true');
       }
     } else {
       this.initJsError();
@@ -58,10 +59,6 @@ export default class Tracker {
    * 初始化jserror
    */
   initJsError() {
-    // 不上报错误数据
-    if (!this.host.configInstance.get('record.error.runtime')) {
-      return;
-    }
     window.addEventListener('error', (async (event) => {
       // 阻止错误冒泡，避免在控制台出现
       if (!this.host.configInstance.get('isTest')) {
@@ -83,6 +80,7 @@ export default class Tracker {
         ),
         type: this.host.parseTypeError(event.message),
       };
+      this.host.runLifeCycle(LifeCycleName.ERROR, [ErrorType.JS, errorLog]);
       this.handleError(errorLog);
     }), true);
   }
@@ -91,9 +89,6 @@ export default class Tracker {
    * 初始化promise错误监控
    */
   intitPromiseError() {
-    if (!this.host.configInstance.get('record.error.runtime')) {
-      return;
-    }
     window.addEventListener('unhandledrejection', (event) => {
       // 阻止错误冒泡，避免在控制台出现
       if (!this.host.configInstance.get('isTest')) {
@@ -110,6 +105,8 @@ export default class Tracker {
         errorUid: this.host.getErrorUid(this.getErrorUidInput(ErrorType.UJ, event.reason)),
         reason,
       };
+      // 执行LifeCycleName.ERROR类型的生命周期回调
+      this.host.runLifeCycle(LifeCycleName.ERROR, [ErrorType.UJ, errorLog]);
       this.handleError(errorLog);
     }, true);
   }
@@ -140,6 +137,7 @@ export default class Tracker {
         )),
       };
 
+      this.host.runLifeCycle(LifeCycleName.ERROR, [ErrorType.API, errorLog]);
       this.handleError(errorLog);
     };
 
@@ -264,6 +262,8 @@ export default class Tracker {
         ),
         componentName: formatComponentName(vm, true),
       };
+      this.host.runLifeCycle(LifeCycleName.ERROR, [ErrorType.VUE, errorLog]);
+
       // 被errorHandler拦截的错误不会出现在控制台中，所以需要额外打印出来
       if (typeof console !== 'undefined' && typeof console.error === 'function') console.error(err);
 

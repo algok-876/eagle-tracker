@@ -6,6 +6,7 @@ import Core from './src/core';
 import WebVitals from './src/plugins/performance';
 import Transport from './src/plugins/transport';
 import { IGlobalConfig } from './src/types';
+import { ConfigLifeCycleCallback, ErrorLifeCycleCallback, LifeCycleName } from './src/types/core';
 
 // 全局sdk单例对象
 let sdkInstance: any;
@@ -25,11 +26,12 @@ export default class Eagle extends Core {
     if (typeof sdkInstance === 'object' && sdkInstance instanceof Eagle) {
       // 重复实例化虽然不会返回不同的对象，但是配置会发生合并，注意是合并
       sdkInstance.configInstance.set(config);
+      sdkInstance.runLifeCycle(LifeCycleName.CONFIG, [sdkInstance.configInstance.getALL()]);
       return sdkInstance;
     }
     super();
     // 挂载插件
-    this.configInstance = new Config(this);
+    this.configInstance = new Config();
     // 更新配置
     this.configInstance.set(config);
     this.transportInstance = new Transport(this);
@@ -55,7 +57,22 @@ export default class Eagle extends Core {
   getVueErrorhandler() {
     return this.trackerInstance.vueErrorhandler();
   }
+
+  /**
+   * 注册onCatchError生命周期函数
+   * @param cb 生命周期回调
+   */
+  onCatchError(cb: ErrorLifeCycleCallback) {
+    this.registerLifeCycle(LifeCycleName.ERROR, cb);
+  }
+
+  /**
+   * 注册初始化后生命周期函数
+   * @param cb 生命周期回调
+   */
+  onMergeConfig(cb: ConfigLifeCycleCallback) {
+    this.registerLifeCycle(LifeCycleName.CONFIG, cb);
+  }
 }
 
 export * from './src/types';
-export const a = 100;
