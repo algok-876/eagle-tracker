@@ -28,6 +28,7 @@
         "@typescript-eslint/ban-types": "off",
         "no-new": "off",
         "no-underscore-dangle": "off",
-        "prefer-destructuring": "off"
+        "prefer-destructuring": "off",
+        "no-constructor-return": "off"
     }
 }

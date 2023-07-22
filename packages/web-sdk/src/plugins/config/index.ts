@@ -14,7 +14,7 @@ type DeepKeys<T> = T extends object
 export const DEFAULT_CONFIG: Partial<IGlobalConfig> = {
   pid: '',
   uid: '',
-  isTest: true,
+  isTest: false,
   record: {
     timeOnPage: true,
     performance: {
