@@ -33,10 +33,7 @@ export const DEFAULT_CONFIG: IGlobalConfig = {
   },
   tracker: {
     enable: true,
-    maxError: 16,
     sampling: 1,
-    delay: 2000,
-    concat: true,
   },
   famework: {
     vue: false,
