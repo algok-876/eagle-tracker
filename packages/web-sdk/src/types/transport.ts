@@ -5,7 +5,7 @@ import { PerformanceData, ResourceItem } from './performance';
 /**
  * 上报的数据类型
  */
-export type TransportData = IErrorLog | PerformanceData | ResourceItem
+export type TransportData = IErrorLog | PerformanceData | ResourceItem[]
 
 /**
  * 上报数据的最终形式

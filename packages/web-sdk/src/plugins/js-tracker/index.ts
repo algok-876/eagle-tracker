@@ -1,6 +1,6 @@
 import StackTrace from 'stacktrace-js';
 import { merge } from 'lodash-es';
-import { debounce, formatComponentName, econsole } from '@eagle-tracker/utils';
+import { formatComponentName, econsole } from '@eagle-tracker/utils';
 import Eagle from '../../../index';
 import { ErrorType, TransportCategory } from '../../types/enum';
 import {
@@ -11,20 +11,11 @@ import { LifeCycleName } from '../../types/core';
 export default class Tracker {
   private options: ITrackerOption = {
     enable: true,
-    maxError: 16,
     sampling: 1,
-    delay: 2000,
-    concat: true,
   };
 
   // 存放已上报过或者正处在errorList中的错误uid
   private errorSet = new Set<string>();
-
-  // 错误日志列表
-  private errorList: IErrorLog[] = [];
-
-  // 防抖版本的上报回调
-  private report;
 
   // 插件挂载的宿主
   private host: Eagle;
@@ -38,11 +29,7 @@ export default class Tracker {
     this.host = host;
     // 覆盖默认配置
     this.options = merge(this.options, opt);
-    const { delay } = this.options;
-    // 包装一下report的防抖版本，用于延迟上报错误的场景
-    this.report = debounce(this.host.transportInstance.log, delay, () => {
-      this.errorList.length = 0;
-    }, this.host.transportInstance);
+
     // 不监控错误
     if (!this.options.enable) {
       if (this.host.configInstance.get('isTest')) {
@@ -300,18 +287,7 @@ export default class Tracker {
   }
 
   /**
-   * 将错误信息加入错误列表中
-   * @param errorLog 错误信息
-   */
-  private pushError(errorLog: IErrorLog) {
-    if (this.needReport(this.options.sampling)
-      && this.errorList.length < this.options.maxError) {
-      this.errorList.push(errorLog);
-    }
-  }
-
-  /**
-   * 处理错误 延迟上报或者直接上报
+   * 处理错误
    * @param errorLog 错误信息
    * @returns
    */
@@ -325,13 +301,6 @@ export default class Tracker {
       return;
     }
     this.errorSet.add(errorLog.errorUid);
-    const { concat } = this.options;
-    // 是否立即上报
-    if (!concat) {
-      this.host.transportInstance.log(TransportCategory.ERROR, errorLog);
-    } else {
-      this.pushError(errorLog);
-      this.report(TransportCategory.ERROR, this.errorList);
-    }
+    this.host.transportInstance.log(TransportCategory.ERROR, errorLog);
   }
 }

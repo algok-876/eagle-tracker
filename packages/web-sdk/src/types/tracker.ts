@@ -85,15 +85,6 @@ export interface ITrackerOption {
    * 是否开启错误监控
    */
   enable: boolean
-  concat: boolean
-  /**
-   * 错误处理间隔时间
-   */
-  delay: number
-  /**
-   * 异常报错数量限制
-   */
-  maxError: number
   /**
    * 采样率
    */

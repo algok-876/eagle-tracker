@@ -1,8 +1,9 @@
 import { econsole } from '@eagle-tracker/utils';
+import { cloneDeep } from 'lodash-es';
 import Eagle from '../../../index';
 import {
   TransportStructure, TransportData, PerformanceData, IErrorLog,
-  ResourceItem, TransportCategory, IVueErrorLog,
+  ResourceItem, TransportCategory, IVueErrorLog, LifeCycleName,
 } from '../../types';
 
 /**
@@ -49,7 +50,7 @@ export default class Transport {
       category,
     };
 
-    return JSON.stringify(structure);
+    return structure;
   }
 
   /**
@@ -57,7 +58,7 @@ export default class Transport {
    * @param category 数据分类
    * @param context 上报数据
    */
-  log(category: TransportCategory.ERROR, context: IErrorLog | IErrorLog[]): void
+  log(category: TransportCategory.ERROR, context: IErrorLog): void
 
   /**
    * 上报性能数据
@@ -88,7 +89,7 @@ export default class Transport {
    */
   log(category: TransportCategory.CUS, context: any): void
 
-  log(category: TransportCategory, context: TransportData | TransportData[], once = false) {
+  log(category: TransportCategory, context: TransportData) {
     // 测试时不上报数据
     if (this.host.configInstance.get('isTest') === true) {
       econsole('测试模式，跳过上报该数据 ===>', `类别: ${category}`, context);
@@ -101,25 +102,11 @@ export default class Transport {
       return;
     }
 
-    // TODO 这里可能需要根据全局配置过滤一下上报的数据
-    if (once) {
-      const transportStr = this.format(category, context as TransportData);
-      this.send(transportStr);
-      return;
-    }
-
-    // 将单个log装成数组，兼容满足批量上报需求
-    const data: TransportData[] = [];
-    if (!Array.isArray(context)) {
-      data.push(context);
-    } else {
-      data.push(...context);
-    }
-    // 依次上报数组中的数据
-    data.forEach((errorlog) => {
-      const transportStr = this.format(category, errorlog);
-      this.send(transportStr);
-    });
+    // 格式化数据
+    const transportData = this.format(category, context as TransportData);
+    this.send(JSON.stringify(transportData));
+    // 生命周期
+    this.host.runLifeCycle(LifeCycleName.REPORT, [category, cloneDeep(transportData)]);
   }
 
   private send(transportStr: string) {

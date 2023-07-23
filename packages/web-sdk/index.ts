@@ -6,7 +6,9 @@ import Core from './src/core';
 import WebVitals from './src/plugins/performance';
 import Transport from './src/plugins/transport';
 import { IGlobalConfig } from './src/types';
-import { ConfigLifeCycleCallback, ErrorLifeCycleCallback, LifeCycleName } from './src/types/core';
+import {
+  ConfigLifeCycleCallback, ErrorLifeCycleCallback, LifeCycleName, ReportLifeCycleCallback,
+} from './src/types/core';
 
 // 全局sdk单例对象
 let sdkInstance: any;
@@ -67,12 +69,21 @@ export default class Eagle extends Core {
   }
 
   /**
-   * 注册初始化后生命周期函数
+   * 注册配置合并时生命周期函数
    * @param cb 生命周期回调
    */
   onMergeConfig(cb: ConfigLifeCycleCallback) {
     this.registerLifeCycle(LifeCycleName.CONFIG, cb);
   }
+
+  /**
+   * 注册数据上报生命周期函数
+   * @param cb 生命周期回调
+   */
+  onReportData(cb: ReportLifeCycleCallback) {
+    this.registerLifeCycle(LifeCycleName.REPORT, cb);
+  }
 }
 
+// 导出所有类型
 export * from './src/types';
