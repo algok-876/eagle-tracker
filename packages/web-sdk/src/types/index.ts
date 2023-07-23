@@ -4,3 +4,4 @@ export * from './performance';
 export * from './tracker';
 export * from './transport';
 export * from './core';
+export * from './guard';
