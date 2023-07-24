@@ -27,7 +27,8 @@ export default class Core {
    * @returns 编码后的错误标识码
    */
   getErrorUid(input: string) {
-    return window.btoa(input);
+    // debugger;
+    return window.btoa(encodeURIComponent(input));
   }
 
   /**

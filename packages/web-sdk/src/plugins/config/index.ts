@@ -80,7 +80,7 @@ export default class Config {
       message.push('dsn上报地址为必填项');
     }
     if (message.length > 0) {
-      this.host.console(...message, '配置项校验不通过');
+      this.host.console('log', ...message, '配置项校验不通过');
       return false;
     }
     return true;

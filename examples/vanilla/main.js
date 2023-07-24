@@ -4,12 +4,15 @@ import Eagle from '@eagle-tracker/core/index'
 const instance = new Eagle({
   isTest: true,
   appId: 'test123',
-  dsn: 'http://weiwei8848.com/log/log.png'
+  dsn: 'http://weiwei8848.com/log/log.png',
 })
 instance.start()
 // 测试错误生命周期函数
-instance.onCatchError((p1, p2) => {
-  // console.log(p1, p2)
+instance.onCatchError(() => {
+  Promise.reject('故意死循环')
+})
+instance.onCatchError(() => {
+  // console.log(kkk)
 })
 instance.onMergeConfig((config) => {
   console.log('哎呀配置被合并了，新配置为', config)

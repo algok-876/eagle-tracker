@@ -58,11 +58,12 @@ export default class Eagle extends Core {
 
   /**
    * 在测试模式下打印控制台信息
+   * @param method 打印方法
    * @param args 每个输出独占一行， 最后一个参数是标题
    */
-  console(...args: any[]) {
+  console(method: 'error' | 'log' | 'dir' | 'info', ...args: any[]) {
     if (this.configInstance.get('isTest') === true) {
-      econsole(...args);
+      econsole(method, ...args);
     }
   }
 

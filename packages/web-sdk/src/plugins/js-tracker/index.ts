@@ -1,6 +1,6 @@
 import StackTrace from 'stacktrace-js';
 import { merge } from 'lodash-es';
-import { formatComponentName, econsole } from '@eagle-tracker/utils';
+import { formatComponentName } from '@eagle-tracker/utils';
 import Eagle from '../../../index';
 import { ErrorType, TransportCategory } from '../../types/enum';
 import {
@@ -32,14 +32,16 @@ export default class Tracker {
 
     // 不监控错误
     if (!this.options.enable) {
-      if (this.host.configInstance.get('isTest')) {
-        econsole('[测试环境]已关闭监控JS运行时错误，如需开启请设置record.tracker.enable为true');
-      }
+      this.host.console('log', '已关闭监控JS运行时错误，如需开启请设置record.tracker.enable为true', '配置提示');
     } else {
       this.initJsError();
       this.intitPromiseError();
       this.initHttpError();
     }
+  }
+
+  isSafe(errorUid: string) {
+    return !this.errorSet.has(errorUid);
   }
 
   /**
@@ -50,7 +52,16 @@ export default class Tracker {
       // 阻止错误冒泡，避免在控制台出现
       event.preventDefault();
       // 在控制台打印错误
-      this.host.console(event.error, '发生了js运行时错误');
+      this.host.console('error', event.error, '发生了js运行时错误');
+
+      const errorUid = this.host.getErrorUid(
+        this.getErrorUidInput(ErrorType.JS, event.message, event.filename),
+      );
+      if (this.errorSet.has(errorUid)) {
+        return;
+      }
+      this.errorSet.add(errorUid);
+
       const stack = await StackTrace.fromError(event.error);
       // 收集错误信息
       const errorLog: IJsErrorLog = {
@@ -62,9 +73,7 @@ export default class Tracker {
         timestamp: Date.now(),
         filename: event.filename,
         stack,
-        errorUid: this.host.getErrorUid(
-          this.getErrorUidInput(ErrorType.JS, event.message, event.filename),
-        ),
+        errorUid,
         type: this.host.parseTypeError(event.message),
       };
       this.host.runLifeCycle(LifeCycleName.ERROR, [ErrorType.JS, errorLog]);
@@ -77,12 +86,13 @@ export default class Tracker {
    */
   intitPromiseError() {
     window.addEventListener('unhandledrejection', (event) => {
-      // 阻止错误冒泡，避免在控制台出现
-      if (!this.host.configInstance.get('isTest')) {
-        event.preventDefault();
-      }
+      event.preventDefault();
       // 在控制台打印错误
-      this.host.console(`reason: ${JSON.stringify(event.reason)}`, event.promise, 'Promise被拒绝了');
+      this.host.console('log', `reason: ${JSON.stringify(event.reason)}`, event.promise, 'Promise被拒绝了');
+      const errorUid = this.host.getErrorUid(this.getErrorUidInput(ErrorType.UJ, event.reason));
+      if (this.errorSet.has(errorUid)) {
+        return;
+      }
 
       const { reason } = event;
       const errorLog: IPromiseErrorLog = {
@@ -92,9 +102,10 @@ export default class Tracker {
         url: `${window.window.location.href}${window.window.location.pathname}`,
         timestamp: Date.now(),
         type: event.type,
-        errorUid: this.host.getErrorUid(this.getErrorUidInput(ErrorType.UJ, event.reason)),
+        errorUid,
         reason,
       };
+      this.errorSet.add(errorUid);
       // 执行LifeCycleName.ERROR类型的生命周期回调
       this.host.runLifeCycle(LifeCycleName.ERROR, [ErrorType.UJ, errorLog]);
       this.handleError(errorLog);
@@ -105,13 +116,19 @@ export default class Tracker {
    * 初始化Http错误监控
    */
   initHttpError() {
-    // 不上报http错误数据
-    if (!this.host.configInstance.get('record.error.http')) {
-      return;
-    }
     const loadHandler = (reqInfo: IHttplog) => {
       if (reqInfo.status < 400) return;
+      this.host.console('log', reqInfo, 'Http请求错误');
 
+      const errorUid = this.host.getErrorUid(this.getErrorUidInput(
+        ErrorType.API,
+        reqInfo.response,
+        reqInfo.statusText,
+        reqInfo.status,
+      ));
+      if (this.errorSet.has(errorUid)) {
+        return;
+      }
       const errorLog: IErrorLog = {
         title: document.title,
         errorType: ErrorType.API,
@@ -119,14 +136,9 @@ export default class Tracker {
         url: `${window.window.location.href}${window.window.location.pathname}`,
         timestamp: Date.now(),
         meta: reqInfo,
-        errorUid: this.host.getErrorUid(this.getErrorUidInput(
-          ErrorType.API,
-          reqInfo.response,
-          reqInfo.statusText,
-          reqInfo.status,
-        )),
+        errorUid,
       };
-
+      this.errorSet.add(errorUid);
       this.host.runLifeCycle(LifeCycleName.ERROR, [ErrorType.API, errorLog]);
       this.handleError(errorLog);
     };
@@ -237,7 +249,7 @@ export default class Tracker {
 
     // 处理函数
     const handler = async (err: Error, vm: any, info: any) => {
-      this.host.console(err, 'vue组件错误');
+      this.host.console('error', err, 'vue组件错误');
       const stack = await StackTrace.fromError(err);
       const errorLog: IVueErrorLog = {
         title: document.title,
@@ -256,7 +268,9 @@ export default class Tracker {
       this.host.runLifeCycle(LifeCycleName.ERROR, [ErrorType.VUE, errorLog]);
 
       // 被errorHandler拦截的错误不会出现在控制台中，所以需要额外打印出来
-      if (typeof console !== 'undefined' && typeof console.error === 'function') console.error(err);
+      if (typeof console !== 'undefined' && typeof console.error === 'function') {
+        this.host.console('error', err, 'vue错误');
+      }
 
       // 上报
       if (!this.errorSet.has(errorLog.errorUid)) {
@@ -300,11 +314,6 @@ export default class Tracker {
     if (!this.needReport()) {
       return;
     }
-    // 在同一次会话中，重复的错误无需上报多次
-    if (this.errorSet.has(errorLog.errorUid)) {
-      return;
-    }
-    this.errorSet.add(errorLog.errorUid);
     this.host.transportInstance.log(TransportCategory.ERROR, errorLog);
   }
 }

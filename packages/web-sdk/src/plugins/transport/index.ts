@@ -95,7 +95,7 @@ export default class Transport {
   log(category: TransportCategory, context: TransportData) {
     // 测试时不上报数据
     if (this.host.configInstance.get('isTest') === true) {
-      this.host.console(`类别: ${category}`, context, '测试环境，跳过上报');
+      this.host.console('log', `类别: ${category}`, context, '测试环境，跳过上报');
       return;
     }
     // 判断该类型的数据是否需要上报  等于undefined认为无该配置项可以上报

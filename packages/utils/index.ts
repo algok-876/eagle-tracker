@@ -36,21 +36,19 @@ export function debounce(func: Function, delay: number, callback?: Function, con
 
 /**
  * 向控制台输出信息
+ * @param method 打印方法
  * @param args 任意信息
  */
-export function econsole(...args: any[]) {
+export function econsole(method: 'error' | 'log' | 'dir' | 'info', ...args: any[]) {
   console.group(
     `%c EagleTracker %c ${args[args.length - 1]} %c`,
     'background:#35495e ; padding: 1px 3px; border-radius: 3px 0 0 3px;  color: #fff',
     'background:#41b883 ; padding: 1px 3px; border-radius: 0 3px 3px 0;  color: #fff',
     'background:transparent',
   );
+
   args.slice(0, -1).forEach((log) => {
-    if (typeof log === 'object') {
-      console.dir(log);
-    } else {
-      console.log(log);
-    }
+    console[method](log);
   });
   console.groupEnd();
 }
