@@ -1,0 +1,251 @@
+# TS数据类型
+如果你是在TypeScript项目中使用，那么这些类型定义会对你的开发大有益处。  
+如果使用的是JavaScript，也可以作为开发参考。
+
+::: tip
+以下这些类型全部可以导出使用
+```typescript{5}
+import {
+  ITrackerOption, IErrorLog, IJsErrorLog, IHttplog, IPromiseErrorLog, IVueErrorLog,
+} from '@eagle-tracker/vue3';
+
+// or
+
+import {
+  ITrackerOption, IErrorLog, IJsErrorLog, IHttplog, IPromiseErrorLog, IVueErrorLog,
+} from '@eagle-tracker/core';
+```
+:::
+
+## 错误相关
+
+### IBasicErrorLog
+```typescript
+interface IBasicErrorLog {
+  /**
+  * 页面标题
+  */
+  title: string
+  /**
+   * 错误类型
+   */
+  errorType: 'js-error' | 'promise-error' | 'api-error' | 'vue-error'
+  /**
+   * 发生错误的时间戳
+   */
+  timestamp: number
+  /**
+   * 发生错误页面的路径
+   */
+  url: string
+  /**
+   * 捕获到错误的途径
+   */
+  mechanism: 'onerror' | 'onunhandledrejection' | 'onloadend' | 'vueErrorhandler',
+  /**
+   * 错误的标识码
+   */
+  errorUid: string
+}
+```
+
+### IJsErrorLog
+```typescript
+interface IJsErrorLog extends IBasicErrorLog {
+  /**
+   * 发生错误的代码文件
+   */
+  filename: string
+  /**
+   * 具体错误信息
+   */
+  message: string
+  /**
+   * js错误类型 类似TypeError SyntaxError
+   */
+  type?: string
+  /**
+   * 错误堆栈
+   */
+  stack: StackTrace.StackFrame[],
+}
+```
+
+### IPromiseErrorLog
+
+```typescript
+interface IPromiseErrorLog extends IBasicErrorLog {
+  type: string
+  /**
+   * promise被拒绝的原因
+   */
+  reason: string
+}
+```
+
+### IHttpErrorLog
+```typescript
+
+interface IHttplog {
+  method: string
+  url: string | URL
+  body: Document | XMLHttpRequestBodyInit | null | undefined | ReadableStream
+  requestTime: number
+  responseTime: number
+  status: number
+  statusText: string
+  response?: any
+}
+
+interface IHttpErrorLog extends IBasicErrorLog {
+  meta: IHttplog
+}
+```
+
+### IVueErrorLog
+```typescript
+interface IVueErrorLog extends IBasicErrorLog {
+  message: string,
+  componentName?: string
+  hook: string
+  stack: StackTrace.StackFrame[]
+}
+```
+
+### IErrorLog
+解释：统一各种错误类型，会出现在上报参数和[错误生命周期回调](/guide/use/lifecycle#oncatcherror)中
+
+```typescript
+type IErrorLog = IJsErrorLog | IPromiseErrorLog | IHttpErrorLog | IVueErrorLog
+```
+
+### ErrorType
+错误类型，同样出现在[错误生命周期回调](/guide/use/lifecycle#oncatcherror)中
+```typescript
+enum ErrorType {
+  /**
+   * js错误
+   */
+  JS = 'js-error',
+  /**
+   * Promise错误
+   */
+  UJ = 'promise-error',
+  /**
+   * api错误
+   */
+  API = 'api-error',
+  /**
+   * vue错误
+   */
+  VUE = 'vue-error'
+}
+```
+## 性能指标
+
+### PerformanceData
+```typescript
+interface MPerformanceNavigationTiming {
+  FP?: number;
+  TTI?: number;
+  DomReady?: number;
+  Load?: number;
+  FirstByte?: number;
+  DNS?: number;
+  TCP?: number;
+  SSL?: number;
+  TTFB?: number;
+  Trans?: number;
+  DomParse?: number;
+  Res?: number;
+}
+
+interface PerformanceData {
+  fp: number,
+  fcp: number,
+  lcp: number,
+  nav: MPerformanceNavigationTiming
+}
+```
+
+### ResourceItem
+```typescript
+interface ResourceItem {
+  /**
+   * 资源名称
+   */
+  name: string
+  /**
+   * 资源类型
+   */
+  type: string
+  /**
+   * 加载时间
+   */
+  loadTime: number
+  /**
+   * 内容下载耗费的时间
+   */
+  contentDownloadTime: number
+  /**
+   * 总传输时间
+   */
+  totalTransTime: number
+  /**
+   * 资源大小
+   */
+  size: number
+}
+```
+
+## 数据上报
+
+### TransportCategory
+ 上报数据分类
+```typescript
+enum TransportCategory {
+  // PV访问数据
+  PV = 'pv',
+  // 性能数据
+  PERF = 'perf',
+  // 报错数据
+  ERROR = 'error',
+  // Vue错误数据
+  VUEERROR = 'vue-error',
+  // 自定义行为
+  CUS = 'custom',
+  // 资源加载数据
+  RS = 'resource'
+}
+
+```
+
+### TransportData
+待上报的数据
+```typescript
+type TransportData = IErrorLog | PerformanceData | ResourceItem[]
+```
+
+### TransportStructure
+待上报的数据将会被组装成这样的结构
+```typescript
+interface TransportStructure {
+  pid: string,
+  /**
+   * 上报数据的类型
+   */
+  category: TransportCategory
+  /**
+   * 环境相关数据
+   */
+  env: any
+  /**
+   * 上报对象（正文）
+   */
+  context: TransportData
+  /**
+   * 上报时间
+   */
+  timestamp: number
+}
+```

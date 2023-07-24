@@ -1,5 +1,5 @@
 # 开始
-eagle-sdk是一个基于 javascript 的前端错误、性能、用户行为的插件
+eagle-sdk是一个基于 javascript 的监控前端错误、性能、用户行为的插件
 
 ## 直接使用
 

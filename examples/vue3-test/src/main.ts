@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
-import Eagle, { useCatchError, isVueError } from '@eagle-tracker/vue3/index.ts'
+import Eagle, { useCatchError, isVueError, useReportData } from '@eagle-tracker/vue3/index.ts'
 
 const app = createApp(App)
 
@@ -18,6 +18,9 @@ useCatchError((type, log) => {
   if (isVueError(log)) {
     console.log(type, log)
   }
+})
+useReportData((category, context) => {
+  console.log(category, context)
 })
 app.use(Eagle, {
   isTest: false

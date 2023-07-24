@@ -27,8 +27,10 @@ export const enum TransportCategory {
   PERF = 'perf',
   // 报错数据
   ERROR = 'error',
+  // Vue错误数据
   VUEERROR = 'vue-error',
   // 自定义行为
   CUS = 'custom',
+  // 资源加载数据
   RS = 'resource'
 }

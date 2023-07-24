@@ -9,6 +9,9 @@ export default defineConfig({
   base: '/',
   cleanUrls: true,
 
+  markdown: {
+    lineNumbers: true
+  },
   themeConfig: {
     // logo: 'https://cdn.staticaly.com/gh/M-cheng-web/image-provider@main/web-tracing/icon_5e9950ae4507f.33lqpfzrwzc0.svg',
 
