@@ -48,9 +48,9 @@ export default class Tracker {
   initJsError() {
     window.addEventListener('error', (async (event) => {
       // 阻止错误冒泡，避免在控制台出现
-      if (!this.host.configInstance.get('isTest')) {
-        event.preventDefault();
-      }
+      event.preventDefault();
+      // 在控制台打印错误
+      this.host.console(event.error, '发生了js运行时错误');
       const stack = await StackTrace.fromError(event.error);
       // 收集错误信息
       const errorLog: IJsErrorLog = {
@@ -81,6 +81,9 @@ export default class Tracker {
       if (!this.host.configInstance.get('isTest')) {
         event.preventDefault();
       }
+      // 在控制台打印错误
+      this.host.console(`reason: ${JSON.stringify(event.reason)}`, event.promise, 'Promise被拒绝了');
+
       const { reason } = event;
       const errorLog: IPromiseErrorLog = {
         title: document.title,
@@ -234,6 +237,7 @@ export default class Tracker {
 
     // 处理函数
     const handler = async (err: Error, vm: any, info: any) => {
+      this.host.console(err, 'vue组件错误');
       const stack = await StackTrace.fromError(err);
       const errorLog: IVueErrorLog = {
         title: document.title,

@@ -40,11 +40,17 @@ export function debounce(func: Function, delay: number, callback?: Function, con
  */
 export function econsole(...args: any[]) {
   console.group(
-    '%c EagleTracker',
-    'background-color: #e0005a ; color: #ffffff ; font-weight: bold ; padding: 4px ;',
+    `%c EagleTracker %c ${args[args.length - 1]} %c`,
+    'background:#35495e ; padding: 1px 3px; border-radius: 3px 0 0 3px;  color: #fff',
+    'background:#41b883 ; padding: 1px 3px; border-radius: 0 3px 3px 0;  color: #fff',
+    'background:transparent',
   );
-  args.forEach((log) => {
-    console.log(log);
+  args.slice(0, -1).forEach((log) => {
+    if (typeof log === 'object') {
+      console.dir(log);
+    } else {
+      console.log(log);
+    }
   });
   console.groupEnd();
 }

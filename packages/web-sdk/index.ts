@@ -1,4 +1,5 @@
 // import { get } from 'lodash-es';
+import { econsole } from '@eagle-tracker/utils/index.ts';
 import Config from './src/plugins/config';
 import Tracker from './src/plugins/js-tracker';
 // import { debugLogger } from './utils';
@@ -33,7 +34,7 @@ export default class Eagle extends Core {
     }
     super();
     // 挂载插件
-    this.configInstance = new Config();
+    this.configInstance = new Config(this);
     // 更新配置
     this.configInstance.set(config);
     this.transportInstance = new Transport(this);
@@ -47,9 +48,22 @@ export default class Eagle extends Core {
     if (this.isStart) {
       return;
     }
+    if (!this.configInstance.checkConfig()) {
+      return;
+    }
     this.trackerInstance = new Tracker(this, this.configInstance.get('tracker'));
     this.vitalsInstance = new WebVitals(this);
     this.isStart = true;
+  }
+
+  /**
+   * 在测试模式下打印控制台信息
+   * @param args 每个输出独占一行， 最后一个参数是标题
+   */
+  console(...args: any[]) {
+    if (this.configInstance.get('isTest') === true) {
+      econsole(...args);
+    }
   }
 
   /**

@@ -43,7 +43,10 @@ export default class Transport {
    */
   format(category: TransportCategory, context: TransportData) {
     const structure: TransportStructure = {
-      pid: this.host.configInstance.get('pid'),
+      appId: this.host.configInstance.get('appId'),
+      appVersion: this.host.configInstance.get('appVersion'),
+      appName: this.host.configInstance.get('appName'),
+      uid: this.host.configInstance.get('uid'),
       context,
       env: 'env',
       timestamp: new Date().getTime(),
@@ -92,7 +95,7 @@ export default class Transport {
   log(category: TransportCategory, context: TransportData) {
     // 测试时不上报数据
     if (this.host.configInstance.get('isTest') === true) {
-      econsole('测试模式，跳过上报该数据 ===>', `类别: ${category}`, context);
+      this.host.console(`类别: ${category}`, context, '测试环境，跳过上报');
       return;
     }
     // 判断该类型的数据是否需要上报  等于undefined认为无该配置项可以上报
@@ -110,8 +113,8 @@ export default class Transport {
   }
 
   private send(transportStr: string) {
-    const dest = 'http://weiwei8848.com/log/log.png';
+    const dsn = this.host.configInstance.get('dsn');
     const img = new Image();
-    img.src = `${dest}?data=${encodeURIComponent(transportStr)}`;
+    img.src = `${dsn}?data=${encodeURIComponent(transportStr)}`;
   }
 }

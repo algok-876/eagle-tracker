@@ -2,11 +2,23 @@ import { ITrackerOption } from './tracker';
 
 export interface IGlobalConfig {
   /**
-   * 项目id
+   * 项目id，必填
    */
-  pid: ''
+  appId: '',
   /**
-   * 设备唯一id
+   * 应用名称
+   */
+  appName: '',
+  /**
+   * 数据上报地址
+   */
+  dsn: string,
+  /**
+   * 应用版本
+   */
+  appVersion: '',
+  /**
+   * 用户id，如果有的话
    */
   uid: ''
   /**

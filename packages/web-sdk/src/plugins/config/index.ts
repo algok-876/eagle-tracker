@@ -1,5 +1,6 @@
 import { merge, cloneDeep, get } from 'lodash-es';
 import { IGlobalConfig } from '../../types';
+import Eagle from '../../../index';
 
 type DeepKeys<T> = T extends object
   ? {
@@ -11,7 +12,10 @@ type DeepKeys<T> = T extends object
 
 // 默认配置
 export const DEFAULT_CONFIG: IGlobalConfig = {
-  pid: '',
+  appId: '',
+  dsn: '',
+  appName: '',
+  appVersion: '',
   uid: '',
   isTest: false,
   record: {
@@ -43,6 +47,12 @@ export const DEFAULT_CONFIG: IGlobalConfig = {
 export default class Config {
   private config: IGlobalConfig = cloneDeep(DEFAULT_CONFIG);
 
+  private host: Eagle;
+
+  constructor(host: Eagle) {
+    this.host = host;
+  }
+
   /**
    * 更新配置
    * @param customConfig 配置对象
@@ -54,6 +64,26 @@ export default class Config {
     } else {
       this.config = merge(this.config, customConfig);
     }
+  }
+
+  checkConfig() {
+    const message: string[] = [];
+    if (!this.config.appId) {
+      message.push('appId为必填项');
+    }
+    const reg = /^https?:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i;
+    if (this.config.dsn) {
+      if (!reg.test(this.config.dsn)) {
+        message.push('dsn上报地址格式不正确');
+      }
+    } else {
+      message.push('dsn上报地址为必填项');
+    }
+    if (message.length > 0) {
+      this.host.console(...message, '配置项校验不通过');
+      return false;
+    }
+    return true;
   }
 
   /**
