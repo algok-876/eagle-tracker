@@ -7,10 +7,16 @@ sdk还处于开发阶段，配置项可能会经常变动
 ## main 主要配置
 | 名称                | 类型                 | 必填   | 默认值    | 说明                          |
 | ------------------- | -------------------- | ------ | --------- | ----------------------------- |
-| pid                 | string               | **是** | -         | 项目id                      |
+| appId                 | string               | **是** | -         | 应用id                      |
+| dsn                 | string               | **是** | -         | 数据上报地址                      |
+| appName                 | string           | 否 | -         | 应用名称                      |
+| appVersion                 | string        | 否 | -         | 应用版本                      |
+| uid                 | string               | 否 | -         | 用户id                      |
 | isTest             | boolean               | 否     | false         | 时候是测试环境，测试环境不上报数据，同时伴有控制台输出            |
 | tracker             | object               | 否     | -         | ***详细见下方***  [tracker](#tracker-监控)                    |
 | record              | object               | 否     | -         | ***详细见下方*** [record](#record-数据记录)      |
+
+其中 `appId`, `appName`, `appVersion`, `uid` 会随着数据一起上报
 
 ## tracker 监控
 | 名称                | 类型                 | 必填   | 默认值    | 说明                          |
@@ -51,7 +57,11 @@ sdk还处于开发阶段，配置项可能会经常变动
 
 ```json
 {
-  pid: '',
+  appId: '',
+  dsn: '',
+  appName: '',
+  appVersion: '',
+  uid: '',
   isTest: false,
   record: {
     timeOnPage: true,
@@ -73,6 +83,6 @@ sdk还处于开发阶段，配置项可能会经常变动
   tracker: {
     enable: true,
     sampling: 1,
-  },
-};
+  }
+}
 ```
