@@ -54,3 +54,4 @@ export function econsole(method: 'error' | 'log' | 'dir' | 'info', ...args: any[
 }
 
 export * from './src/vue';
+export * from './src/env';

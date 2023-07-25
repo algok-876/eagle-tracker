@@ -22,7 +22,12 @@ export interface TransportStructure {
   /**
    * 环境相关数据
    */
-  env: any
+  env: {
+    browser: string,
+    os: string,
+    deviceType: string,
+    screen: string,
+  }
   /**
    * 上报对象（正文）
    */

@@ -1,3 +1,6 @@
+import {
+  getBrowser, getOS, getDeviceType, getScreenResolution,
+} from '@eagle-tracker/utils/index';
 import { IGlobalConfig } from '../types';
 import {
   ConfigLifeCycleCallback, ErrorLifeCycleCallback, LifeCycleName, ReportLifeCycleCallback,
@@ -29,6 +32,19 @@ export default class Core {
   getErrorUid(input: string) {
     // debugger;
     return window.btoa(encodeURIComponent(input));
+  }
+
+  /**
+   * 获取用户环境相关数据
+   * @returns 浏览器类型，操作系统，设备类型，屏幕分辨率
+   */
+  getUserEnv() {
+    return {
+      browser: getBrowser(),
+      os: getOS(),
+      deviceType: getDeviceType(),
+      screen: getScreenResolution(),
+    };
   }
 
   /**

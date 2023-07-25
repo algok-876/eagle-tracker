@@ -48,7 +48,7 @@ export default class Transport {
       appName: this.host.configInstance.get('appName'),
       uid: this.host.configInstance.get('uid'),
       context,
-      env: 'env',
+      env: this.host.getUserEnv(),
       timestamp: new Date().getTime(),
       category,
     };

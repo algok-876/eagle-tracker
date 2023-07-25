@@ -40,8 +40,13 @@ export default class Tracker {
     }
   }
 
-  isSafe(errorUid: string) {
-    return !this.errorSet.has(errorUid);
+  /**
+   * 判断是否已经处理过相同错误，可以用来防止执行生命周期时死循环或者避免处理重复错误
+   * @param errorUid 错误唯一标识
+   * @returns 是否之前处理过
+   */
+  isUnSafe(errorUid: string) {
+    return this.errorSet.has(errorUid);
   }
 
   /**
@@ -57,7 +62,7 @@ export default class Tracker {
       const errorUid = this.host.getErrorUid(
         this.getErrorUidInput(ErrorType.JS, event.message, event.filename),
       );
-      if (this.errorSet.has(errorUid)) {
+      if (this.isUnSafe(errorUid)) {
         return;
       }
       this.errorSet.add(errorUid);
@@ -99,7 +104,7 @@ export default class Tracker {
         title: document.title,
         errorType: ErrorType.UJ,
         mechanism: 'onunhandledrejection',
-        url: `${window.window.location.href}${window.window.location.pathname}`,
+        url: `${window.location.href}${window.location.pathname}`,
         timestamp: Date.now(),
         type: event.type,
         errorUid,
@@ -133,7 +138,7 @@ export default class Tracker {
         title: document.title,
         errorType: ErrorType.API,
         mechanism: 'onloadend',
-        url: `${window.window.location.href}${window.window.location.pathname}`,
+        url: `${window.location.href}${window.location.pathname}`,
         timestamp: Date.now(),
         meta: reqInfo,
         errorUid,
