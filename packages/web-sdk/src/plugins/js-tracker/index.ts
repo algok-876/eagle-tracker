@@ -2,11 +2,22 @@ import StackTrace from 'stacktrace-js';
 import { merge } from 'lodash-es';
 import { formatComponentName } from '@eagle-tracker/utils';
 import Eagle from '../../../index';
-import { ErrorType, TransportCategory } from '../../types/enum';
+import { ErrorType, RSErrorType, TransportCategory } from '../../types/enum';
 import {
-  ITrackerOption, IErrorLog, IJsErrorLog, IHttplog, IPromiseErrorLog, IVueErrorLog,
+  ITrackerOption, IErrorLog, IJsErrorLog, IHttplog, IPromiseErrorLog, IVueErrorLog, RSErrorLog,
 } from '../../types';
 import { LifeCycleName } from '../../types/core';
+
+function isResourceError(event: ErrorEvent) {
+  if (event.target !== window
+    && event.target !== null
+    && ((event.target as any).src !== undefined
+      || (event.target as any).href !== undefined
+    )) {
+    return true;
+  }
+  return false;
+}
 
 export default class Tracker {
   private options: ITrackerOption = {
@@ -35,8 +46,9 @@ export default class Tracker {
       this.host.console('log', '已关闭监控JS运行时错误，如需开启请设置record.tracker.enable为true', '配置提示');
     } else {
       this.initJsError();
-      this.intitPromiseError();
+      this.initPromiseError();
       this.initHttpError();
+      this.initResourceError();
     }
   }
 
@@ -54,6 +66,9 @@ export default class Tracker {
    */
   initJsError() {
     window.addEventListener('error', (async (event) => {
+      if (isResourceError(event)) {
+        return;
+      }
       // 阻止错误冒泡，避免在控制台出现
       event.preventDefault();
       // 在控制台打印错误
@@ -83,13 +98,13 @@ export default class Tracker {
       };
       this.host.runLifeCycle(LifeCycleName.ERROR, [ErrorType.JS, errorLog]);
       this.handleError(errorLog);
-    }), true);
+    }));
   }
 
   /**
    * 初始化promise错误监控
    */
-  intitPromiseError() {
+  initPromiseError() {
     window.addEventListener('unhandledrejection', (event) => {
       event.preventDefault();
       // 在控制台打印错误
@@ -114,6 +129,37 @@ export default class Tracker {
       // 执行LifeCycleName.ERROR类型的生命周期回调
       this.host.runLifeCycle(LifeCycleName.ERROR, [ErrorType.UJ, errorLog]);
       this.handleError(errorLog);
+    });
+  }
+
+  /**
+   * 初始化资源加载错误
+   */
+  initResourceError() {
+    const tagMapToType = {
+      link: RSErrorType.CSS,
+      script: RSErrorType.SCRIPT,
+      img: RSErrorType.IMG,
+      audio: RSErrorType.AUDIO,
+      video: RSErrorType.VIDEO,
+    };
+    window.addEventListener('error', (event) => {
+      if (!isResourceError(event)) {
+        return;
+      }
+      const target = event.target as any;
+      const tagName = target.tagName.toLowerCase();
+      const url = target.src || target.href;
+
+      const log = {
+        type: tagMapToType[tagName],
+        pageUrl: window.location.href,
+        pageTitle: document.title,
+        triggerTime: Date.now(),
+        url,
+        tagName,
+      } as RSErrorLog;
+      this.host.transportInstance.log(TransportCategory.RSERROR, log);
     }, true);
   }
 

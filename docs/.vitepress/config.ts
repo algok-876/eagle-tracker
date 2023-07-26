@@ -33,8 +33,8 @@ export default defineConfig({
         {
           text: '使用',
           items: [
+            { text: '基础说明', link: '/guide/use/basic' },
             { text: '配置项', link: '/guide/use/options' },
-            { text: '基础', link: '/guide/use/basic' },
             { text: '生命周期', link: '/guide/use/lifecycle' },
             { text: 'TS数据类型', link: '/guide/use/type' },
             { text: 'TS类型保护', link: '/guide/use/guard' },

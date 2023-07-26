@@ -1,3 +1,5 @@
+import { RSErrorType } from './enum';
+
 export interface IBasicErrorLog {
   /**
   * 页面标题
@@ -52,14 +54,65 @@ export interface IPromiseErrorLog extends IBasicErrorLog {
   reason: string
 }
 
+export interface RSErrorLog {
+  /**
+   * 何种类型的资源错误
+   */
+  type: RSErrorType,
+  /**
+   * 标签
+   */
+  tagName: string,
+  /**
+   * 资源url
+   */
+  url: string,
+  /**
+   * 发生错误时间
+   */
+  triggerTime: number,
+  /**
+   * 页面url
+   */
+  pageUrl: string,
+  /**
+   * 页面标题
+   */
+  pageTitle: string,
+}
+
 export interface IHttplog {
+  /**
+   * 请求方法
+   */
   method: string
+  /**
+   * 请求的url
+   */
   url: string | URL
+  /**
+   * 请求实体
+   */
   body: Document | XMLHttpRequestBodyInit | null | undefined | ReadableStream
+  /**
+   * 发起请求的时间
+   */
   requestTime: number
+  /**
+   * 响应时间
+   */
   responseTime: number
+  /**
+   * http请求状态
+   */
   status: number
+  /**
+   * http请求状态短语
+   */
   statusText: string
+  /**
+   * 响应实体
+   */
   response?: any
 }
 

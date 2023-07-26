@@ -1,19 +1,28 @@
 import { TransportCategory } from './enum';
-import { IErrorLog } from './tracker';
+import { IErrorLog, RSErrorLog } from './tracker';
 import { PerformanceData, ResourceItem } from './performance';
 
 /**
  * 上报的数据类型
  */
-export type TransportData = IErrorLog | PerformanceData | ResourceItem[]
+export type TransportData = IErrorLog | PerformanceData | ResourceItem[] | RSErrorLog
 
 /**
  * 上报数据的最终形式
  */
 export interface TransportStructure {
   appId: string,
+  /**
+   * 应用名称
+   */
   appName: string,
+  /**
+   * 应用版本
+   */
   appVersion: string,
+  /**
+   * 用户id
+   */
   uid: string,
   /**
    * 上报数据的类型
@@ -23,9 +32,21 @@ export interface TransportStructure {
    * 环境相关数据
    */
   env: {
+    /**
+     * 浏览器及版本
+     */
     browser: string,
+    /**
+     * 操作系统及版本
+     */
     os: string,
-    deviceType: string,
+    /**
+     * 设备类型
+     */
+    deviceType: 'Mobile' | 'Tablet' | 'Desktop',
+    /**
+     * 屏幕分辨率
+     */
     screen: string,
   }
   /**

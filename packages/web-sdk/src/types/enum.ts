@@ -20,6 +20,14 @@ export const enum ErrorType {
   VUE = 'vue-error'
 }
 
+export const enum RSErrorType {
+  CSS = 'css-load-error',
+  IMG = 'img-load-error',
+  VIDEO = 'video-load-error',
+  AUDIO = 'audio-load-error',
+  SCRIPT = 'script-load-error'
+}
+
 export const enum TransportCategory {
   // PV访问数据
   PV = 'pv',
@@ -29,6 +37,8 @@ export const enum TransportCategory {
   ERROR = 'error',
   // Vue错误数据
   VUEERROR = 'vue-error',
+  // 资源加载错误
+  RSERROR = 'resource-load-error',
   // 自定义行为
   CUS = 'custom',
   // 资源加载数据

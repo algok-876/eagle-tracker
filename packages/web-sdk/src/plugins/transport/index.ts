@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash-es';
 import Eagle from '../../../index';
 import {
   TransportStructure, TransportData, PerformanceData, IErrorLog,
-  ResourceItem, TransportCategory, IVueErrorLog, LifeCycleName,
+  ResourceItem, TransportCategory, IVueErrorLog, LifeCycleName, RSErrorLog,
 } from '../../types';
 
 /**
@@ -84,6 +84,13 @@ export default class Transport {
    * @param context 上报数据
    */
   log(category: TransportCategory.VUEERROR, context: IVueErrorLog): void
+
+  /**
+   * 上报资源加载错误
+   * @param category 数据分类
+   * @param context 上报数据
+   */
+  log(category: TransportCategory.RSERROR, context: RSErrorLog): void
 
   /**
    * 上报自定义数据

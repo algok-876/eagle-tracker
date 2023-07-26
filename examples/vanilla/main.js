@@ -4,7 +4,7 @@ import Eagle from '@eagle-tracker/core/index'
 const instance = new Eagle({
   isTest: true,
   appId: 'test123',
-  dsn: 'http://weiwei8848.com/log/log.png',
+  dsn: 'http://weiwei8848.com/log/log.png'
 })
 instance.start()
 // 测试错误生命周期函数
@@ -26,6 +26,8 @@ document.querySelector('#app').innerHTML = `
 <button id="j">触发JS错误</button>
 <button id="h">触发Http(xhr)错误</button>
 <button id="f">触发Http(fetch)错误</button>
+<button id="img">图片加载错误</button>
+<div id="wrapper"></div>
 `
 
 // 触发Proise错误
@@ -49,6 +51,7 @@ document.querySelector('#p').addEventListener('click', () => {
   triggerPromiseError()
 })
 document.querySelector('#j').addEventListener('click', () => {
+  console.log('触发js错误')
   triggerJSError()
 })
 document.querySelector('#h').addEventListener('click', () => {
@@ -72,3 +75,24 @@ document.querySelector('#f').addEventListener('click', () => {
     })
   })
 })
+
+document.querySelector('#img').addEventListener('click', () => {
+  const html = document.querySelector('#wrapper').innerHTML
+  document.querySelector('#wrapper').innerHTML = html + "<img src='baid.com'/>"
+})
+
+// window.addEventListener("error", function (event) {
+//   event.preventDefault()
+//   const target = event.target
+//   const tagName = target.tagName.toLowerCase()
+//   const url = target.src || target.href
+
+//   const lohhg = {
+//     pageUrl: window.location.href,
+//     pageTitle: document.title,
+//     triggerTime: Date.now(),
+//     url,
+//     tagName,
+//   }
+//   console.log(lohhg)
+// }, true)
