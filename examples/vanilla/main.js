@@ -6,6 +6,7 @@ const instance = new Eagle({
   appId: 'test123',
   dsn: 'http://weiwei8848.com/log/log.png'
 })
+console.log(instance.getUserEnv())
 instance.start()
 // 测试错误生命周期函数
 instance.onCatchError(() => {

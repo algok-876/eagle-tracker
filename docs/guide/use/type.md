@@ -18,7 +18,7 @@ import {
 :::
 
 ## 错误相关
-
+以下 `xxxLog` 都表示发生对应错误时收集有关这个错误的信息。
 ### IBasicErrorLog
 ```typescript
 interface IBasicErrorLog {
@@ -87,13 +87,37 @@ interface IPromiseErrorLog extends IBasicErrorLog {
 ```typescript
 
 interface IHttplog {
+  /**
+   * 请求方法
+   */
   method: string
+  /**
+   * 请求的url
+   */
   url: string | URL
+  /**
+   * 请求实体
+   */
   body: Document | XMLHttpRequestBodyInit | null | undefined | ReadableStream
+  /**
+   * 发起请求的时间
+   */
   requestTime: number
+  /**
+   * 响应时间
+   */
   responseTime: number
+  /**
+   * http请求状态
+   */
   status: number
+  /**
+   * http请求状态短语
+   */
   statusText: string
+  /**
+   * 响应实体
+   */
   response?: any
 }
 
@@ -120,7 +144,9 @@ type IErrorLog = IJsErrorLog | IPromiseErrorLog | IHttpErrorLog | IVueErrorLog
 ```
 
 ### ErrorType
-错误类型，同样出现在[错误生命周期回调](/guide/use/lifecycle#oncatcherror)中
+这用来表示程序运行中的不同的错误类型  
+
+同样出现在[错误生命周期回调](/guide/use/lifecycle#oncatcherror)中
 ```typescript
 enum ErrorType {
   /**
@@ -141,6 +167,52 @@ enum ErrorType {
   VUE = 'vue-error'
 }
 ```
+
+## 资源加载错误
+
+###  RSErrorType
+有多种类型的资源，所以也有多种资源错误类型，例如css加载失败，img加载失败。
+```typescript
+enum RSErrorType {
+  CSS = 'css-load-error',
+  IMG = 'img-load-error',
+  VIDEO = 'video-load-error',
+  AUDIO = 'audio-load-error',
+  SCRIPT = 'script-load-error'
+}
+```
+
+### RSErrorLog
+若发生资源加载错误将收集以下的数据。
+```typescript
+interface RSErrorLog {
+  /**
+   * 何种类型的资源错误
+   */
+  type: RSErrorType,
+  /**
+   * 标签
+   */
+  tagName: string,
+  /**
+   * 资源url
+   */
+  url: string,
+  /**
+   * 发生错误时间
+   */
+  triggerTime: number,
+  /**
+   * 页面url
+   */
+  pageUrl: string,
+  /**
+   * 页面标题
+   */
+  pageTitle: string,
+}
+```
+
 ## 性能指标
 
 ### PerformanceData
@@ -212,25 +284,38 @@ enum TransportCategory {
   ERROR = 'error',
   // Vue错误数据
   VUEERROR = 'vue-error',
+  // 资源加载错误
+  RSERROR = 'resource-load-error',
   // 自定义行为
   CUS = 'custom',
   // 资源加载数据
   RS = 'resource'
 }
-
 ```
 
 ### TransportData
 待上报的数据
 ```typescript
-type TransportData = IErrorLog | PerformanceData | ResourceItem[]
+type TransportData = IErrorLog | PerformanceData | ResourceItem[] | RSErrorLog
 ```
 
 ### TransportStructure
 待上报的数据将会被组装成这样的结构
 ```typescript
 interface TransportStructure {
-  pid: string,
+  appId: string,
+  /**
+   * 应用名称
+   */
+  appName: string,
+  /**
+   * 应用版本
+   */
+  appVersion: string,
+  /**
+   * 用户id
+   */
+  uid: string,
   /**
    * 上报数据的类型
    */
@@ -238,7 +323,24 @@ interface TransportStructure {
   /**
    * 环境相关数据
    */
-  env: any
+  env: {
+    /**
+     * 浏览器及版本
+     */
+    browser: string,
+    /**
+     * 操作系统及版本
+     */
+    os: string,
+    /**
+     * 设备类型
+     */
+    deviceType: 'Mobile' | 'Tablet' | 'Desktop',
+    /**
+     * 屏幕分辨率
+     */
+    screen: string,
+  }
   /**
    * 上报对象（正文）
    */
@@ -248,4 +350,5 @@ interface TransportStructure {
    */
   timestamp: number
 }
+
 ```
