@@ -1,5 +1,5 @@
 // import { get } from 'lodash-es';
-import { econsole } from '@eagle-tracker/utils/index.ts';
+import { econsole } from '@eagle-tracker/utils/index';
 import Config from './src/plugins/config';
 import Tracker from './src/plugins/js-tracker';
 // import { debugLogger } from './utils';
@@ -8,7 +8,12 @@ import WebVitals from './src/plugins/performance';
 import Transport from './src/plugins/transport';
 import { IGlobalConfig } from './src/types';
 import {
-  ConfigLifeCycleCallback, ErrorLifeCycleCallback, LifeCycleName, ReportLifeCycleCallback,
+  AfterSendDataLifeCycleCallback,
+  BeforeSendDataLifeCycleCallback,
+  ConfigLifeCycleCallback,
+  ErrorLifeCycleCallback,
+  LifeCycleName,
+  RSErrorLifeCycleCallback,
 } from './src/types/core';
 
 // 全局sdk单例对象
@@ -84,6 +89,14 @@ export default class Eagle extends Core {
   }
 
   /**
+   * 注册onCatchRSError生命周期函数
+   * @param cb 生命周期回调
+   */
+  onCatchRSError(cb: RSErrorLifeCycleCallback) {
+    this.registerLifeCycle(LifeCycleName.RSERROR, cb);
+  }
+
+  /**
    * 注册配置合并时生命周期函数
    * @param cb 生命周期回调
    */
@@ -92,11 +105,19 @@ export default class Eagle extends Core {
   }
 
   /**
-   * 注册数据上报生命周期函数
+   * 注册数据上报之前生命周期函数
    * @param cb 生命周期回调
    */
-  onReportData(cb: ReportLifeCycleCallback) {
-    this.registerLifeCycle(LifeCycleName.REPORT, cb);
+  beforeSendData(cb: BeforeSendDataLifeCycleCallback) {
+    this.registerLifeCycle(LifeCycleName.BSEND, cb);
+  }
+
+  /**
+   * 注册数据上报之前生命周期函数
+   * @param cb 生命周期回调
+   */
+  afterSendData(cb: AfterSendDataLifeCycleCallback) {
+    this.registerLifeCycle(LifeCycleName.ASEND, cb);
   }
 }
 

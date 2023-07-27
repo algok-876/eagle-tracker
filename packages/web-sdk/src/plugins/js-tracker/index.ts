@@ -159,6 +159,8 @@ export default class Tracker {
         url,
         tagName,
       } as RSErrorLog;
+      // 执行资源错误生命周期回调
+      this.host.runLifeCycle(LifeCycleName.RSERROR, [log.type, log]);
       this.host.transportInstance.log(TransportCategory.RSERROR, log);
     }, true);
   }

@@ -3,9 +3,15 @@ import {
 } from '@eagle-tracker/utils/index';
 import { IGlobalConfig } from '../types';
 import {
-  ConfigLifeCycleCallback, ErrorLifeCycleCallback, LifeCycleName, ReportLifeCycleCallback,
+  AfterSendDataLifeCycleCallback,
+  BeforeSendDataLifeCycleCallback,
+  ConfigLifeCycleCallback,
+  ErrorLifeCycleCallback,
+  LifeCycleName,
+  RSErrorLifeCycleCallback,
 } from '../types/core';
 
+type DeviceType = 'Mobile' | 'Tablet' | 'Desktop'
 export default class Core {
   private lifeCycleMap = new Map<LifeCycleName, any[]>();
 
@@ -42,7 +48,7 @@ export default class Core {
     return {
       browser: getBrowser(),
       os: getOS(),
-      deviceType: getDeviceType(),
+      deviceType: getDeviceType() as DeviceType,
       screen: getScreenResolution(),
     };
   }
@@ -62,11 +68,25 @@ export default class Core {
   registerLifeCycle(name: LifeCycleName.CONFIG, fn: ConfigLifeCycleCallback): void
 
   /**
-   * 注册数据上报生命周期
+   * 注册数据上报之后生命周期
    * @param name 生命周期名字
    * @param fn 注册的生命周期函数
    */
-  registerLifeCycle(name: LifeCycleName.REPORT, fn: ReportLifeCycleCallback): void
+  registerLifeCycle(name: LifeCycleName.ASEND, fn: AfterSendDataLifeCycleCallback): void
+
+  /**
+   * 注册数据上报之前生命周期
+   * @param name 生命周期名字
+   * @param fn 注册的生命周期函数
+   */
+  registerLifeCycle(name: LifeCycleName.BSEND, fn: BeforeSendDataLifeCycleCallback): void
+
+  /**
+   * 注册资源错误生命周期
+   * @param name 生命周期名字
+   * @param fn 注册的生命周期函数
+   */
+  registerLifeCycle(name: LifeCycleName.RSERROR, fn: RSErrorLifeCycleCallback): void
 
   /**
    * 注册生命周期
@@ -100,12 +120,31 @@ export default class Core {
     params: [IGlobalConfig]): void
 
   /**
-   * 执行数据上报生命周期回调
+   * 执行数据上报之前生命周期回调
    * @param name 生命周期名称
    * @param params 传递给生命周期回调的参数，数组方式
    */
-  runLifeCycle(name: LifeCycleName.REPORT,
-    params: [Parameters<ReportLifeCycleCallback>[0], Parameters<ReportLifeCycleCallback>[1]]): void
+  runLifeCycle(name: LifeCycleName.BSEND,
+    params: [Parameters<BeforeSendDataLifeCycleCallback>[0],
+      Parameters<BeforeSendDataLifeCycleCallback>[1]]): void
+
+  /**
+   * 执行数据上报之后生命周期回调
+   * @param name 生命周期名称
+   * @param params 传递给生命周期回调的参数，数组方式
+   */
+  runLifeCycle(name: LifeCycleName.ASEND,
+    params: [Parameters<AfterSendDataLifeCycleCallback>[0],
+      Parameters<AfterSendDataLifeCycleCallback>[1]]): void
+
+  /**
+   * 执行资源错误生命周期回调
+   * @param name 生命周期名称
+   * @param params 传递给生命周期回调的参数，数组方式
+   */
+  runLifeCycle(name: LifeCycleName.RSERROR,
+    params: [Parameters<RSErrorLifeCycleCallback>[0],
+      Parameters<RSErrorLifeCycleCallback>[1]]): void
 
   /**
    * 执行生命周期回调

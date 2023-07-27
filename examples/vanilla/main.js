@@ -6,20 +6,15 @@ const instance = new Eagle({
   appId: 'test123',
   dsn: 'http://weiwei8848.com/log/log.png'
 })
-console.log(instance.getUserEnv())
 instance.start()
-// 测试错误生命周期函数
-instance.onCatchError(() => {
-  Promise.reject('故意死循环')
-})
-instance.onCatchError(() => {
-  // console.log(kkk)
+instance.onCatchRSError((type, log) => {
+  console.log('资源错误', type, log)
 })
 instance.onMergeConfig((config) => {
   console.log('哎呀配置被合并了，新配置为', config)
 })
-instance.onReportData((category, data) => {
-  console.log('数据上报时')
+instance.afterSendData((category, data) => {
+  console.log('数据上报前')
   console.log(category, data)
 })
 document.querySelector('#app').innerHTML = `

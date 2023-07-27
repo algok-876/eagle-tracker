@@ -114,9 +114,11 @@ export default class Transport {
 
     // 格式化数据
     const transportData = this.format(category, context as TransportData);
+    // 上报前生命周期
+    this.host.runLifeCycle(LifeCycleName.BSEND, [category, cloneDeep(transportData)]);
     this.send(JSON.stringify(transportData));
-    // 生命周期
-    this.host.runLifeCycle(LifeCycleName.REPORT, [category, cloneDeep(transportData)]);
+    // 上报后生命周期
+    this.host.runLifeCycle(LifeCycleName.ASEND, [category, cloneDeep(transportData)]);
   }
 
   private send(transportStr: string) {
