@@ -1,6 +1,6 @@
 import {
   getBrowser, getOS, getDeviceType, getScreenResolution,
-} from '@eagle-tracker/utils/index';
+} from '@eagle-tracker/utils';
 import { IGlobalConfig } from '../types';
 import {
   AfterSendDataLifeCycleCallback,

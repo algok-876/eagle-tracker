@@ -1,5 +1,5 @@
 // import { get } from 'lodash-es';
-import { econsole } from '@eagle-tracker/utils/index';
+import { econsole } from '@eagle-tracker/utils';
 import Config from './src/plugins/config';
 import Tracker from './src/plugins/js-tracker';
 // import { debugLogger } from './utils';
