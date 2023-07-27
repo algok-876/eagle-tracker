@@ -33,21 +33,56 @@ instance.onMergeConfig((config) => {
   console.log('哎呀配置被合并了，新配置为', config)
 })
 ```
-## onReportData
+## beforeSendData
 
-在数据上报之前会触发改生命周期，优先级高于配置项，即使配置项中设置了不上报某个记录，在改生命周期中仍然可以获取上报的数据。
+在数据上报之前会触发生命周期，优先级高于配置项，即使配置项中设置了不上报某个记录，在改生命周期中仍然可以获取上报的数据。
 你可以拿到最终上报数据后自行处理。
 ### 回调类型
 ```typescript
-type ReportLifeCycleCallback =
+type BeforeSendDataLifeCycleCallback =
   (category: TransportCategory, context: TransportStructure) => void
 ```
 ### 举个例子 :chestnut:
 ```typescript
 const eagle = new Eagle()
 eagle.start()
-instance.onReportData((category, data) => {
+instance.beforeSendData((category, data) => {
   console.log(category, data)
+})
+```
+
+## afterSendData
+
+在数据上报后会触发生命周期，如果配置项中设置了不上报某个记录，可能不会触发
+### 回调类型
+```typescript
+type AfterSendDataLifeCycleCallback =
+  (category: TransportCategory, context: TransportStructure) => void
+```
+### 举个例子 :chestnut:
+```typescript
+const eagle = new Eagle()
+eagle.start()
+instance.afterSendData((category, data) => {
+  console.log(category, data)
+})
+```
+
+
+## onCatchRSError
+
+发生资源加载错误时，会触发该生命周期
+
+### 回调类型
+```typescript
+type RSErrorLifeCycleCallback = (type: RSErrorType, log: RSErrorLog) => void
+```
+### 举个例子 :chestnut:
+```typescript
+const eagle = new Eagle()
+eagle.start()
+instance.onCatchRSError((type, log) => {
+  console.log(type, log)
 })
 ```
 
@@ -69,16 +104,42 @@ useCatchError((type, log) => {
 })
 ```
 
-## useReportData
-和[onReportData](#onreportdata)具有同样的功能
+## useBeforeSendData
+和[beforeSendData](#beforesenddata)具有同样的功能
 
 
 ### 举个例子 :chestnut:
 ```typescript
-import { useReportData } from '@eagle-tracker/vue3'
+import { useBeforeSendData } from '@eagle-tracker/vue3'
 
-useReportData((category, context) => {
+useBeforeSendData((category, context) => {
   console.log(category, context)
+})
+```
+
+## useAfterSendData
+和[afterSendData](#aftersenddata)具有同样的功能
+
+
+### 举个例子 :chestnut:
+```typescript
+import { useAfterSendData } from '@eagle-tracker/vue3'
+
+useAfterSendData((category, context) => {
+  console.log(category, context)
+})
+```
+
+## useCatchRSError
+和[onCatchRSError](#oncatchrserror)具有同样的功能
+
+
+### 举个例子 :chestnut:
+```typescript
+import { useCatchRSError } from '@eagle-tracker/vue3'
+
+useCatchRSError((type, log) => {
+  console.log(type, log)
 })
 ```
 

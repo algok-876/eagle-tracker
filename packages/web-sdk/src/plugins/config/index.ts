@@ -18,6 +18,7 @@ export const DEFAULT_CONFIG: IGlobalConfig = {
   appVersion: '',
   uid: '',
   isTest: false,
+  manual: false,
   record: {
     timeOnPage: true,
     performance: {

@@ -99,6 +99,10 @@ export default class Transport {
   log(category: TransportCategory.CUS, context: any): void
 
   log(category: TransportCategory, context: TransportData) {
+    // 格式化数据
+    const transportData = this.format(category, context as TransportData);
+    // 上报前生命周期
+    this.host.runLifeCycle(LifeCycleName.BSEND, [category, cloneDeep(transportData)]);
     // 测试时不上报数据
     if (this.host.configInstance.get('isTest') === true) {
       this.host.console('log', `类别: ${category}`, context, '跳过上报');
@@ -110,11 +114,10 @@ export default class Transport {
       this.host.console('log', '根据配置项，跳过该数据 ===>', `类别: ${category}`, context, '跳过上报');
       return;
     }
-
-    // 格式化数据
-    const transportData = this.format(category, context as TransportData);
-    // 上报前生命周期
-    this.host.runLifeCycle(LifeCycleName.BSEND, [category, cloneDeep(transportData)]);
+    // 取消自动上报数据
+    if (this.host.configInstance.get('manual') === true) {
+      return;
+    }
     this.send(JSON.stringify(transportData));
     // 上报后生命周期
     this.host.runLifeCycle(LifeCycleName.ASEND, [category, cloneDeep(transportData)]);

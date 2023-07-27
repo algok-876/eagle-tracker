@@ -20,7 +20,11 @@ export interface IGlobalConfig {
   /**
    * 用户id，如果有的话
    */
-  uid: ''
+  uid: '',
+  /**
+   * 是否取消自动上报数据
+   */
+  manual: boolean,
   /**
    * 是否为测试数据, 默认为boolean(测试模式下打点数据仅供浏览, 不会展示在系统中)
    */
