@@ -12,7 +12,8 @@ sdk还处于开发阶段，配置项可能会经常变动
 | appName                 | string           | 否 | -         | 应用名称                      |
 | appVersion                 | string        | 否 | -         | 应用版本                      |
 | uid                 | string               | 否 | -         | 用户id                      |
-| isTest             | boolean               | 否     | false         | 时候是测试环境，测试环境不上报数据，同时伴有控制台输出            |
+| manual                 | boolean               | 否 | false        | true表示关闭自动上报                      |
+| isTest             | boolean               | 否     | false         | 是否开启测试环境，测试环境不上报数据，同时伴有控制台输出            |
 | tracker             | object               | 否     | -         | ***详细见下方***  [tracker](#tracker-监控)                    |
 | record              | object               | 否     | -         | ***详细见下方*** [record](#record-数据记录)      |
 
@@ -63,6 +64,7 @@ sdk还处于开发阶段，配置项可能会经常变动
   appVersion: '',
   uid: '',
   isTest: false,
+  manual: false,
   record: {
     timeOnPage: true,
     performance: {
@@ -83,6 +85,10 @@ sdk还处于开发阶段，配置项可能会经常变动
   tracker: {
     enable: true,
     sampling: 1,
-  }
+  },
+  famework: {
+    vue: false,
+    app: null,
+  },
 }
 ```

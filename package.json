@@ -17,7 +17,8 @@
     "build": "run-s clean build:rollup",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "docs:publish": "sh scripts/deploy.sh"
   },
   "config": {
     "commitizen": {

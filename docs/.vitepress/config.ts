@@ -16,7 +16,8 @@ export default defineConfig({
     // logo: 'https://cdn.staticaly.com/gh/M-cheng-web/image-provider@main/web-tracing/icon_5e9950ae4507f.33lqpfzrwzc0.svg',
 
     nav: [
-      { text: '指南', link: '/guide/starting' },
+      { text: '指南', link: '/guide/start' },
+      { text: '迭代计划', link: '/iteration' },
       // { text: '示例', link: '/guide/use/demo' },
       // { text: '技术点分析', link: '/analyse/index', activeMatch: '/analyse/' },
     ],
@@ -35,6 +36,7 @@ export default defineConfig({
           items: [
             { text: '基础说明', link: '/guide/use/basic' },
             { text: '配置项', link: '/guide/use/options' },
+            { text: '手动上报', link: '/guide/use/manual' },
             { text: '生命周期', link: '/guide/use/lifecycle' },
             { text: 'TS数据类型', link: '/guide/use/type' },
             { text: 'TS类型保护', link: '/guide/use/guard' },

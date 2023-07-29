@@ -53,7 +53,19 @@ instance.beforeSendData((category, data) => {
 
 ## afterSendData
 
-在数据上报后会触发生命周期，如果配置项中设置了不上报某个记录，可能不会触发
+在数据上报后会触发生命周期
+:::tip
+case A: 如果配置项中设置了不上报某类错误或者数据  
+
+csse B: 处于测试环境下  
+
+case C: 开启了手动处理
+
+if (A || B || C) {
+  console.log("不触发此生命周期")
+}
+:::
+
 ### 回调类型
 ```typescript
 type AfterSendDataLifeCycleCallback =
