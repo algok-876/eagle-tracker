@@ -1,7 +1,7 @@
 import StackTrace from 'stacktrace-js';
 import { merge } from 'lodash-es';
 import { formatComponentName } from '@eagle-tracker/utils';
-import Eagle from '../../../index';
+import { EagleTracker } from '../../../index';
 import { ErrorType, RSErrorType, TransportCategory } from '../../types/enum';
 import {
   ITrackerOption, IErrorLog, IJsErrorLog, IHttplog, IPromiseErrorLog, IVueErrorLog, RSErrorLog,
@@ -29,14 +29,14 @@ export default class Tracker {
   private errorSet = new Set<string>();
 
   // 插件挂载的宿主
-  private host: Eagle;
+  private host: EagleTracker;
 
   /**
    * 错误监控类
    * @param host 插件宿主
    * @param opt 插件配置
    */
-  constructor(host: Eagle, opt?: Partial<ITrackerOption>) {
+  constructor(host: EagleTracker, opt?: Partial<ITrackerOption>) {
     this.host = host;
     // 覆盖默认配置
     this.options = merge(this.options, opt);

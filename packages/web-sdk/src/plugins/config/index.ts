@@ -1,6 +1,6 @@
 import { merge, cloneDeep, get } from 'lodash-es';
 import { IGlobalConfig } from '../../types';
-import Eagle from '../../../index';
+import { EagleTracker } from '../../../index';
 
 type DeepKeys<T> = T extends object
   ? {
@@ -48,9 +48,9 @@ export const DEFAULT_CONFIG: IGlobalConfig = {
 export default class Config {
   private config: IGlobalConfig = cloneDeep(DEFAULT_CONFIG);
 
-  private host: Eagle;
+  private host: EagleTracker;
 
-  constructor(host: Eagle) {
+  constructor(host: EagleTracker) {
     this.host = host;
   }
 

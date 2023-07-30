@@ -1,5 +1,5 @@
-import Eagle from '@eagle-tracker/core';
+import { EagleTracker } from '@eagle-tracker/core';
 
-const eagle = new Eagle();
+const eagle = new EagleTracker();
 
 export default eagle;

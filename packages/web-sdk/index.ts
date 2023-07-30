@@ -19,7 +19,7 @@ import {
 
 // 全局sdk单例对象
 let sdkInstance: any;
-export default class Eagle extends Core {
+export class EagleTracker extends Core {
   trackerInstance!: Tracker;
 
   configInstance!: Config;
@@ -34,7 +34,7 @@ export default class Eagle extends Core {
 
   constructor(config: Partial<IGlobalConfig> = {}) {
     // 如果已经实例化过了，就返回唯一的实例
-    if (typeof sdkInstance === 'object' && sdkInstance instanceof Eagle) {
+    if (typeof sdkInstance === 'object' && sdkInstance instanceof EagleTracker) {
       // 重复实例化虽然不会返回不同的对象，但是配置会发生合并，注意是合并
       sdkInstance.configInstance.set(config);
       sdkInstance.runLifeCycle(LifeCycleName.CONFIG, [sdkInstance.configInstance.getALL()]);

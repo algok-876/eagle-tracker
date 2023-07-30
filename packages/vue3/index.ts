@@ -13,8 +13,7 @@ function install(app: any, options: Partial<IGlobalConfig> = {}) {
   eagle.start();
   app.config.errorHandler = eagle.getVueErrorhandler();
 }
-
-export default {
+export const EagleTracker = {
   install,
 };
 // 导出类型守卫

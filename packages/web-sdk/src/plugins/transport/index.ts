@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash-es';
-import Eagle from '../../../index';
+import { EagleTracker } from '../../../index';
 import {
   TransportStructure, TransportData, PerformanceData, IErrorLog,
   ResourceItem, TransportCategory, IVueErrorLog, LifeCycleName, RSErrorLog,
@@ -18,7 +18,7 @@ interface IReportStrategies {
 }
 
 export default class Transport {
-  private host: Eagle;
+  private host: EagleTracker;
 
   private reportStrategies: IReportStrategies;
 
@@ -26,7 +26,7 @@ export default class Transport {
    * 数据上报插件
    * @param host 插件宿主
    */
-  constructor(host: Eagle) {
+  constructor(host: EagleTracker) {
     this.host = host;
     this.reportStrategies = {
       [TransportCategory.ERROR]: this.host.configInstance.get('record.error.runtime') === true,

@@ -1,7 +1,7 @@
 import './style.css'
-import Eagle from '@eagle-tracker/core/index'
+import { EagleTracker } from '@eagle-tracker/core'
 
-const instance = new Eagle({
+const instance = new EagleTracker({
   // isTest: true,
   manual: true,
   appId: 'test123',

@@ -1,15 +1,16 @@
 import { cloneDeep } from 'lodash-es';
-import Eagle, { TransportCategory } from '../../../index';
+import { EagleTracker } from '../../../index';
+import { TransportCategory } from '../../types/enum';
 import wrapReplaceHistory from './event';
 import { IPageRecord, UserOnlineRecord } from '../../types/behavior';
 import groupBy from './group';
 
 export default class Behavior {
-  private host: Eagle;
+  private host: EagleTracker;
 
   private pageTimeList: IPageRecord[];
 
-  constructor(host: Eagle) {
+  constructor(host: EagleTracker) {
     this.host = host;
     this.pageTimeList = [];
 

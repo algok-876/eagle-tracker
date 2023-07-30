@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
-import Eagle, { useCatchError, isVueError } from '@eagle-tracker/vue3'
+import { EagleTracker, useCatchError, isVueError } from '@eagle-tracker/vue3'
 import router from './router'
 const app = createApp(App)
 
@@ -20,7 +20,7 @@ useCatchError((type, log) => {
   }
 })
 app.use(router)
-app.use(Eagle, {
+app.use(EagleTracker, {
   isTest: true,
   appId: 'fdsafd',
   dsn: 'http://www.baidu.com'

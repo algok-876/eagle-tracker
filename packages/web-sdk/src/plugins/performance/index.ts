@@ -1,6 +1,6 @@
 import MetricsStore, { metricsName, IMetrics } from './store';
 import { getFP, getFCP, getNavigationTiming } from './entry';
-import Eagle from '../../../index';
+import { EagleTracker } from '../../../index';
 import { TransportCategory, PerformanceData, ResourceItem } from '../../types';
 
 interface PerformanceEntryHandler {
@@ -47,14 +47,14 @@ export default class WebVitals {
   // 本地暂存数据在 Map 里 （也可以自己用对象来存储）
   public metrics: MetricsStore;
 
-  host: Eagle;
+  host: EagleTracker;
 
   /**
    * 收集web性能数据
    * @param host 插件数组
    * @param report 上报回调
    */
-  constructor(host: Eagle) {
+  constructor(host: EagleTracker) {
     this.host = host;
     this.metrics = new MetricsStore();
 
