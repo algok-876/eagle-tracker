@@ -4,6 +4,7 @@ import {
   TransportStructure, TransportData, PerformanceData, IErrorLog,
   ResourceItem, TransportCategory, IVueErrorLog, LifeCycleName, RSErrorLog,
 } from '../../types';
+import { UserOnlineRecord } from '../../types/behavior';
 
 /**
  * 上报策略
@@ -90,6 +91,13 @@ export default class Transport {
    * @param context 上报数据
    */
   log(category: TransportCategory.RSERROR, context: RSErrorLog): void
+
+  /**
+   * 上报用户在线数据
+   * @param category 数据分类
+   * @param context 上报数据
+   */
+  log(category: TransportCategory.ONLINE, context: UserOnlineRecord): void
 
   /**
    * 上报自定义数据

@@ -6,7 +6,7 @@ export default defineConfig({
   description: '行为埋点 & 性能采集 & 异常采集 & 请求采集 & 路由采集',
 
   lastUpdated: true,
-  base: '/',
+  base: '/eagle-tracker',
   cleanUrls: true,
 
   markdown: {

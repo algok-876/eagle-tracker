@@ -4,11 +4,11 @@ export interface IGlobalConfig {
   /**
    * 项目id，必填
    */
-  appId: '',
+  appId: string,
   /**
    * 应用名称
    */
-  appName: '',
+  appName: string,
   /**
    * 数据上报地址
    */
@@ -16,11 +16,11 @@ export interface IGlobalConfig {
   /**
    * 应用版本
    */
-  appVersion: '',
+  appVersion: string,
   /**
    * 用户id，如果有的话
    */
-  uid: '',
+  uid: string,
   /**
    * 是否取消自动上报数据
    */

@@ -23,3 +23,4 @@ export {
 } from '@eagle-tracker/core';
 // 导出生命周期
 export * from './src/licfecycle';
+export * from './src/behavior';

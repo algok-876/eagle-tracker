@@ -29,6 +29,7 @@
         "no-new": "off",
         "no-underscore-dangle": "off",
         "prefer-destructuring": "off",
-        "no-constructor-return": "off"
+        "no-constructor-return": "off",
+        "prefer-rest-params": "off"
     }
 }

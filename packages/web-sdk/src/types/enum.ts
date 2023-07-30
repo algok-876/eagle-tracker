@@ -42,5 +42,7 @@ export const enum TransportCategory {
   // 自定义行为
   CUS = 'custom',
   // 资源加载数据
-  RS = 'resource'
+  RS = 'resource',
+  // 用户在浏览过的每个页面的时长
+  ONLINE = 'user-page-online'
 }

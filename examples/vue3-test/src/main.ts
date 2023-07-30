@@ -1,8 +1,8 @@
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
-import Eagle, { useCatchError, isVueError, useReportData } from '@eagle-tracker/vue3/index.ts'
-
+import Eagle, { useCatchError, isVueError } from '@eagle-tracker/vue3'
+import router from './router'
 const app = createApp(App)
 
 app.config.performance = true
@@ -19,9 +19,9 @@ useCatchError((type, log) => {
     console.log(type, log)
   }
 })
-useReportData((category, context) => {
-  console.log(category, context)
-})
+app.use(router)
 app.use(Eagle, {
-  isTest: false
+  isTest: true,
+  appId: 'fdsafd',
+  dsn: 'http://www.baidu.com'
 }).mount('#app')

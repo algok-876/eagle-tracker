@@ -6,6 +6,7 @@ import Tracker from './src/plugins/js-tracker';
 import Core from './src/core';
 import WebVitals from './src/plugins/performance';
 import Transport from './src/plugins/transport';
+import Behavior from './src/plugins/behavior';
 import { IGlobalConfig } from './src/types';
 import {
   AfterSendDataLifeCycleCallback,
@@ -26,6 +27,8 @@ export default class Eagle extends Core {
   vitalsInstance!: WebVitals;
 
   transportInstance!: Transport;
+
+  behaviorInstance!: Behavior;
 
   private isStart = false;
 
@@ -58,6 +61,7 @@ export default class Eagle extends Core {
     }
     this.trackerInstance = new Tracker(this, this.configInstance.get('tracker'));
     this.vitalsInstance = new WebVitals(this);
+    this.behaviorInstance = new Behavior(this);
     this.isStart = true;
   }
 
@@ -118,6 +122,14 @@ export default class Eagle extends Core {
    */
   afterSendData(cb: AfterSendDataLifeCycleCallback) {
     this.registerLifeCycle(LifeCycleName.ASEND, cb);
+  }
+
+  /**
+   * 获取用户页面浏览记录
+   * @returns 记录列表
+   */
+  getPageRecord() {
+    return this.behaviorInstance.getPageRecord();
   }
 }
 
