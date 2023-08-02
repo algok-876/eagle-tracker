@@ -1,8 +1,8 @@
 import './style.css'
-import { EagleTracker } from '@eagle-tracker/core'
+import { EagleTracker } from '@eagle-tracker/core/index'
 
 const instance = new EagleTracker({
-  // isTest: true,
+  isTest: true,
   manual: true,
   appId: 'test123',
   dsn: 'http://weiwei8848.com/log/log.png'
@@ -40,8 +40,14 @@ function b () {
 }
 // 触发ReferenceError
 
-function triggerPromiseError () {
-  Promise.reject('reject test')
+async function triggerPromiseError () {
+  const promise = new Promise((resolve, rej) => {
+    setTimeout(() => {
+      rej('promise rej test')
+    }, 2000)
+  })
+  await promise
+  console.log('成功了')
 }
 
 function triggerJSError () {

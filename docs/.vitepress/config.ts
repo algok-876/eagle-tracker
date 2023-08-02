@@ -45,6 +45,7 @@ export default defineConfig({
         {
           text: '功能',
           items: [
+            { text: '错误监控', link: '/guide/fun/error' },
             { text: '统计在线时长', link: '/guide/fun/user-page-record' },
           ]
         }

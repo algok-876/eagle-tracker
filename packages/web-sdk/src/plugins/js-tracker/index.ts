@@ -1,4 +1,3 @@
-import StackTrace from 'stacktrace-js';
 import { merge } from 'lodash-es';
 import { formatComponentName } from '@eagle-tracker/utils';
 import { EagleTracker } from '../../../index';
@@ -7,6 +6,7 @@ import {
   ITrackerOption, IErrorLog, IJsErrorLog, IHttplog, IPromiseErrorLog, IVueErrorLog, RSErrorLog,
 } from '../../types';
 import { LifeCycleName } from '../../types/core';
+import parseStackFrames from './parseStackFrames';
 
 function isResourceError(event: ErrorEvent) {
   if (event.target !== window
@@ -82,7 +82,7 @@ export default class Tracker {
       }
       this.errorSet.add(errorUid);
 
-      const stack = await StackTrace.fromError(event.error);
+      const stack = parseStackFrames(event.error);
       // 收集错误信息
       const errorLog: IJsErrorLog = {
         title: document.title,
@@ -303,7 +303,7 @@ export default class Tracker {
     // 处理函数
     const handler = async (err: Error, vm: any, info: any) => {
       this.host.console('error', err, 'vue组件错误');
-      const stack = await StackTrace.fromError(err);
+      const stack = parseStackFrames(err);
       const errorLog: IVueErrorLog = {
         title: document.title,
         errorType: ErrorType.VUE,

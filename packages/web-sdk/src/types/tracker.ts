@@ -1,5 +1,14 @@
 import { RSErrorType } from './enum';
 
+export interface ErrorStackInfo {
+  filename: string,
+  functionName: string,
+  lineNumber: number,
+  columnNumber: number,
+}
+
+export type ErrorStackFrames = ErrorStackInfo[]
+
 export interface IBasicErrorLog {
   /**
   * 页面标题
@@ -43,7 +52,7 @@ export interface IJsErrorLog extends IBasicErrorLog {
   /**
    * 错误堆栈
    */
-  stack: StackTrace.StackFrame[],
+  stack: ErrorStackFrames,
 }
 
 export interface IPromiseErrorLog extends IBasicErrorLog {
