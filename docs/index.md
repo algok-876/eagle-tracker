@@ -1,12 +1,12 @@
 ---
 layout: home
 
-title: eagle-sdk
+title: eagle-tracker
 titleTemplate: 埋点
 
 hero:
-  name: eagle-sdk
-  text: 前端监控SDK 错误 & 性能 & 资源
+  name: eagle-tracker
+  text: 前端监控SDK 错误 & 性能 & 资源 & 用户行为
   actions:
     - theme: brand
       text: 起步

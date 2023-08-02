@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   lang: 'zh-CN',
-  title: 'eagle-sdk',
+  title: 'eagle-tracker',
   description: '行为埋点 & 性能采集 & 异常采集 & 请求采集 & 路由采集',
 
   lastUpdated: true,
@@ -42,6 +42,12 @@ export default defineConfig({
             { text: 'TS类型保护', link: '/guide/use/guard' },
           ]
         },
+        {
+          text: '功能',
+          items: [
+            { text: '统计在线时长', link: '/guide/fun/user-page-record' },
+          ]
+        }
         /*  {
            text: '功能',
            items: [
@@ -67,7 +73,7 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/M-cheng-web/web-tracing' }
+      { icon: 'github', link: 'https://github.com/AzuraXW/eagle-tracker' }
     ],
   },
 })

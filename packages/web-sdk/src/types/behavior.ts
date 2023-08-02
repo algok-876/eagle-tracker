@@ -22,6 +22,6 @@ export interface IPageRecord {
 }
 
 /**
- * 用户在线时长记录
+ * 各页面在线总时长
  */
 export type UserOnlineRecord = Record<string, IPageRecord>

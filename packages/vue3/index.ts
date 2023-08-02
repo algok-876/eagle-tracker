@@ -18,7 +18,7 @@ export const EagleTracker = {
 };
 // 导出类型守卫
 export {
-  isJSError, isHttpError, isPromiseError, isVueError,
+  isJSError, isHttpError, isPromiseError, isVueError, TransportCategory,
 } from '@eagle-tracker/core';
 // 导出生命周期
 export * from './src/licfecycle';

@@ -86,9 +86,5 @@ sdk还处于开发阶段，配置项可能会经常变动
     enable: true,
     sampling: 1,
   },
-  famework: {
-    vue: false,
-    app: null,
-  },
 }
 ```

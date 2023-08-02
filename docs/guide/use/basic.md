@@ -4,10 +4,10 @@
 sdk会全程自动运行，理论上不需要手动干预，也暂不支持手动采集。如果你希望改变数据结构，或者手动上报数据，请异步至手动上报
 
 ```javascript
-const eagle = new Eagle({
+const eagle = new EagleTracker({
   isTest: true,
-  appId: 'test123',
-  dsn: 'http://weiwei8848.com/log/log.png'
+  appId: 'XXXXXXXX',
+  dsn: 'http://test.com/log'
 })
 ```
 运行上述代码发生了：
@@ -19,7 +19,7 @@ const eagle = new Eagle({
 ## 环境相关数据
 在数据上报之前会附带一些公共数据，其中就包含与用户环境相关的数据。例如用户所使用的浏览器类型及版本，操作系统类型及版本，屏幕分辨率。
 
-至于用户IP和所在位置或者地理相关信息，这个可以通过后端来实现。
+至于用户IP和所在位置或者地理相关信息，这个需要后端来实现。
 ### 数据样例
 
 ```json

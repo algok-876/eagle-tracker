@@ -213,6 +213,37 @@ interface RSErrorLog {
 }
 ```
 
+## 浏览记录
+```typescript
+interface IPageRecord {
+  /**
+   * 页面标题
+   */
+  pageTitle: string
+  /**
+   * 页面路径
+   */
+  path: string
+  /**
+   * 第一次进入页面的时间
+   */
+  startTime: number
+  /**
+   * 累计停留的时间
+   */
+  duration: number
+  /**
+   * 最后一次离开页面的时间
+   */
+  endTime: number
+}
+
+/**
+ * 各页面在线总时长
+ */
+type UserOnlineRecord = Record<string, IPageRecord>
+```
+
 ## 性能指标
 
 ### PerformanceData
@@ -275,7 +306,7 @@ interface ResourceItem {
 ### TransportCategory
  上报数据分类
 ```typescript
-enum TransportCategory {
+export const enum TransportCategory {
   // PV访问数据
   PV = 'pv',
   // 性能数据
@@ -289,14 +320,20 @@ enum TransportCategory {
   // 自定义行为
   CUS = 'custom',
   // 资源加载数据
-  RS = 'resource'
+  RS = 'resource',
+  // 用户在浏览过的每个页面的时长
+  ONLINE = 'user-page-online'
 }
 ```
 
 ### TransportData
 待上报的数据
 ```typescript
-type TransportData = IErrorLog | PerformanceData | ResourceItem[] | RSErrorLog
+type TransportData = IErrorLog
+| PerformanceData
+| ResourceItem[]
+| RSErrorLog
+| UserOnlineRecord
 ```
 
 ### TransportStructure

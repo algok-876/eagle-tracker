@@ -10,10 +10,12 @@ npm i @eagle-tracker/core
 
 ### 在项目中使用
 ```javascript
-import Eagle from '@eagle-tracker/core'
+import { EagleTracker } from '@eagle-tracker/core'
 
-const eagle = new Eagle({
-  isTest: true
+const eagle = new EagleTracker({
+  isTest: true,
+  appId: 'XXXXXXXX',
+  dsn: 'http://test.com/log'
 })
 eagle.start()
 ```
@@ -30,10 +32,12 @@ npm i @eagle-tracker/vue3
 
 ### 在项目中使用
 ```javascript
-import Eagle from '@eagle-tracker/vue3'
+import { EagleTracker } from '@eagle-tracker/vue3'
 
 const app = createApp(App)
-app.use(Eagle, {
-  isTest: false
+app.use(EagleTracker, {
+  isTest: true,
+  appId: 'XXXXXXXX',
+  dsn: 'http://test.com/log'
 })
 ```

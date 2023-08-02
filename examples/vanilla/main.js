@@ -8,6 +8,10 @@ const instance = new EagleTracker({
   dsn: 'http://weiwei8848.com/log/log.png'
 })
 instance.start()
+setTimeout(() => {
+  console.log(instance.getPageRecord())
+
+}, 1000)
 instance.onCatchRSError((type, log) => {
   console.log('资源错误', type, log)
 })

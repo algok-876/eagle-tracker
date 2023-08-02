@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router"
-import { getPageRecord } from "@eagle-tracker/vue3"
+import { getPageRecord, useBeforeSendData, TransportCategory } from "@eagle-tracker/vue3"
 const routes = [
   { path: '/', component: () => import('../views/index.vue') },
   { path: '/page1', component: () => import('../views/page1.vue') },
@@ -12,8 +12,13 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 })
-router.beforeEach(() => {
+router.afterEach(() => {
   console.log(getPageRecord())
+})
+useBeforeSendData((category, context) => {
+  if (category === TransportCategory.ONLINE) {
+    console.log(context.context)
+  }
 })
 
 export default router

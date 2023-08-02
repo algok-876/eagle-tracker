@@ -1,13 +1,13 @@
 # 单例模式
 
-`Eagle`是单例模式的类，多次实例化的对象是一致的，并不会创建新的对象，这样
+`EagleTracker`是单例模式的类，多次实例化的对象是一致的，并不会创建新的对象，这样
 做的目的是为了防止多次实例化，导致对错误，性能数据的重复处理。  
 
 下面的例子说明了这种情况：
 
 ```javascript
-const instance1 = new Eagle()
-const instance2 = new Eagle()
+const instance1 = new EagleTracker()
+const instance2 = new EagleTracker()
 console.log(instance1 === instance2)  // true
 ```
 
