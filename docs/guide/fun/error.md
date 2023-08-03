@@ -108,5 +108,48 @@ css加载错误，script脚本加载错误，图片加载错误，视频加载�
 详细信息参见 [RSErrorLog](/guide/use/type#rserrorlog)
 
 
-## Vue运行时错误
-[errorHandler](https://cn.vuejs.org/api/application.html#app-config-errorhandler) 是Vue提供的为应用内抛出的未捕获错误指定一个全局处理函数。
+## Vue应用内运行时错误
+[errorHandler](https://cn.vuejs.org/api/application.html#app-config-errorhandler) 是Vue提供的为应用内抛出的未捕获错误指定一个全局处理函数。被errorHandler捕获的错误不会冒泡至window，相当于提前处理了。对于Promise来说，只要不是
+使用await执行的，还是会被unhandledrejection事件捕获。使用了await就相当于是同步的错误会被errorHandler截胡。
+
+收集的数据示例
+```json
+{
+  "title": "Vite + Vue + TS",
+  "errorType": "vue-error",
+  "mechanism": "vueErrorhandler",
+  "message": "kkk is not defined",
+  "url": "http://127.0.0.1:5173//",
+  "timestamp": 1690977598534,
+  "stack": [
+    {
+      "filename": "http://127.0.0.1:5173/src/components/HelloWorld.vue?t=1690976932127",
+      "functionName": "triggerJSError",
+      "lineNumber": 10,
+      "columnNumber": 19
+    },
+    {
+      "filename": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UWRLCAF5.js?v=54d0d8cf",
+      "functionName": "callWithErrorHandling",
+      "lineNumber": 1565,
+      "columnNumber": 18
+    },
+    {
+      "filename": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UWRLCAF5.js?v=54d0d8cf",
+      "functionName": "callWithAsyncErrorHandling",
+      "lineNumber": 1573,
+      "columnNumber": 17
+    },
+    {
+      "filename": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-UWRLCAF5.js?v=54d0d8cf",
+      "functionName": "HTMLButtonElement.invoker",
+      "lineNumber": 9397,
+      "columnNumber": 5
+    }
+  ],
+  "hook": "native event handler",
+  "errorUid": "dnVlLWVycm9yLWtrayUyMGlzJTIwbm90JTIwZGVmaW5lZC1uYXRpdmUlMjBldmVudCUyMGhhbmRsZXI=",
+  "componentName": "<HelloWorld>"
+}
+```
+详细信息请参见 [IVueErrorLog](/guide/use/type#ivueerrorlog)

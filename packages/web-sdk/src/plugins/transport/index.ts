@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash-es';
+import { cloneDeep } from '@eagle-tracker/utils';
 import { EagleTracker } from '../../../index';
 import {
   TransportStructure, TransportData, PerformanceData, IErrorLog,

@@ -6,18 +6,18 @@ import router from './router'
 const app = createApp(App)
 
 app.config.performance = true
-app.config.errorHandler = (err, instance, info) => {
-  console.log('err')
-  console.log(err instanceof Error)
-  console.dir(err)
-  console.log('instance', instance)
-  console.log('info', info)
-}
+// app.config.errorHandler = (err, instance, info) => {
+//   console.log('err')
+//   console.log(err instanceof Error)
+//   console.dir(err)
+//   console.log('instance', instance)
+//   console.log('info', info)
+// }
 useCatchError((type, log) => {
   console.log('发生错误啦')
-  if (isVueError(log)) {
-    console.log(type, log)
-  }
+  // if (isVueError(log)) {
+  console.log(type, log)
+  // }
 })
 app.use(router)
 app.use(EagleTracker, {

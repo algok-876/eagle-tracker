@@ -129,10 +129,10 @@ export interface IHttplog {
  * vue错误信息
  */
 export interface IVueErrorLog extends IBasicErrorLog {
-  message: string,
+  message: string
   componentName?: string
   hook: string
-  stack: StackTrace.StackFrame[]
+  stack: ErrorStackFrames
 }
 
 export interface IHttpErrorLog extends IBasicErrorLog {

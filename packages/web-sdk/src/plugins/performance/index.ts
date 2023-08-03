@@ -64,12 +64,16 @@ export default class WebVitals {
       this.initFCP();
       this.initLCP();
       this.initCLS();
-      // this.initFID();
       this.initNavigationTiming();
-      this.initResourceFlow();
+      if (this.host.configInstance.get('record.performance.resource') === true) {
+        this.initResourceFlow();
+      }
     });
 
     afterLoad(() => {
+      if (this.host.configInstance.get('record.performance.timing') === false) {
+        return;
+      }
       const origin = this.metrics.getValues();
       const data: PerformanceData = {
         fp: origin[metricsName.FP],

@@ -1,35 +1,44 @@
 {
-    "env": {
-        "browser": true,
-        "es2021": true
-    },
-    "extends": [
-        "airbnb-base",
-        "plugin:@typescript-eslint/recommended"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": 12,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "@typescript-eslint"
-    ],
-    "rules": {
-        "import/extensions":"off",
-        "import/no-unresolved":"off",
-        "import/no-extraneous-dependencies":"off",
-        "no-shadow":"off",
-        "no-unused-vars":"off",
-        "no-console": "off",
-        "@typescript-eslint/no-empty-function": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "class-methods-use-this": "off",
-        "@typescript-eslint/ban-types": "off",
-        "no-new": "off",
-        "no-underscore-dangle": "off",
-        "prefer-destructuring": "off",
-        "no-constructor-return": "off",
-        "prefer-rest-params": "off"
-    }
+	"env": {
+		"browser": true,
+		"es2021": true
+	},
+	"extends": [
+		"airbnb-base",
+		"plugin:@typescript-eslint/recommended"
+	],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaVersion": 12,
+		"sourceType": "module"
+	},
+	"plugins": [
+		"@typescript-eslint"
+	],
+  "rules": {
+		"import/extensions":"off",
+		"import/no-unresolved":"off",
+		"import/no-extraneous-dependencies":"off",
+		"no-shadow":"off",
+		"no-unused-vars":"off",
+		"no-console": "off",
+		"@typescript-eslint/no-empty-function": "off",
+		"@typescript-eslint/no-explicit-any": "off",
+		"class-methods-use-this": "off",
+		"@typescript-eslint/ban-types": "off",
+		"no-new": "off",
+		"no-underscore-dangle": "off",
+		"prefer-destructuring": "off",
+		"no-constructor-return": "off",
+		"prefer-rest-params": "off",
+		"no-param-reassign": [
+			"error",
+			{
+			"props": true,
+				"ignorePropertyModificationsFor": [
+					"app"
+				]
+			}
+		]
+	}
 }

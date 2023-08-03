@@ -5,3 +5,4 @@ export * from './tracker';
 export * from './transport';
 export * from './core';
 export * from './guard';
+export * from './behavior';

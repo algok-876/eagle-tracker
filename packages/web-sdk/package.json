@@ -22,8 +22,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@eagle-tracker/utils": "workspace:*",
-    "@types/lodash-es": "^4.17.7",
-    "lodash-es": "^4.17.21"
+    "@eagle-tracker/utils": "workspace:*"
   }
 }

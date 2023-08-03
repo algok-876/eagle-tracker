@@ -1,5 +1,4 @@
-import { merge } from 'lodash-es';
-import { formatComponentName } from '@eagle-tracker/utils';
+import { merge, formatComponentName } from '@eagle-tracker/utils';
 import { EagleTracker } from '../../../index';
 import { ErrorType, RSErrorType, TransportCategory } from '../../types/enum';
 import {
@@ -36,7 +35,7 @@ export default class Tracker {
    * @param host 插件宿主
    * @param opt 插件配置
    */
-  constructor(host: EagleTracker, opt?: Partial<ITrackerOption>) {
+  constructor(host: EagleTracker, opt: Partial<ITrackerOption> = {}) {
     this.host = host;
     // 覆盖默认配置
     this.options = merge(this.options, opt);
@@ -72,7 +71,7 @@ export default class Tracker {
       // 阻止错误冒泡，避免在控制台出现
       event.preventDefault();
       // 在控制台打印错误
-      this.host.console('error', event.error, '发生了js运行时错误');
+      this.host.console('error', event.error, 'js运行时错误');
 
       const errorUid = this.host.getErrorUid(
         this.getErrorUidInput(ErrorType.JS, event.message, event.filename),
@@ -302,7 +301,7 @@ export default class Tracker {
 
     // 处理函数
     const handler = async (err: Error, vm: any, info: any) => {
-      this.host.console('error', err, 'vue组件错误');
+      this.host.console('error', err, 'vue应用内错误');
       const stack = parseStackFrames(err);
       const errorLog: IVueErrorLog = {
         title: document.title,
@@ -319,11 +318,6 @@ export default class Tracker {
         componentName: formatComponentName(vm, true),
       };
       this.host.runLifeCycle(LifeCycleName.ERROR, [ErrorType.VUE, errorLog]);
-
-      // 被errorHandler拦截的错误不会出现在控制台中，所以需要额外打印出来
-      if (typeof console !== 'undefined' && typeof console.error === 'function') {
-        this.host.console('error', err, 'vue错误');
-      }
 
       // 上报
       if (!this.errorSet.has(errorLog.errorUid)) {

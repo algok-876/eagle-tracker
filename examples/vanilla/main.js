@@ -5,7 +5,11 @@ const instance = new EagleTracker({
   isTest: true,
   manual: true,
   appId: 'test123',
-  dsn: 'http://weiwei8848.com/log/log.png'
+  dsn: 'http://weiwei8848.com/log/log.png',
+  uid: '88888',
+  record: {
+    timeOnPage: true,
+  },
 })
 instance.start()
 setTimeout(() => {

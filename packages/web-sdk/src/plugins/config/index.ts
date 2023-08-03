@@ -1,4 +1,4 @@
-import { merge, cloneDeep, get } from 'lodash-es';
+import { get, merge, cloneDeep } from '@eagle-tracker/utils';
 import { IGlobalConfig } from '../../types';
 import { EagleTracker } from '../../../index';
 
@@ -59,12 +59,8 @@ export default class Config {
    * @param customConfig 配置对象
    * @param isOverwrite 是否覆盖默认配置，默认是递归合并配置
    */
-  set(customConfig: Partial<IGlobalConfig>, isOverwrite = false) {
-    if (isOverwrite) {
-      this.config = cloneDeep(customConfig) as IGlobalConfig;
-    } else {
-      this.config = merge(this.config, customConfig);
-    }
+  set(customConfig: Partial<IGlobalConfig>) {
+    this.config = merge(this.config, customConfig);
   }
 
   checkConfig() {
