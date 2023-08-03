@@ -1,0 +1,14 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "vanilla": "0.0.0",
+    "vue3-test": "0.0.0",
+    "@eagle-tracker/utils": "1.0.0",
+    "@eagle-tracker/vue3": "1.0.0",
+    "@eagle-tracker/core": "1.0.0"
+  },
+  "changesets": [
+    "fresh-wolves-wonder"
+  ]
+}

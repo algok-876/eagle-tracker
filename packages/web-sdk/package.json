@@ -1,10 +1,11 @@
 {
   "name": "@eagle-tracker/core",
-  "version": "1.0.0",
+  "version": "1.1.0-beta.0",
   "description": "",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "jsdelivr": "./dist/index.iife.min.js",
+  "unpkg": "./dist/index.iife.min.js",
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "exports": {
@@ -13,13 +14,25 @@
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
     },
-    "./*": "./*.ts"
+    "./*": "./*"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AzuraXW/eagle-tracker"
+  },
+  "author": "AzuraXW <2219444825@qq.com>",
   "files": [
     "dist"
   ],
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "前端监控",
+    "用户行为",
+    "资源",
+    "性能",
+    "fontend",
+    "mintor",
+    "sdk"
+  ],
   "license": "ISC",
   "dependencies": {
     "@eagle-tracker/utils": "workspace:*"
