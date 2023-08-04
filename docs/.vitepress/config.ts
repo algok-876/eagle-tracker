@@ -27,7 +27,7 @@ export default defineConfig({
         {
           text: '指南',
           items: [
-            { text: '起步', link: '/guide/start' },
+            { text: '快速上手', link: '/guide/start' },
             { text: '单例模式', link: '/guide/single' },
           ]
         },
