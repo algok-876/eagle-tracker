@@ -25,10 +25,9 @@ async function build (target) {
 
 function buildAll () {
   const resolvedTargets = targets.length === 0
-    ? ['vue3', 'web-sdk', 'utils'] : targets
+    ? ['utils', 'web-sdk', 'vue3'] : targets
   resolvedTargets.forEach(async (name) => {
     await build(name)
-    console.log('构建完成')
   })
 }
 

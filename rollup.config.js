@@ -5,7 +5,9 @@ import dts from 'rollup-plugin-dts'
 import json from '@rollup/plugin-json'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
+import babel from '@rollup/plugin-babel'
 
+// 打包的目标
 const target = process.env.TARGET
 
 const esbuildMinifer = (options) => {
@@ -70,16 +72,46 @@ function createConfig (target) {
         name: iifeName[target],
         extend: true,
         globals: iifeGlobals,
-        plugins: [esbuildMinifer({ minify: true })],
+        plugins: [
+          esbuildMinifer({ minify: true }),
+        ],
       },
     ],
     plugins: [
       commonjs(),
-      nodeResolve(),
       json(),
+      nodeResolve(),
       esbuildPlugin,
     ],
-  }, {
+  },
+  {
+    // 打包iife格式
+    input,
+    output: [
+      {
+        file: `${packageRoot}/dist/index.iife.polyfill.js`,
+        format: 'iife',
+        name: iifeName[target],
+        extend: true,
+        globals: iifeGlobals,
+        plugins: [
+          esbuildMinifer({ minify: true }),
+        ],
+      },
+    ],
+    plugins: [
+      commonjs(),
+      json(),
+      nodeResolve(),
+      esbuildPlugin,
+      babel({
+        babelHelpers: 'runtime',
+        exclude: 'node_modules/**',
+        extensions: ['.js', '.ts'],
+      }),
+    ],
+  },
+  {
     // 打包声明文件
     input,
     output: {
