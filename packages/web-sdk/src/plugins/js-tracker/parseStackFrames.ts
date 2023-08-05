@@ -1,4 +1,4 @@
-import { ErrorStackFrames, ErrorStackInfo } from '../../types';
+import { ErrorStackFrames, ErrorStackInfo } from '@eagle-tracker/types';
 
 // 正则表达式，用以解析堆栈split后得到的字符串
 const FULL_MATCH = /^\s*at (?:(.*?) ?\()?((?:file|https?|blob|chrome-extension|address|native|eval|webpack|<anonymous>|[-a-z]+:|.*bundle|\/).*?)(?::(\d+))?(?::(\d+))?\)?\s*$/i;

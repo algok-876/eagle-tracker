@@ -1,7 +1,6 @@
 import {
   getBrowser, getOS, getDeviceType, getScreenResolution,
 } from '@eagle-tracker/utils';
-import { IGlobalConfig } from '../types';
 import {
   AfterSendDataLifeCycleCallback,
   BeforeSendDataLifeCycleCallback,
@@ -9,7 +8,8 @@ import {
   ErrorLifeCycleCallback,
   LifeCycleName,
   RSErrorLifeCycleCallback,
-} from '../types/core';
+  IGlobalConfig,
+} from '@eagle-tracker/types';
 
 type DeviceType = 'Mobile' | 'Tablet' | 'Desktop'
 export default class Core {

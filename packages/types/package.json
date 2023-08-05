@@ -1,0 +1,23 @@
+{
+  "name": "@eagle-tracker/types",
+  "version": "2.0.0",
+  "description": "eagle-tracker类型包",
+  "main": "./index.ts",
+  "module": "./index.ts",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AzuraXW/eagle-tracker"
+  },
+  "author": "AzuraXW",
+  "keywords": [
+    "前端监控",
+    "用户行为",
+    "资源",
+    "性能",
+    "fontend",
+    "mintor",
+    "sdk"
+  ],
+  "license": "ISC"
+}

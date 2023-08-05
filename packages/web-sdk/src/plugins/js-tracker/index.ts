@@ -1,10 +1,18 @@
 import { merge, formatComponentName } from '@eagle-tracker/utils';
-import { EagleTracker } from '../../../index';
-import { ErrorType, RSErrorType, TransportCategory } from '../../types/enum';
 import {
-  ITrackerOption, IErrorLog, IJsErrorLog, IHttplog, IPromiseErrorLog, IVueErrorLog, RSErrorLog,
-} from '../../types';
-import { LifeCycleName } from '../../types/core';
+  ErrorType,
+  RSErrorType,
+  TransportCategory,
+  LifeCycleName,
+  ITrackerOption,
+  IErrorLog,
+  IJsErrorLog,
+  IHttplog,
+  IPromiseErrorLog,
+  IVueErrorLog,
+  RSErrorLog,
+} from '@eagle-tracker/types';
+import { EagleTracker } from '../../../index';
 import parseStackFrames from './parseStackFrames';
 
 function isResourceError(event: ErrorEvent) {

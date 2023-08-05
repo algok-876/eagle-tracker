@@ -1,4 +1,4 @@
-import { MPerformanceNavigationTiming } from '../../types';
+import { MPerformanceNavigationTiming } from '@eagle-tracker/types';
 
 export const getFP = (): PerformanceEntry | undefined => {
   const [entry] = performance.getEntriesByName('first-paint');

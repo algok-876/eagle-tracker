@@ -1,5 +1,5 @@
 import { get, merge, cloneDeep } from '@eagle-tracker/utils';
-import { IGlobalConfig } from '../../types';
+import { IGlobalConfig } from '@eagle-tracker/types';
 import { EagleTracker } from '../../../index';
 
 type DeepKeys<T> = T extends object

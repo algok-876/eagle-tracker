@@ -1,5 +1,5 @@
 // 为了开发方便，导入时加上index可以及时响应变更，不需要build
-import { IGlobalConfig } from '@eagle-tracker/core';
+import { IGlobalConfig } from '@eagle-tracker/types';
 import eagle from './src/eagle';
 
 function install(app: any, options: Partial<IGlobalConfig> = {}) {
@@ -18,8 +18,8 @@ export const EagleTracker = {
 };
 // 导出类型守卫
 export {
-  isJSError, isHttpError, isPromiseError, isVueError, TransportCategory,
-} from '@eagle-tracker/core';
+  isJSError, isHttpError, isPromiseError, isVueError,
+} from '@eagle-tracker/types';
 // 导出生命周期
 export * from './src/licfecycle';
 export * from './src/behavior';

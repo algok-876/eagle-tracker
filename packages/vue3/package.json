@@ -1,6 +1,6 @@
 {
   "name": "@eagle-tracker/vue3",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -37,6 +37,7 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "@eagle-tracker/core": "workspace:*"
+    "@eagle-tracker/core": "workspace:*",
+    "@eagle-tracker/types": "workspace:*"
   }
 }

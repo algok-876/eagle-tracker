@@ -1,8 +1,7 @@
 import { cloneDeep } from '@eagle-tracker/utils';
+import { TransportCategory, IPageRecord, UserOnlineRecord } from '@eagle-tracker/types';
 import { EagleTracker } from '../../../index';
-import { TransportCategory } from '../../types/enum';
 import wrapReplaceHistory from './event';
-import { IPageRecord, UserOnlineRecord } from '../../types/behavior';
 import groupBy from './group';
 
 export default class Behavior {

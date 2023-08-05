@@ -155,6 +155,8 @@ importers:
         specifier: ^1.8.3
         version: 1.8.3(typescript@5.0.2)
 
+  packages/types: {}
+
   packages/utils: {}
 
   packages/vue3:
@@ -162,9 +164,15 @@ importers:
       '@eagle-tracker/core':
         specifier: workspace:*
         version: link:../web-sdk
+      '@eagle-tracker/types':
+        specifier: workspace:^
+        version: link:../types
 
   packages/web-sdk:
     dependencies:
+      '@eagle-tracker/types':
+        specifier: workspace:*
+        version: link:../types
       '@eagle-tracker/utils':
         specifier: workspace:*
         version: link:../utils

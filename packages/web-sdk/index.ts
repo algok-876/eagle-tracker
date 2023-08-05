@@ -1,22 +1,23 @@
 import { econsole } from '@eagle-tracker/utils';
-import Config from './src/plugins/config';
-import Tracker from './src/plugins/js-tracker';
-import Core from './src/core';
-import WebVitals from './src/plugins/performance';
-import Transport from './src/plugins/transport';
-import Behavior from './src/plugins/behavior';
-import { IGlobalConfig } from './src/types';
 import {
+  IGlobalConfig,
   AfterSendDataLifeCycleCallback,
   BeforeSendDataLifeCycleCallback,
   ConfigLifeCycleCallback,
   ErrorLifeCycleCallback,
   LifeCycleName,
   RSErrorLifeCycleCallback,
-} from './src/types/core';
+} from '@eagle-tracker/types';
+import Config from './src/plugins/config';
+import Tracker from './src/plugins/js-tracker';
+import Core from './src/core';
+import WebVitals from './src/plugins/performance';
+import Transport from './src/plugins/transport';
+import Behavior from './src/plugins/behavior';
 
 // 全局sdk单例对象
 let sdkInstance: any;
+// eslint-disable-next-line import/prefer-default-export
 export class EagleTracker extends Core {
   trackerInstance!: Tracker;
 
@@ -130,6 +131,3 @@ export class EagleTracker extends Core {
     return this.behaviorInstance.getPageRecord();
   }
 }
-
-// 导出所有类型
-export * from './src/types';

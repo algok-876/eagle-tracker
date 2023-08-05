@@ -1,5 +1,13 @@
 # @eagle-tracker/vue3
 
+## 1.1.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @eagle-tracker/types@2.0.0
+  - @eagle-tracker/core@1.1.1
+
 ## 1.1.0
 
 ### Minor Changes

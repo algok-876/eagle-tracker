@@ -3,7 +3,7 @@ import {
   BeforeSendDataLifeCycleCallback,
   AfterSendDataLifeCycleCallback,
   RSErrorLifeCycleCallback,
-} from '@eagle-tracker/core';
+} from '@eagle-tracker/types';
 import eagle from './eagle';
 
 export function useCatchError(cb: ErrorLifeCycleCallback) {

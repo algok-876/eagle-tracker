@@ -1,10 +1,17 @@
 import { cloneDeep } from '@eagle-tracker/utils';
-import { EagleTracker } from '../../../index';
 import {
-  TransportStructure, TransportData, PerformanceData, IErrorLog,
-  ResourceItem, TransportCategory, IVueErrorLog, LifeCycleName, RSErrorLog,
-} from '../../types';
-import { UserOnlineRecord } from '../../types/behavior';
+  UserOnlineRecord,
+  TransportStructure,
+  TransportData,
+  PerformanceData,
+  IErrorLog,
+  ResourceItem,
+  TransportCategory,
+  IVueErrorLog,
+  LifeCycleName,
+  RSErrorLog,
+} from '@eagle-tracker/types';
+import { EagleTracker } from '../../../index';
 
 /**
  * 上报策略

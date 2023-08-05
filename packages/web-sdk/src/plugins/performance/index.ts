@@ -1,7 +1,11 @@
+import {
+  TransportCategory,
+  PerformanceData,
+  ResourceItem,
+} from '@eagle-tracker/types';
 import MetricsStore, { metricsName, IMetrics } from './store';
 import { getFP, getFCP, getNavigationTiming } from './entry';
 import { EagleTracker } from '../../../index';
-import { TransportCategory, PerformanceData, ResourceItem } from '../../types';
 
 interface PerformanceEntryHandler {
   (entry: PerformanceEntryList): void;
