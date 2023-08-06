@@ -30,20 +30,16 @@ export const getNavigationTiming = (): MPerformanceNavigationTiming | undefined 
     } = entry;
 
     return {
-      // 关键时间点
-      FP: responseEnd - fetchStart,
-      TTI: domInteractive - fetchStart,
-      DomReady: domContentLoadedEventEnd - fetchStart,
-      Load: loadEventStart - fetchStart,
-      FirstByte: responseStart - domainLookupStart,
-      // 关键时间段
-      DNS: domainLookupEnd - domainLookupStart,
-      TCP: connectEnd - connectStart,
-      SSL: secureConnectionStart ? connectEnd - secureConnectionStart : 0,
-      TTFB: responseStart - requestStart,
-      Trans: responseEnd - responseStart,
-      DomParse: domInteractive - responseEnd,
-      Res: loadEventStart - domContentLoadedEventEnd,
+      firstInteractive: domInteractive - fetchStart,
+      domReady: domContentLoadedEventEnd - fetchStart,
+      load: loadEventStart - fetchStart,
+      dns: domainLookupEnd - domainLookupStart,
+      tcp: connectEnd - connectStart,
+      ssl: secureConnectionStart ? connectEnd - secureConnectionStart : 0,
+      http: responseStart - requestStart,
+      trans: responseEnd - responseStart,
+      domParse: domInteractive - responseEnd,
+      resource: loadEventStart - domContentLoadedEventEnd,
     };
   };
 

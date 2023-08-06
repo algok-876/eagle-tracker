@@ -6,6 +6,7 @@ import {
 import MetricsStore, { metricsName, IMetrics } from './store';
 import { getFP, getFCP, getNavigationTiming } from './entry';
 import { EagleTracker } from '../../../index';
+import { getStartName, getEndName, getMeasureName } from './mark';
 
 interface PerformanceEntryHandler {
   (entry: PerformanceEntryList): void;
@@ -49,7 +50,11 @@ export const observe = (type: string, callback: PerformanceEntryHandler):
 // 初始化入口，外部调用只需要 new WebVitals();
 export default class WebVitals {
   // 本地暂存数据在 Map 里 （也可以自己用对象来存储）
-  public metrics: MetricsStore;
+  private metrics: MetricsStore;
+
+  private markList: string[] = [];
+
+  private measureList: string[] = [];
 
   host: EagleTracker;
 
@@ -89,26 +94,20 @@ export default class WebVitals {
     });
   }
 
-  // 性能数据的上报策略
-  perfSendHandler = (): void => {
-    // 如果你要监听 FID 数据。你就需要等待 FID 参数捕获完成后进行上报;
-    // 如果不需要监听 FID，那么这里你就可以发起上报请求了;
-  };
-
   // 初始化 FP 的获取以及返回
-  initFP = (): void => {
+  private initFP = (): void => {
     const entry = getFP();
     this.metrics.set(metricsName.FP, entry?.startTime);
   };
 
   // 初始化 FCP 的获取以及返回
-  initFCP = (): void => {
+  private initFCP = (): void => {
     const entry = getFCP();
     this.metrics.set(metricsName.FCP, entry?.startTime);
   };
 
   // 初始化 LCP 的获取以及返回
-  initLCP = (): void => {
+  private initLCP = (): void => {
     observe('largest-contentful-paint', (entryList) => {
       const entry = entryList[0];
       this.metrics.set(metricsName.LCP, entry.startTime);
@@ -129,18 +128,18 @@ export default class WebVitals {
   };
 
   // 初始化 CLS 的获取以及返回
-  initCLS = (): void => {
+  private initCLS = (): void => {
   };
 
   // 初始化 NT 的获取以及返回
-  initNavigationTiming = (): void => {
+  private initNavigationTiming = (): void => {
     const navigationTiming = getNavigationTiming();
     const metrics = navigationTiming as IMetrics;
     this.metrics.set(metricsName.NT, metrics);
   };
 
   // 初始化 RF 的获取以及返回
-  initResourceFlow = (): void => {
+  private initResourceFlow = (): void => {
     const entry = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
     const data: ResourceItem[] = entry.map((item) => ({
       name: item.name,
@@ -153,4 +152,139 @@ export default class WebVitals {
     // 资源数据单独上报
     this.host.transportInstance.log(TransportCategory.RS, data, true);
   };
+
+  /**
+   * 获取网站性能数据
+   * @returns 计算后的数据
+   */
+  getNavigationTiming() {
+    return this.metrics.getValues()[metricsName.NT];
+  }
+
+  /**
+   * 创建一个性能开始标记
+   * @param name 名称
+   * @returns 是否成功标记
+   */
+  markStart(name: string) {
+    if (this.markList.includes(getStartName(name))) {
+      this.host.console('log', `已存在该开始标记：${name}`, '自定义埋点');
+      return false;
+    }
+    this.markList.push(getStartName(name));
+    performance.mark(getStartName(name));
+    return true;
+  }
+
+  /**
+   * 创建一个性能结束标记
+   * @param name 名称
+   * @returns 是否成功标记
+   */
+  markEnd(name: string) {
+    if (!this.markList.includes(getStartName(name))) {
+      this.host.console('log', `不存在对应的开始标记：${name}`, '自定义埋点');
+      return false;
+    }
+    if (this.markList.includes(getEndName(name))) {
+      this.host.console('log', `已存在该结束标记：${name}`, '自定义埋点');
+      return false;
+    }
+    this.markList.push(getEndName(name));
+    performance.mark(getEndName(name));
+    return true;
+  }
+
+  /**
+   * 创建一个性能测量
+   * @param name 名称
+   * @returns 是否测量成功
+   */
+  measure(name: string) {
+    const markStartName = getStartName(name);
+    const markEndName = getEndName(name);
+    if (!this.markList.includes(markStartName)) {
+      this.host.console('log', `不存在性能开始标记: ${name}, 无法测量时间`, '自定义埋点');
+      return false;
+    }
+    if (!this.markList.includes(markStartName)) {
+      this.host.console('log', `不存在性能结束标记: ${name}，无法测量时间`, '自定义埋点');
+      return false;
+    }
+    if (this.measureList.includes(getMeasureName(name))) {
+      this.host.console('log', `已存在该性能测量: ${name}`, '自定义埋点');
+      return false;
+    }
+    this.measureList.push(getMeasureName(name));
+    performance.measure(getMeasureName(name), markStartName, markEndName);
+    return true;
+  }
+
+  /**
+   * 获取标记信息，包括开始和结束
+   * @param name 标记名称
+   * @returns 标记信息数组
+   */
+  getMarks(name: string) {
+    const markStartName = getStartName(name);
+    const markEndName = getEndName(name);
+    const entrys = performance.getEntriesByType('mark') as PerformanceMark[];
+    return entrys.filter((item) => item.name === markStartName || item.name === markEndName);
+  }
+
+  /**
+   * 删除结束性能标记
+   * @param name 标记名称
+   */
+  clearEndMark(name: string) {
+    const index = this.markList.indexOf(getEndName(name));
+    if (index < 0) {
+      this.host.console('log', `不存在结束性能测量：${name}，无法删除`, '自定义埋点');
+      return;
+    }
+    performance.clearMarks(getEndName(name));
+    this.markList.splice(index, 1);
+  }
+
+  /**
+   * 获取测量的数据
+   * @param name 名称
+   * @returns 相关数据
+   */
+  getMeasure(name: string) {
+    if (!this.measureList.includes(getMeasureName(name))) {
+      this.host.console('log', `不存在性能测量：${name}`, '自定义埋点');
+      return [];
+    }
+    return performance.getEntriesByName(getMeasureName(name)) as PerformanceMeasure[];
+  }
+
+  /**
+   * 删除已存在的性能测量
+   * @param name 测量的名称
+   */
+  clearMeasure(name: string) {
+    const index = this.measureList.indexOf(getMeasureName(name));
+    if (index < 0) {
+      this.host.console('log', `不存在性能测量：${name}，无法删除`, '自定义埋点');
+      return;
+    }
+    performance.clearMeasures(getMeasureName(name));
+    this.measureList.splice(index, 1);
+  }
+
+  /**
+   * 获取所有测量数据
+   * @returns 测量数据
+   */
+  getAllMeasure() {
+    const measures: {
+      [prop: string]: PerformanceMeasure
+    } = {};
+    this.measureList.forEach((name) => {
+      const originName = name.split('-')[0];
+      measures[originName] = this.getMeasure(originName)[0];
+    });
+    return measures;
+  }
 }

@@ -2,20 +2,17 @@
 如果你是在TypeScript项目中使用，那么这些类型定义会对你的开发大有益处。  
 如果使用的是JavaScript，也可以作为开发参考。
 
-::: tip
-以下这些类型全部可以导出使用
-```typescript{5}
-import {
-  ITrackerOption, IErrorLog, IJsErrorLog, IHttplog, IPromiseErrorLog, IVueErrorLog,
-} from '@eagle-tracker/vue3';
+## 使用类型包
 
-// or
-
-import {
-  ITrackerOption, IErrorLog, IJsErrorLog, IHttplog, IPromiseErrorLog, IVueErrorLog,
-} from '@eagle-tracker/core';
+```bash
+npm i @eagle-tracker/types
 ```
-:::
+下列类型全部都可以从此包中导出使用
+```typescript
+import {
+  ITrackerOption, IErrorLog, IJsErrorLog, IHttplog, IPromiseErrorLog, IVueErrorLog,
+} from '@eagle-tracker/types';
+```
 
 ## 错误相关
 以下 `xxxLog` 都表示发生对应错误时收集有关这个错误的信息。

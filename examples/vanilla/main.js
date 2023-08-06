@@ -1,17 +1,6 @@
 import './style.css'
-import { EagleTracker } from '@eagle-tracker/core/index'
-
-const instance = new EagleTracker({
-  isTest: true,
-  manual: true,
-  appId: 'test123',
-  dsn: 'http://weiwei8848.com/log/log.png',
-  uid: '88888',
-  record: {
-    timeOnPage: true,
-  },
-})
-instance.start()
+import instance from './eagle'
+import './testPerformanceMark'
 setTimeout(() => {
   console.log(instance.getPageRecord())
 

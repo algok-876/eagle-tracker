@@ -130,4 +130,8 @@ export class EagleTracker extends Core {
   getPageRecord() {
     return this.behaviorInstance.getPageRecord();
   }
+
+  get performance() {
+    return this.vitalsInstance;
+  }
 }
