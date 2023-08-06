@@ -23,3 +23,4 @@ export {
 // 导出生命周期
 export * from './src/licfecycle';
 export * from './src/behavior';
+export * from './src/performance';
