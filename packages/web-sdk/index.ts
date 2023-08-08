@@ -17,6 +17,9 @@ import Behavior from './src/plugins/behavior';
 
 // 全局sdk单例对象
 let sdkInstance: any;
+export {
+  WebVitals,
+};
 // eslint-disable-next-line import/prefer-default-export
 export class EagleTracker extends Core {
   trackerInstance!: Tracker;

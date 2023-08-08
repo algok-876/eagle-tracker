@@ -46,6 +46,8 @@ export default defineConfig({
           text: '功能',
           items: [
             { text: '错误监控', link: '/guide/fun/error' },
+            { text: '网站性能相关', link: '/guide/fun/performance' },
+            { text: '自定义埋点', link: '/guide/fun/point' },
             { text: '统计在线时长', link: '/guide/fun/user-page-record' },
           ]
         }

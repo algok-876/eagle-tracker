@@ -3,7 +3,7 @@
   "changelog": "@changesets/cli/changelog",
   "commit": false,
   "fixed": [],
-  "linked": [],
+  "linked": [["@eagle-tracker/core", "@eagle-tracker/vue3", "@eagle-tracker/utils", "@eagle-tracker/types"]],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",

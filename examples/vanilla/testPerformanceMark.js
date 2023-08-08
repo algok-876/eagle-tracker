@@ -14,4 +14,10 @@ setTimeout(() => {
   p.measure('test')
   console.log('第二次打点', p.getMeasure('test'))
 }, 4000)
+p.markStart('settimeout')
+setTimeout(() => {
+  p.markEnd('settimeout')
+  p.measure('settimeout')
+  console.log('settimeout measure', p.getMeasure('settimeout'))
+}, 2000)
 // console.log(p.getMarks('tete'))

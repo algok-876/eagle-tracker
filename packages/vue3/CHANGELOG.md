@@ -1,5 +1,17 @@
 # @eagle-tracker/vue3
 
+## 2.1.0
+
+### Minor Changes
+
+- 增加自定义埋点功能
+
+### Patch Changes
+
+- Updated dependencies
+  - @eagle-tracker/types@2.1.0
+  - @eagle-tracker/core@2.1.0
+
 ## 1.1.1
 
 ### Patch Changes
