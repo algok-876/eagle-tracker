@@ -1,4 +1,4 @@
-import eagle from './eagle'
+/* import eagle from './eagle'
 console.log(eagle)
 const p = eagle.performance
 p.markStart('test')
@@ -20,4 +20,4 @@ setTimeout(() => {
   p.measure('settimeout')
   console.log('settimeout measure', p.getMeasure('settimeout'))
 }, 2000)
-// console.log(p.getMarks('tete'))
+// console.log(p.getMarks('tete')) */

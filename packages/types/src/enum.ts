@@ -31,8 +31,10 @@ export const enum RSErrorType {
 export const enum TransportCategory {
   // PV访问数据
   PV = 'pv',
-  // 性能数据
+  // 性能指标
   PERF = 'perf',
+  // 加载速度相关指标
+  LOAD_SPEED = 'load_speed',
   // 报错数据
   ERROR = 'error',
   // Vue错误数据

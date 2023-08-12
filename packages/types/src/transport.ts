@@ -1,16 +1,17 @@
 import { TransportCategory } from './enum';
 import { IErrorLog, RSErrorLog } from './tracker';
-import { PerformanceData, ResourceItem } from './performance';
+import { MPerformanceNavigationTiming, PerformanceMetric, ResourceItem } from './performance';
 import { UserOnlineRecord } from './behavior';
 
 /**
  * 上报的数据类型
  */
 export type TransportData = IErrorLog
-  | PerformanceData
+  | PerformanceMetric
   | ResourceItem[]
   | RSErrorLog
   | UserOnlineRecord
+  | MPerformanceNavigationTiming
 
 /**
  * 上报数据的最终形式

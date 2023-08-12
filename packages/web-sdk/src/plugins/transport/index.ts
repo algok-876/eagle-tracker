@@ -10,6 +10,7 @@ import {
   IVueErrorLog,
   LifeCycleName,
   RSErrorLog,
+  MPerformanceNavigationTiming,
 } from '@eagle-tracker/types';
 import { EagleTracker } from '../../../index';
 
@@ -71,7 +72,7 @@ export default class Transport {
   log(category: TransportCategory.ERROR, context: IErrorLog): void
 
   /**
-   * 上报性能数据
+   * 上报以用户为中心的性能指标
    * @param category 数据分类
    * @param context 上报数据
    */
@@ -106,12 +107,14 @@ export default class Transport {
    */
   log(category: TransportCategory.ONLINE, context: UserOnlineRecord): void
 
+  log(category: TransportCategory.CUS, context: any): void
+
   /**
-   * 上报自定义数据
+   * 上报以技术为中心的性能指标
    * @param category 数据分类
    * @param context 上报数据
    */
-  log(category: TransportCategory.CUS, context: any): void
+  log(category: TransportCategory.LOAD_SPEED, context: MPerformanceNavigationTiming): void
 
   log(category: TransportCategory, context: TransportData) {
     // 格式化数据

@@ -31,6 +31,8 @@
 		"prefer-destructuring": "off",
 		"no-constructor-return": "off",
 		"prefer-rest-params": "off",
+		"import/prefer-default-export": "off",
+		"no-empty": "off",
 		"no-param-reassign": [
 			"error",
 			{

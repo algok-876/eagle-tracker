@@ -54,6 +54,10 @@ perf.markStart('test')
 perf.markEnd('test')
 ```
 
+::: tip 说明
+你可以想象有一条很长的时间线，开始标记和结束标记是这个条时间线上的两个点，一对匹配的开始标记和结束标记表示了一段时间。
+:::
+
 ### measure
 #### 类型
 ```typescript
@@ -75,10 +79,10 @@ getMeasure(name: string): PerformanceMeasure[]
 获取存在的性能测量，数组的第一项则是测量数据。
 
 ```typescript
-p.markStart('settimeout')
+perf.markStart('settimeout')
 setTimeout(() => {
-  p.markEnd('settimeout')
-  p.measure('settimeout')
+  perf.markEnd('settimeout')
+  perf.measure('settimeout')
   console.log('settimeout measure', p.getMeasure('settimeout'))
 }, 2000)
 ```

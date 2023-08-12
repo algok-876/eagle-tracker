@@ -1,3 +1,5 @@
+import { Metric } from '@eagle-tracker/types';
+
 /**
  * 需要收集的数据
  */
@@ -11,28 +13,21 @@ export enum metricsName {
   RF = 'resource-flow',
 }
 
-export type IMetrics = number | any
-
 export default class metricsStore {
-  state: Map<metricsName | string, IMetrics>;
+  state: Map<metricsName | string, Metric>;
 
   /**
    * Map 暂存数据
    */
   constructor() {
-    this.state = new Map<metricsName | string, IMetrics>();
+    this.state = new Map<metricsName | string, Metric>();
   }
 
-  set(key: metricsName | string, value: IMetrics): void {
+  set(key: metricsName | string, value: Metric): void {
     this.state.set(key, value);
   }
 
-  add(key: metricsName | string, value: IMetrics): void {
-    const keyValue = this.state.get(key);
-    this.state.set(key, keyValue ? keyValue.concat([value]) : [value]);
-  }
-
-  get(key: metricsName | string): IMetrics | undefined {
+  get(key: metricsName | string): Metric | undefined {
     return this.state.get(key);
   }
 
@@ -44,7 +39,7 @@ export default class metricsStore {
     this.state.clear();
   }
 
-  getValues(): IMetrics {
+  getValues() {
     // Map 转为 对象 返回
     return Object.fromEntries(this.state);
   }

@@ -1,51 +1,51 @@
+/**
+ * 以技术为中心的性能指标
+ */
 export interface MPerformanceNavigationTiming {
   /**
    * 首次可交互时间
    */
-  firstInteractive?: number;
+  TTI?: number;
   /**
    * 解析完dom所花费的时间
    */
-  domReady?: number;
+  Ready?: number;
   /**
    * 页面完全加载时间
    */
-  load?: number;
+  Load?: number;
   /**
    * DNS查询耗费的时间
    */
-  dns?: number;
+  DNS?: number;
   /**
-   * 建立tcp连接所花费的时间
+   * TCP连接耗时
    */
-  tcp?: number;
+  TCP?: number;
   /**
-   * SSL安全连接耗时
+   * 首包时间
    */
-  ssl?: number;
+  FirstByte?: number;
   /**
    * 请求响应耗时
    */
-  http?: number;
+  TTFB?: number;
   /**
    * 响应内容传输耗时
    */
-  trans?: number;
+  Trans?: number;
   /**
    * dom解析耗时
    */
-  domParse?: number;
+  DOM?: number;
+  /**
+   * SSL安全连接耗时
+   */
+  SSL?: number;
   /**
    * 资源加载耗时
    */
-  resource?: number;
-}
-
-export interface PerformanceData {
-  fp: number,
-  fcp: number,
-  lcp: number,
-  nav: MPerformanceNavigationTiming
+  Res?: number;
 }
 
 export interface ResourceItem {
@@ -73,4 +73,42 @@ export interface ResourceItem {
    * 资源大小
    */
   size: number
+}
+
+export interface LayoutShift extends PerformanceEntry {
+  value: number;
+  hadRecentInput: boolean;
+}
+
+export interface Metric {
+  /**
+   * The name of the metric (in acronym form).
+   */
+  name: 'CLS' | 'FID' | 'LCP' | 'FCP' | 'FP';
+
+  /**
+   * 性能度量值
+   */
+  value: number;
+
+  /**
+   * 性能值的评级
+   */
+  rating: 'good' | 'needs-improvement' | 'poor';
+
+  entries: (
+    | PerformanceEntry
+    | LayoutShift
+  )[];
+}
+
+/**
+ * 以用户为中心的性能指标
+ */
+export interface PerformanceMetric {
+  FP: Metric,
+  FCP: Metric,
+  LCP: Metric,
+  FID: Metric,
+  CLS: Metric,
 }
