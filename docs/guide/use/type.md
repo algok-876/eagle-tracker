@@ -243,28 +243,89 @@ type UserOnlineRecord = Record<string, IPageRecord>
 
 ## 性能指标
 
-### PerformanceData
+### MPerformanceNavigationTiming （以技术为中心的性能指标，导航加载数据）
 ```typescript
 interface MPerformanceNavigationTiming {
-  FP?: number;
-  TTI?: number;
-  DomReady?: number;
-  Load?: number;
-  FirstByte?: number;
-  DNS?: number;
-  TCP?: number;
-  SSL?: number;
-  TTFB?: number;
-  Trans?: number;
-  DomParse?: number;
-  Res?: number;
+  /**
+   * 首次可交互时间
+   */
+  TTI: number;
+  /**
+   * 解析完dom所花费的时间
+   */
+  Ready: number;
+  /**
+   * 页面完全加载时间
+   */
+  Load: number;
+  /**
+   * DNS查询耗费的时间
+   */
+  DNS: number;
+  /**
+   * TCP连接耗时
+   */
+  TCP: number;
+  /**
+   * 首包时间
+   */
+  FirstByte: number;
+  /**
+   * 请求响应耗时
+   */
+  TTFB: number;
+  /**
+   * 响应内容传输耗时
+   */
+  Trans: number;
+  /**
+   * dom解析耗时
+   */
+  DOM: number;
+  /**
+   * SSL安全连接耗时
+   */
+  SSL: number;
+  /**
+   * 资源加载耗时
+   */
+  Res: number;
+}
+```
+
+### PerformanceMetric (以用户为中心的性能指标)
+```typescript
+interface Metric {
+  /**
+   * 指标名称
+   */
+  name: 'CLS' | 'FID' | 'LCP' | 'FCP' | 'FP';
+
+  /**
+   * 性能度量值
+   */
+  value: number;
+
+  /**
+   * 性能值的评级
+   */
+  rating: 'good' | 'needs-improvement' | 'poor';
+
+  /**
+   * 和数据统计相关的原始性能条目
+   */
+  entries: (
+    | PerformanceEntry
+    | LayoutShift
+  )[];
 }
 
-interface PerformanceData {
-  fp: number,
-  fcp: number,
-  lcp: number,
-  nav: MPerformanceNavigationTiming
+interface PerformanceMetric {
+  FP: Metric,
+  FCP: Metric,
+  LCP: Metric,
+  FID: Metric,
+  CLS: Metric,
 }
 ```
 
@@ -303,11 +364,13 @@ interface ResourceItem {
 ### TransportCategory
  上报数据分类
 ```typescript
-export const enum TransportCategory {
+enum TransportCategory {
   // PV访问数据
   PV = 'pv',
-  // 性能数据
+  // 性能指标
   PERF = 'perf',
+  // 导航加载指标
+  LOAD_SPEED = 'load_speed',
   // 报错数据
   ERROR = 'error',
   // Vue错误数据
@@ -326,11 +389,15 @@ export const enum TransportCategory {
 ### TransportData
 待上报的数据
 ```typescript
+/**
+ * 上报的数据类型
+ */
 type TransportData = IErrorLog
-| PerformanceData
-| ResourceItem[]
-| RSErrorLog
-| UserOnlineRecord
+  | PerformanceMetric
+  | ResourceItem[]
+  | RSErrorLog
+  | UserOnlineRecord
+  | MPerformanceNavigationTiming
 ```
 
 ### TransportStructure

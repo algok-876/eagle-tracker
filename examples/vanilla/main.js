@@ -1,6 +1,9 @@
 import './style.css'
 import instance from './eagle'
 import './testPerformanceMark'
+setTimeout(() => {
+  console.log(instance.performance.getVitals())
+}, 2000)
 instance.onCatchRSError((type, log) => {
   console.log('资源错误', type, log)
 })

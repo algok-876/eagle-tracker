@@ -1,3 +1,4 @@
+import { DeepKeys, DeepType } from '../types';
 /**
  * 通过路径深度获取一个对象中某个key的值
  * @param data 对象
@@ -5,7 +6,9 @@
  * @param defaultValue 不存在时的默认值
  * @returns path所对应的值
  */
-export function get<TData, TPath extends string>(data: TData, path: TPath, defaultValue?: any) {
+export function get<TData extends object,
+  TPath extends DeepKeys<TData>>(data: TData, path: TPath, defaultValue?: any)
+  : DeepType<TData, TPath> {
   const paths = path.split('.');
   if (paths.length === 1) {
     return data[paths[0]] === undefined ? defaultValue : data[paths[0]];

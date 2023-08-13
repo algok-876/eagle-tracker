@@ -18,3 +18,19 @@ export interface ViewModel {
     __file?: string;
   };
 }
+
+export type DeepKeys<T> = T extends object
+  ? {
+    [K in keyof T]-?: K extends string | number
+    ? `${K}` | `${K}.${DeepKeys<T[K]>}`
+    : never;
+  }[keyof T]
+  : never;
+
+export type DeepType<O extends object, T extends string> = T extends `${infer prop}.${infer tail}` | `${infer prop}` ?
+  prop extends keyof O ?
+  O[prop] extends object ?
+  DeepType<O[prop], tail>
+  : O[prop]
+  : never
+  : never

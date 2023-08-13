@@ -179,7 +179,7 @@ export default class WebVitals {
    * @returns 计算后的数据
   */
   getNavigationTiming() {
-    return this.metrics.getValues()[metricsName.NT];
+    return getNavigationTiming();
   }
 
   /**

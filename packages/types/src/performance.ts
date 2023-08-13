@@ -5,47 +5,47 @@ export interface MPerformanceNavigationTiming {
   /**
    * 首次可交互时间
    */
-  TTI?: number;
+  TTI: number;
   /**
    * 解析完dom所花费的时间
    */
-  Ready?: number;
+  Ready: number;
   /**
    * 页面完全加载时间
    */
-  Load?: number;
+  Load: number;
   /**
    * DNS查询耗费的时间
    */
-  DNS?: number;
+  DNS: number;
   /**
    * TCP连接耗时
    */
-  TCP?: number;
+  TCP: number;
   /**
    * 首包时间
    */
-  FirstByte?: number;
+  FirstByte: number;
   /**
    * 请求响应耗时
    */
-  TTFB?: number;
+  TTFB: number;
   /**
    * 响应内容传输耗时
    */
-  Trans?: number;
+  Trans: number;
   /**
    * dom解析耗时
    */
-  DOM?: number;
+  DOM: number;
   /**
    * SSL安全连接耗时
    */
-  SSL?: number;
+  SSL: number;
   /**
    * 资源加载耗时
    */
-  Res?: number;
+  Res: number;
 }
 
 export interface ResourceItem {
@@ -96,6 +96,9 @@ export interface Metric {
    */
   rating: 'good' | 'needs-improvement' | 'poor';
 
+  /**
+   * 和数据统计相关的原始性能条目
+   */
   entries: (
     | PerformanceEntry
     | LayoutShift

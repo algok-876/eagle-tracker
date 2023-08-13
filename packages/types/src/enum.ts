@@ -33,7 +33,7 @@ export const enum TransportCategory {
   PV = 'pv',
   // 性能指标
   PERF = 'perf',
-  // 加载速度相关指标
+  // 导航加载指标
   LOAD_SPEED = 'load_speed',
   // 报错数据
   ERROR = 'error',

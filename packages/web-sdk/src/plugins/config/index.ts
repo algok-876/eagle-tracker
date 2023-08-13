@@ -96,7 +96,7 @@ export default class Config {
    * @param path 目标值的路径
    * @returns 路径对应的值
    */
-  get(path: DeepKeys<IGlobalConfig>): any {
+  get(path: DeepKeys<IGlobalConfig>) {
     return get(this.config, path, get(DEFAULT_CONFIG, path));
   }
 }
