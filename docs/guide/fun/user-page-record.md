@@ -226,29 +226,6 @@ window.addEventListener('replaceState', () => {
 });
 ```
 
-
-## 数据上报时机
-能大概确定的是在用户离开页面的时候需要上报数据，那么有以下几种方案可选
-- beforeunload
-- unload
-- pagehide
-
-beforeunload事件在窗口、文档、各种资源将要卸载前触发，它可以用来防止用户不小心卸载资源。在移动端如果
-用户直接关闭浏览器或者切换后台应用，则不会触发，unload、pagehide也有类似的问题。
-
-`visibilitychange`事件在移动端是可靠的，并且在大多数现代移动浏览器中都得到支持。
-这个事件用于检测页面的可见性状态，即页面是否当前处于活动标签页或者被隐藏
-（例如在后台运行、切换到其他标签页或者锁屏状态）。
-
-当页面从可见状态变为不可见状态，或者从不可见状态变为可见状态时，`visibilitychange`事件都会被触发。可以监听这个
-事件来向服务器上报用户在线时长记录。
-```typescript
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden') {
-    // 页面可见
-  } 
-  if (document.visibilityState === 'visible') {
-    // 页面不可见
-  }
-});
-```
+::: tip
+在线时长数据在[页面卸载时上报](/guide/use/basic#页面卸载时上报)
+:::

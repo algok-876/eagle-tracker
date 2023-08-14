@@ -30,7 +30,7 @@ CLS 测量整个页面生命周期内发生的所有意外布局偏移中最大�
 
 这种不统一性就不得不延迟上报时机至页面隐藏时，这样仍然存在问题，某些数据可能没有被测量到。例如，用户可能没有和界面交互就切换了页面，这时FID没有被测量就上报了。
 
-页面卸载事件往往不可靠，所以，目前采取的方法是每次用户隐藏页面全部数据都会上报一次。
+性能指标会在[页面卸载时上报](/guide/use/basic#页面卸载时上报)
 :::
 
 ## 手动获取指标
@@ -44,3 +44,4 @@ const eagle = new EagleTracker({
 const perf = eagle.performance
 console.log(perf.getVitals())
 ```
+具体数据类型可查看 [PerformanceMetric](/guide/use/type#performancemetric-以用户为中心的性能指标)

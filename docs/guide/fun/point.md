@@ -2,7 +2,7 @@
 在项目中或多或少有一些自定义的需求，比如统计用户某种行为的时长或者某种操作耗时，又或者是某段代码的执行时间。
 这显然需要手动在合适的位置进行打点来统计的，本节的内容就是解决这个问题的。
 ## 相关API
-以下是基于[Performance](https://developer.mozilla.org/zh-CN/docs/Web/API/Performance_API/User_timing)
+以下是基于[Performance User_Timing API](https://developer.mozilla.org/zh-CN/docs/Web/API/Performance_API/User_timing)
 封装的用于埋点的API。相较于使用原生的API，更加语义化，代码结构会更加清晰，可以从根本杜绝某些错误的用法（下面会看到）
 
 ### 使用
@@ -139,5 +139,3 @@ clearMeasure(name: string): void;
 清除已存在的性能测量。如果一个性能测量所依赖的结束标记被清除时，该性能测量不会消失，如果恰巧这个结束标记被重新打在了其他位置
 ，就会拿到旧的测量数据。建议清除结束标记的同时清除对应的性能测量（如果有的话），清除一个不存在的性能测量并不会报错。
 
-
-## 实战

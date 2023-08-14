@@ -6,7 +6,7 @@
 
 
 ## 手动获取
-这些数据都会在页面被隐藏时自动上报且只上报一次，同样可以手动获取
+这些数据都会在[页面隐藏时上报](/guide/use/basic#页面卸载时上报)且只上报一次，同样可以手动获取
 ```typescript
 const eagle = new EagleTracker({
   isTest: true,
