@@ -5,8 +5,11 @@ title: eagle-tracker
 titleTemplate: 埋点
 
 hero:
-  name: eagle-tracker
-  text: 前端监控SDK 错误 & 性能 & 资源 & 用户行为
+  name: 前端监控SDK
+  text: 错误 & 性能 & 资源 & 用户行为
+  image:
+    src: /images/logo_index.png
+    alt: eagle-tracker-logo
   actions:
     - theme: brand
       text: 快速开始

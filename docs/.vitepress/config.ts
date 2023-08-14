@@ -13,7 +13,7 @@ export default defineConfig({
     lineNumbers: true
   },
   themeConfig: {
-    // logo: 'https://cdn.staticaly.com/gh/M-cheng-web/image-provider@main/web-tracing/icon_5e9950ae4507f.33lqpfzrwzc0.svg',
+    logo: '/images/logo_transparent.png',
 
     nav: [
       { text: '指南', link: '/guide/start' },
@@ -80,4 +80,7 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/AzuraXW/eagle-tracker' }
     ],
   },
+  head: [
+    ['link', { rel: 'icon', href: '/images/logo_transparent.png' }],
+  ]
 })
