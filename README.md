@@ -1,4 +1,8 @@
-# eagle-tracker 前端监控SDK
+<div align="center">
+  <img src="https://github.com/AzuraXW/eagle-tracker/assets/53415213/65880765-1a06-49e7-8953-7dadaab3a476" width="300" align="center" alt="eagle-tracker-logo"/>
+</div>
+
+# 前端监控SDK
 eagle-tracker是一个集全方位错误监控、性能指标采集、用户行为于一体的前端监控SDK。
 
 采用原生JS编写，目前无任何第三方依赖。
