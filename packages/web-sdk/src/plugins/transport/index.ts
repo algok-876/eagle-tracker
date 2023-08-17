@@ -3,7 +3,7 @@ import {
   UserOnlineRecord,
   TransportStructure,
   TransportData,
-  PerformanceData,
+  PerformanceMetric,
   IErrorLog,
   ResourceItem,
   TransportCategory,
@@ -76,7 +76,7 @@ export default class Transport {
    * @param category 数据分类
    * @param context 上报数据
    */
-  log(category: TransportCategory.PERF, context: PerformanceData): void
+  log(category: TransportCategory.PERF, context: PerformanceMetric): void
 
   /**
    * 上报资源加载情况数据

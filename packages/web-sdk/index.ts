@@ -22,6 +22,9 @@ export {
 };
 // eslint-disable-next-line import/prefer-default-export
 export class EagleTracker extends Core {
+  // eslint-disable-next-line no-use-before-define
+  protected static sdkInstance:EagleTracker;
+
   trackerInstance!: Tracker;
 
   configInstance!: Config;
@@ -48,7 +51,7 @@ export class EagleTracker extends Core {
     // 更新配置
     this.configInstance.set(config);
     this.transportInstance = new Transport(this);
-    sdkInstance = this;
+    EagleTracker.sdkInstance = this;
   }
 
   /**

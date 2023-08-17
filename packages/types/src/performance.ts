@@ -52,27 +52,27 @@ export interface ResourceItem {
   /**
    * 资源名称
    */
-  name: string
+  name: string;
   /**
    * 资源类型
    */
-  type: string
+  type: string;
   /**
    * 加载时间
    */
-  loadTime: number
+  loadTime: number;
   /**
    * 内容下载耗费的时间
    */
-  contentDownloadTime: number
+  contentDownloadTime: number;
   /**
    * 总传输时间
    */
-  totalTransTime: number
+  totalTransTime: number;
   /**
    * 资源大小
    */
-  size: number
+  size: number;
 }
 
 export interface LayoutShift extends PerformanceEntry {
@@ -80,11 +80,13 @@ export interface LayoutShift extends PerformanceEntry {
   hadRecentInput: boolean;
 }
 
+type MetricName = 'CLS' | 'FID' | 'LCP' | 'FCP' | 'FP';
+
 export interface Metric {
   /**
    * The name of the metric (in acronym form).
    */
-  name: 'CLS' | 'FID' | 'LCP' | 'FCP' | 'FP';
+  name: MetricName;
 
   /**
    * 性能度量值
@@ -99,19 +101,12 @@ export interface Metric {
   /**
    * 和数据统计相关的原始性能条目
    */
-  entries: (
-    | PerformanceEntry
-    | LayoutShift
-  )[];
+  entries: (PerformanceEntry | LayoutShift)[];
 }
 
 /**
  * 以用户为中心的性能指标
  */
-export interface PerformanceMetric {
-  FP: Metric,
-  FCP: Metric,
-  LCP: Metric,
-  FID: Metric,
-  CLS: Metric,
-}
+export type PerformanceMetric = {
+  [key in MetricName]: Metric;
+};
