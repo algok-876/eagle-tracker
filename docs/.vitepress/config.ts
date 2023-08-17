@@ -81,6 +81,6 @@ export default defineConfig({
     ],
   },
   head: [
-    ['link', { rel: 'icon', href: '/images/logo_transparent.png' }],
+    ['link', { rel: 'icon', href: '/eagle-tracker/images/logo_transparent.png' }],
   ]
 })
