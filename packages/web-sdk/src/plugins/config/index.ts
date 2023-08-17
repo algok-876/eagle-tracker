@@ -1,14 +1,10 @@
-import { get, merge, cloneDeep } from '@eagle-tracker/utils';
+import {
+  get, merge, cloneDeep, DeepKeys, DeepType,
+} from '@eagle-tracker/utils/index';
 import { IGlobalConfig } from '@eagle-tracker/types';
 import { EagleTracker } from '../../../index';
 
-type DeepKeys<T> = T extends object
-  ? {
-    [K in keyof T]-?: K extends string | number
-    ? `${K}` | `${K}.${DeepKeys<T[K]>}`
-    : never;
-  }[keyof T]
-  : never;
+// import
 
 // 默认配置
 export const DEFAULT_CONFIG: IGlobalConfig = {
@@ -36,6 +32,7 @@ export const DEFAULT_CONFIG: IGlobalConfig = {
       http: true,
     },
   },
+  ignoreResource: [],
   tracker: {
     enable: true,
     sampling: 1,
@@ -61,6 +58,7 @@ export default class Config {
    */
   set(customConfig: Partial<IGlobalConfig>) {
     this.config = merge(this.config, customConfig);
+    console.log(this.config);
   }
 
   checkConfig() {
@@ -96,7 +94,7 @@ export default class Config {
    * @param path 目标值的路径
    * @returns 路径对应的值
    */
-  get(path: DeepKeys<IGlobalConfig>) {
+  get<T extends DeepKeys<IGlobalConfig>>(path: T): DeepType<IGlobalConfig, T> {
     return get(this.config, path, get(DEFAULT_CONFIG, path));
   }
 }

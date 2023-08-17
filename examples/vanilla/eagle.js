@@ -8,6 +8,7 @@ const instance = new EagleTracker({
   record: {
     timeOnPage: true,
   },
+  ignoreResource: [/http:\/\/127.0.0.1:4000\/@fs\/.*/, /.*\.css/, /.*\.svg/]
 })
 instance.start()
 export default instance

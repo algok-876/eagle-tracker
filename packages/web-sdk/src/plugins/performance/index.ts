@@ -16,6 +16,7 @@ import { runOnce } from '../../lib/runOnce';
 import { initMetric } from '../../lib/initMetric';
 import { getRating } from '../../lib/getRating';
 import { onBFCacheRestore } from '../../lib/bfcache';
+import { isRegexpArray, ignoreWithRegexp, ignoreWithFunction } from '../../lib/ignore';
 
 export default class WebVitals {
   private metrics: MetricsStore;
@@ -162,7 +163,7 @@ export default class WebVitals {
   // 初始化 RF 的获取以及返回
   private reportResourceFlow = (): void => {
     const entry = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
-    const data: ResourceItem[] = entry.map((item) => ({
+    let data: ResourceItem[] = entry.map((item) => ({
       name: item.name,
       loadTime: item.duration,
       contentDownloadTime: item.responseEnd - item.responseStart,
@@ -170,8 +171,17 @@ export default class WebVitals {
       size: item.encodedBodySize,
       type: item.initiatorType,
     }));
+
+    // 根据用户的配置项过滤资源加载情况数据
+    const ignores = this.host.configInstance.get('ignoreResource');
+    console.log('ignores', ignores);
+    if (isRegexpArray(ignores)) {
+      data = data.filter((item) => !ignoreWithRegexp(item.name, ignores));
+    } else {
+      data = data.filter((item) => !ignoreWithFunction(item, ignores));
+    }
     // 资源数据单独上报
-    this.host.transportInstance.log(TransportCategory.RS, data, true);
+    this.host.transportInstance.log(TransportCategory.RS, data);
   };
 
   /**
