@@ -1,4 +1,7 @@
+import { ResourceItem } from './performance';
 import { ITrackerOption } from './tracker';
+
+type IgnoreFunction<T> = (info: T) => boolean
 
 export interface IGlobalConfig {
   /**
@@ -77,6 +80,7 @@ export interface IGlobalConfig {
       http: boolean
     }
   }
+  ignoreResource: RegExp[] | IgnoreFunction<ResourceItem>[]
   tracker: ITrackerOption,
   famework: {
     /**

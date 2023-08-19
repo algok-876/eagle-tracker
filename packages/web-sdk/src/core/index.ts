@@ -1,15 +1,8 @@
 import {
   getBrowser, getOS, getDeviceType, getScreenResolution,
 } from '@eagle-tracker/utils';
-import {
-  AfterSendDataLifeCycleCallback,
-  BeforeSendDataLifeCycleCallback,
-  ConfigLifeCycleCallback,
-  ErrorLifeCycleCallback,
-  LifeCycleName,
-  RSErrorLifeCycleCallback,
-  IGlobalConfig,
-} from '@eagle-tracker/types';
+import { LifeCycleName } from '@eagle-tracker/types';
+import { RegParamterMapping, RunParamterMapping } from './type';
 
 type DeviceType = 'Mobile' | 'Tablet' | 'Desktop'
 export default class Core {
@@ -54,46 +47,11 @@ export default class Core {
   }
 
   /**
-   * 注册发生错误时生命周期
-   * @param name 生命周期名字
-   * @param fn 注册的生命周期函数
-   */
-  registerLifeCycle(name: LifeCycleName.ERROR, fn: ErrorLifeCycleCallback): void
-
-  /**
-   * 注册配置被合并时生命周期
-   * @param name 生命周期名字
-   * @param fn 注册的生命周期函数
-   */
-  registerLifeCycle(name: LifeCycleName.CONFIG, fn: ConfigLifeCycleCallback): void
-
-  /**
-   * 注册数据上报之后生命周期
-   * @param name 生命周期名字
-   * @param fn 注册的生命周期函数
-   */
-  registerLifeCycle(name: LifeCycleName.ASEND, fn: AfterSendDataLifeCycleCallback): void
-
-  /**
-   * 注册数据上报之前生命周期
-   * @param name 生命周期名字
-   * @param fn 注册的生命周期函数
-   */
-  registerLifeCycle(name: LifeCycleName.BSEND, fn: BeforeSendDataLifeCycleCallback): void
-
-  /**
-   * 注册资源错误生命周期
-   * @param name 生命周期名字
-   * @param fn 注册的生命周期函数
-   */
-  registerLifeCycle(name: LifeCycleName.RSERROR, fn: RSErrorLifeCycleCallback): void
-
-  /**
    * 注册生命周期
    * @param name 生命周期名字
    * @param fn 注册的生命周期函数
    */
-  registerLifeCycle(name: LifeCycleName, fn: any) {
+  registerLifeCycle<T extends keyof RegParamterMapping>(name: T, fn: RegParamterMapping[T]) {
     let task: any[] | undefined;
     if (!this.lifeCycleMap.has(name)) {
       this.lifeCycleMap.set(name, task = []);
@@ -104,54 +62,11 @@ export default class Core {
   }
 
   /**
-   * 执行发生错误时的生命周期回调
-   * @param name 生命周期名称
-   * @param params 传递给生命周期回调的参数，数组方式
-   */
-  runLifeCycle(name: LifeCycleName.ERROR,
-    params: [Parameters<ErrorLifeCycleCallback>[0], Parameters<ErrorLifeCycleCallback>[1]]): void
-
-  /**
-   * 执行配置被合并时的生命周期回调
-   * @param name 生命周期名称
-   * @param params 传递给生命周期回调的参数，数组方式
-   */
-  runLifeCycle(name: LifeCycleName.CONFIG,
-    params: [IGlobalConfig]): void
-
-  /**
-   * 执行数据上报之前生命周期回调
-   * @param name 生命周期名称
-   * @param params 传递给生命周期回调的参数，数组方式
-   */
-  runLifeCycle(name: LifeCycleName.BSEND,
-    params: [Parameters<BeforeSendDataLifeCycleCallback>[0],
-      Parameters<BeforeSendDataLifeCycleCallback>[1]]): void
-
-  /**
-   * 执行数据上报之后生命周期回调
-   * @param name 生命周期名称
-   * @param params 传递给生命周期回调的参数，数组方式
-   */
-  runLifeCycle(name: LifeCycleName.ASEND,
-    params: [Parameters<AfterSendDataLifeCycleCallback>[0],
-      Parameters<AfterSendDataLifeCycleCallback>[1]]): void
-
-  /**
-   * 执行资源错误生命周期回调
-   * @param name 生命周期名称
-   * @param params 传递给生命周期回调的参数，数组方式
-   */
-  runLifeCycle(name: LifeCycleName.RSERROR,
-    params: [Parameters<RSErrorLifeCycleCallback>[0],
-      Parameters<RSErrorLifeCycleCallback>[1]]): void
-
-  /**
    * 执行生命周期回调
    * @param name 生命周期名称
    * @param params 传递给生命周期回调的参数，数组方式
    */
-  runLifeCycle(name: LifeCycleName, params: any[]) {
+  runLifeCycle<T extends keyof RunParamterMapping>(name: T, params: RunParamterMapping[T]) {
     if (!this.lifeCycleMap.has(name)) {
       return;
     }

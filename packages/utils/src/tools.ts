@@ -16,7 +16,7 @@ export function get<TData extends object,
   return get(data[paths[0]], paths.slice(1).join('.'), defaultValue);
 }
 
-const isObject = (obj: any) => typeof obj === 'object' && obj !== null;
+const isObject = (obj: any) => typeof obj === 'object' && obj !== null && !Array.isArray(obj);
 
 /**
  * 深度合并两个对象
@@ -26,7 +26,7 @@ const isObject = (obj: any) => typeof obj === 'object' && obj !== null;
  */
 export function merge<TObject extends object,
   TSource extends object>(object: TObject, source: TSource) {
-  const result = {} as TObject & TSource;
+  const result = (Array.isArray(object) ? [] : {}) as TObject & TSource;
   const keys = Object.keys(object);
   Object.keys(source).forEach((key) => {
     if (!keys.includes(key)) {
