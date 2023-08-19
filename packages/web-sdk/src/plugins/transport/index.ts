@@ -1,12 +1,9 @@
 import { cloneDeep } from '@eagle-tracker/utils';
+import axios from 'axios';
 import {
   UserOnlineRecord,
   TransportStructure,
   TransportData,
-<<<<<<< HEAD
-  PerformanceMetric,
-=======
->>>>>>> 7d98480c2f6b8a5a296c6ffb4e27823dec270780
   IErrorLog,
   ResourceItem,
   TransportCategory,
@@ -77,63 +74,7 @@ export default class Transport {
     return structure;
   }
 
-<<<<<<< HEAD
-  /**
-   * 上报错误数据
-   * @param category 数据分类
-   * @param context 上报数据
-   */
-  log(category: TransportCategory.ERROR, context: IErrorLog): void
-
-  /**
-   * 上报以用户为中心的性能指标
-   * @param category 数据分类
-   * @param context 上报数据
-   */
-  log(category: TransportCategory.PERF, context: PerformanceMetric): void
-
-  /**
-   * 上报资源加载情况数据
-   * @param category 数据分类
-   * @param context 上报数据
-   * @param once 只上报一次，不分开上报
-   */
-  log(category: TransportCategory.RS, context: ResourceItem[], once?: boolean): void
-
-  /**
-   * 上报vue错误
-   * @param category 数据分类
-   * @param context 上报数据
-   */
-  log(category: TransportCategory.VUEERROR, context: IVueErrorLog): void
-
-  /**
-   * 上报资源加载错误
-   * @param category 数据分类
-   * @param context 上报数据
-   */
-  log(category: TransportCategory.RSERROR, context: RSErrorLog): void
-
-  /**
-   * 上报用户在线数据
-   * @param category 数据分类
-   * @param context 上报数据
-   */
-  log(category: TransportCategory.ONLINE, context: UserOnlineRecord): void
-
-  log(category: TransportCategory.CUS, context: any): void
-
-  /**
-   * 上报以技术为中心的性能指标
-   * @param category 数据分类
-   * @param context 上报数据
-   */
-  log(category: TransportCategory.LOAD_SPEED, context: MPerformanceNavigationTiming): void
-
-  log(category: TransportCategory, context: TransportData) {
-=======
   log<T extends keyof LogParamterMapping>(category: T, context: LogParamterMapping[T]) {
->>>>>>> 7d98480c2f6b8a5a296c6ffb4e27823dec270780
     // 格式化数据
     const transportData = this.format(category, context as TransportData);
     // 上报前生命周期
@@ -160,8 +101,15 @@ export default class Transport {
   }
 
   private send(transportStr: string) {
-    const dsn = this.host.configInstance.get('dsn');
-    const img = new Image();
-    img.src = `${dsn}?data=${encodeURIComponent(transportStr)}`;
+    const sendMode = this.host.configInstance.get('sendMode');
+
+    if (sendMode === 'img') {
+      const dsn:string = this.host.configInstance.get('dsn');
+      const img = new Image();
+      img.src = `${dsn}?data=${encodeURIComponent(transportStr)}`;
+    } else {
+      const postUrl:string = this.host.configInstance.get('postUrl');
+      axios.post(postUrl, transportStr);
+    }
   }
 }

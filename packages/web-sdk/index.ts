@@ -51,7 +51,7 @@ export class EagleTracker extends Core {
     // 更新配置
     this.configInstance.set(config);
     this.transportInstance = new Transport(this);
-    EagleTracker.sdkInstance = this;
+    sdkInstance = this;
   }
 
   /**

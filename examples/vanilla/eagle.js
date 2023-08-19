@@ -1,9 +1,10 @@
 import { EagleTracker } from '@eagle-tracker/core/index.ts'
 
 const instance = new EagleTracker({
-  isTest: true,
+  isTest: false,
+  sendMode:'post',
+  postUrl:'',
   appId: 'test123',
-  dsn: 'http://weiwei8848.com/log/log.png',
   uid: '88888',
   record: {
     timeOnPage: true,
@@ -11,4 +12,5 @@ const instance = new EagleTracker({
   ignoreResource: [/http:\/\/127.0.0.1:4000\/@fs\/.*/, /.*\.css/, /.*\.svg/]
 })
 instance.start()
+
 export default instance
