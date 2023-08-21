@@ -1,4 +1,4 @@
-import { EagleTracker } from '@eagle-tracker/core/index.ts'
+import { EagleTracker } from '@eagle-tracker/core/index'
 
 const instance = new EagleTracker({
   isTest: true,

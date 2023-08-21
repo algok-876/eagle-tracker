@@ -1,6 +1,6 @@
 import {
   get, merge, cloneDeep, DeepKeys, DeepType,
-} from '@eagle-tracker/utils/index';
+} from '@eagle-tracker/utils';
 import { IGlobalConfig } from '@eagle-tracker/types';
 import { EagleTracker } from '../../../index';
 
