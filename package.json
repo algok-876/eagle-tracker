@@ -12,7 +12,7 @@
     "build:core": "node scripts/build.js web-sdk",
     "build:vue3": "node scripts/build.js vue3",
     "build:utils": "node scripts/build.js utils",
-    "build": "node scripts/build.js",
+    "build": "pnpm run build:utils && pnpm run build:core && pnpm run build:vue3",
     "publish": "changeset publish",
     "commit": "git-cz",
     "release": "standard-version",

@@ -3,7 +3,7 @@ import { EagleTracker } from '@eagle-tracker/core/index.ts'
 const instance = new EagleTracker({
   isTest: false,
   sendMode:'post',
-  postUrl:'',
+  postUrl:'http://127.0.0.1:7001/logs',
   appId: 'test123',
   uid: '88888',
   record: {

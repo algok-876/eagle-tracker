@@ -102,6 +102,8 @@ export default class Transport {
 
   private send(transportStr: string) {
     const sendMode = this.host.configInstance.get('sendMode');
+    const appId = this.host.configInstance.get('appId');
+    const appKey = this.host.configInstance.get('appKey');
 
     if (sendMode === 'img') {
       const dsn:string = this.host.configInstance.get('dsn');
@@ -109,7 +111,7 @@ export default class Transport {
       img.src = `${dsn}?data=${encodeURIComponent(transportStr)}`;
     } else {
       const postUrl:string = this.host.configInstance.get('postUrl');
-      axios.post(postUrl, transportStr);
+      axios.post(postUrl, { data: transportStr });
     }
   }
 }

@@ -1,6 +1,6 @@
 import {
   get, merge, cloneDeep, DeepKeys, DeepType,
-} from '@eagle-tracker/utils/index';
+} from '@eagle-tracker/utils';
 import { IGlobalConfig } from '@eagle-tracker/types';
 import { EagleTracker } from '../../../index';
 
@@ -68,20 +68,23 @@ export default class Config {
       message.push('appId为必填项');
     }
     const reg = /^https?:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i;
+
     if (this.config.sendMode === 'img' && this.config.dsn) {
+      if (!this.config.dsn) {
+        message.push('sendMode ===img 时 dsn属性必填');
+      }
       if (!reg.test(this.config.dsn)) {
         message.push('dsn上报地址格式不正确');
       }
-    } else {
-      message.push('dsn上报地址为必填项');
-    }
-
-    if (this.config.sendMode === 'post' && this.config.postUrl) {
+    } else if (this.config.sendMode === 'post' && this.config.postUrl) {
+      if (!this.config.postUrl) {
+        message.push('sendMode ===post 时 postUrl 属性必填');
+      }
       if (!reg.test(this.config.postUrl)) {
         message.push('post 请求上报地址格式不正确');
       }
     } else {
-      message.push('postUrl上报地址为必填项');
+      message.push('sendMode 为必填');
     }
 
     if (message.length > 0) {

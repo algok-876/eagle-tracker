@@ -85,8 +85,10 @@ export default class Tracker {
         this.getErrorUidInput(ErrorType.JS, event.message, event.filename),
       );
       if (this.isUnSafe(errorUid)) {
+        console.log('isUnSafe return');
         return;
       }
+
       this.errorSet.add(errorUid);
 
       const stack = parseStackFrames(event.error);
@@ -104,6 +106,7 @@ export default class Tracker {
         type: this.host.parseTypeError(event.message),
       };
       this.host.runLifeCycle(LifeCycleName.ERROR, [ErrorType.JS, errorLog]);
+
       this.handleError(errorLog);
     }));
   }
