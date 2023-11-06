@@ -9,6 +9,7 @@ import { EagleTracker } from '../../../index';
 // 默认配置
 export const DEFAULT_CONFIG: IGlobalConfig = {
   appId: '',
+  appKey: '',
   sendMode: 'img',
   dsn: '',
   appName: '',

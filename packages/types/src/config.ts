@@ -9,6 +9,10 @@ export interface IBaseGlobalConfig {
    */
   appId: string;
   /**
+   * 项目appkey，必填
+   */
+  appKey: string;
+  /**
    * 应用名称
    */
   appName: string;
@@ -91,7 +95,7 @@ type PostSendModeConfig = {
   /**
    * 数据上报方式
    */
-  sendMode:'post';
+  sendMode: 'post';
   /**
    * 数据上报的接口地址
    */

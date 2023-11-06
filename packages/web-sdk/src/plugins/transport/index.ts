@@ -111,7 +111,7 @@ export default class Transport {
       img.src = `${dsn}?data=${encodeURIComponent(transportStr)}`;
     } else {
       const postUrl:string = this.host.configInstance.get('postUrl');
-      axios.post(postUrl, { data: transportStr });
+      axios.post(postUrl, { data: transportStr, appId, appKey });
     }
   }
 }

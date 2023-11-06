@@ -10,9 +10,12 @@
     "clean:dep": "rimraf dist packages/*/node_modules examples/*/node_modules",
     "lint": "eslint packages/**/*.ts --fix --ext .ts",
     "build:core": "node scripts/build.js web-sdk",
+    "wb:core": "node scripts/build.js web-sdk --watch --buildDelay 2000",
     "build:vue3": "node scripts/build.js vue3",
+    "wb:vue3": "node scripts/build.js vue3 --watch --buildDelay 2000",
     "build:utils": "node scripts/build.js utils",
-    "build": "pnpm run build:utils && pnpm run build:core && pnpm run build:vue3",
+    "wb:utils": "node scripts/build.js utils --watch --buildDelay 2000",
+    "build": "run-s build:utils build:core build:vue3",
     "publish": "changeset publish",
     "commit": "git-cz",
     "release": "standard-version",
@@ -20,11 +23,6 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "docs:publish": "sh scripts/deploy.sh"
-  },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
-    }
   },
   "keywords": [],
   "repository": {
@@ -71,5 +69,8 @@
     "tslib": "^2.3.1",
     "typescript": "^4.6.3",
     "vitepress": "1.0.0-beta.6"
+  },
+  "dependencies": {
+    "glob": "^10.3.3"
   }
 }
