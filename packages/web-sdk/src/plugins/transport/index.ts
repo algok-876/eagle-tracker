@@ -1,4 +1,5 @@
 import { cloneDeep } from '@eagle-tracker/utils';
+import axios from 'axios';
 import {
   UserOnlineRecord,
   TransportStructure,
@@ -100,8 +101,17 @@ export default class Transport {
   }
 
   private send(transportStr: string) {
-    const dsn = this.host.configInstance.get('dsn');
-    const img = new Image();
-    img.src = `${dsn}?data=${encodeURIComponent(transportStr)}`;
+    const sendMode = this.host.configInstance.get('sendMode');
+    const appId = this.host.configInstance.get('appId');
+    const appKey = this.host.configInstance.get('appKey');
+
+    if (sendMode === 'img') {
+      const dsn:string = this.host.configInstance.get('dsn');
+      const img = new Image();
+      img.src = `${dsn}?data=${encodeURIComponent(transportStr)}`;
+    } else {
+      const postUrl:string = this.host.configInstance.get('postUrl');
+      axios.post(postUrl, { data: transportStr, appId, appKey });
+    }
   }
 }

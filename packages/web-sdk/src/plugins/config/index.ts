@@ -9,6 +9,8 @@ import { EagleTracker } from '../../../index';
 // 默认配置
 export const DEFAULT_CONFIG: IGlobalConfig = {
   appId: '',
+  appKey: '',
+  sendMode: 'img',
   dsn: '',
   appName: '',
   appVersion: '',
@@ -67,13 +69,25 @@ export default class Config {
       message.push('appId为必填项');
     }
     const reg = /^https?:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i;
-    if (this.config.dsn) {
+
+    if (this.config.sendMode === 'img' && this.config.dsn) {
+      if (!this.config.dsn) {
+        message.push('sendMode ===img 时 dsn属性必填');
+      }
       if (!reg.test(this.config.dsn)) {
         message.push('dsn上报地址格式不正确');
       }
+    } else if (this.config.sendMode === 'post' && this.config.postUrl) {
+      if (!this.config.postUrl) {
+        message.push('sendMode ===post 时 postUrl 属性必填');
+      }
+      if (!reg.test(this.config.postUrl)) {
+        message.push('post 请求上报地址格式不正确');
+      }
     } else {
-      message.push('dsn上报地址为必填项');
+      message.push('sendMode 为必填');
     }
+
     if (message.length > 0) {
       this.host.console('log', ...message, '配置项校验不通过');
       return false;
