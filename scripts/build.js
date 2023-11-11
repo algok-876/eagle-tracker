@@ -3,6 +3,7 @@ import minimist from 'minimist'
 import { existsSync, rmSync } from 'node:fs'
 import path from 'node:path'
 import { execa } from 'execa'
+import { consola } from 'consola'
 
 const args = minimist(process.argv.slice(2))
 // 需要打包的package
@@ -45,7 +46,9 @@ async function build (target) {
 
 async function buildAll () {
   for (let target of targets) {
+    consola.start(`开始构建 ${target}`)
     await build(target)
+    consola.success(`${target} 构建完成`)
   }
 }
 
