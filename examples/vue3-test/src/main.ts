@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
-import { EagleTracker, useCatchError, isVueError, usePerformance } from '@eagle-tracker/vue3'
+import { EagleTracker, useCatchError } from '@eagle-tracker/vue3'
 import router from './router'
 const app = createApp(App)
 

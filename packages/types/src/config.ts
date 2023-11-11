@@ -3,7 +3,7 @@ import { ITrackerOption } from './tracker';
 
 type IgnoreFunction<T> = (info: T) => boolean;
 
-export interface IBaseGlobalConfig {
+export interface IGlobalConfig {
   /**
    * 项目id，必填
    */
@@ -32,6 +32,14 @@ export interface IBaseGlobalConfig {
    * 是否为测试数据, 默认为boolean(测试模式下打点数据仅供浏览, 不会展示在系统中)
    */
   isTest: boolean;
+  /**
+   * 数据上报方式
+   */
+  sendMode: 'img' | 'post';
+  /**
+     * 数据上报地址
+     */
+  dsn: string;
   record: {
     timeOnPage: boolean; // 是否监控用户在线时长数据, 默认为boolean
     performance: {
@@ -90,28 +98,3 @@ export interface IBaseGlobalConfig {
     app: any;
   };
 }
-
-type PostSendModeConfig = {
-  /**
-   * 数据上报方式
-   */
-  sendMode: 'post';
-  /**
-   * 数据上报的接口地址
-   */
-  postUrl: string;
-};
-
-type ImgSendModeConfig = {
-  /**
-   * 数据上报方式
-   */
-  sendMode: 'img';
-  /**
-   * 数据上报地址
-   */
-  dsn: string;
-};
-
-export type IGlobalConfig = IBaseGlobalConfig &
-  (PostSendModeConfig | ImgSendModeConfig);

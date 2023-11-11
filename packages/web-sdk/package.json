@@ -38,7 +38,6 @@
   "license": "ISC",
   "dependencies": {
     "@eagle-tracker/types": "workspace:*",
-    "@eagle-tracker/utils": "workspace:*",
-    "axios": "^1.4.0"
+    "@eagle-tracker/utils": "workspace:*"
   }
 }
