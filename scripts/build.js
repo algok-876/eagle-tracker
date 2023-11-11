@@ -6,7 +6,7 @@ import { execa } from 'execa'
 
 const args = minimist(process.argv.slice(2))
 // 需要打包的package
-const targets = args._
+const targets = args._.length === 0 ? ['utils', 'web-sdk', 'vue3'] : args._
 
 // 获取watch选项配置
 function getWatchOptions (args) {
@@ -43,10 +43,10 @@ async function build (target) {
   ], { stdio: 'inherit' })
 }
 
-function buildAll () {
-  targets.forEach(async (name) => {
-    await build(name)
-  })
+async function buildAll () {
+  for (let target of targets) {
+    await build(target)
+  }
 }
 
 buildAll()
