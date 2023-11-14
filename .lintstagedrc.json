@@ -1,0 +1,3 @@
+{
+  "*.{js,jsx,vue,ts}": ["pnpm run lint"]
+}
