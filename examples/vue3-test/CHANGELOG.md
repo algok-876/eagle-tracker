@@ -1,5 +1,12 @@
 # vue3-test
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @eagle-tracker/vue3@2.1.2
+
 ## 0.0.4
 
 ### Patch Changes

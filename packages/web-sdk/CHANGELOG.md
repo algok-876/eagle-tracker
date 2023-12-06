@@ -1,5 +1,13 @@
 # @eagle-tracker/core
 
+## 2.1.2
+
+### Patch Changes
+
+- 增加 beacon 上报方案
+- Updated dependencies
+  - @eagle-tracker/types@2.1.1
+
 ## 2.1.1
 
 ### Patch Changes
