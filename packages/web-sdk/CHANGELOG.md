@@ -1,5 +1,13 @@
 # @eagle-tracker/core
 
+## 2.1.2
+
+### Patch Changes
+
+- 优化类型，增加 PV 数据上报
+- Updated dependencies
+  - @eagle-tracker/types@2.1.1
+
 ## 2.1.1
 
 ### Patch Changes

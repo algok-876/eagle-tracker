@@ -1,6 +1,6 @@
 {
   "name": "@eagle-tracker/types",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "description": "eagle-tracker类型包",
   "main": "./index.ts",
   "module": "./index.ts",
