@@ -2,6 +2,7 @@ import { TransportCategory } from './enum';
 import { IErrorLog, RSErrorLog } from './tracker';
 import { MPerformanceNavigationTiming, PerformanceMetric, ResourceItem } from './performance';
 import { UserOnlineRecord } from './behavior';
+import { PVData } from './user';
 
 /**
  * 上报的数据类型
@@ -13,10 +14,7 @@ export type TransportData = IErrorLog
   | UserOnlineRecord
   | MPerformanceNavigationTiming
 
-/**
- * 上报数据的最终形式
- */
-export interface TransportStructure {
+interface BaseTransportStructure {
   appId: string,
   /**
    * 应用名称
@@ -30,10 +28,6 @@ export interface TransportStructure {
    * 用户id
    */
   uid: string,
-  /**
-   * 上报数据的类型
-   */
-  category: TransportCategory
   /**
    * 环境相关数据
    */
@@ -56,11 +50,50 @@ export interface TransportStructure {
     screen: string,
   }
   /**
-   * 上报对象（正文）
-   */
-  context: TransportData
-  /**
    * 上报时间
    */
   timestamp: number
 }
+interface PerStrucutre {
+  category: TransportCategory.PERF,
+  context: PerformanceMetric
+}
+
+interface ErrorStrucutre {
+  category: TransportCategory.ERROR,
+  context: IErrorLog
+}
+
+interface ResStructutre {
+  category: TransportCategory.RS,
+  context: ResourceItem[]
+}
+
+interface RSErrorStructure {
+  category: TransportCategory.RSERROR,
+  context: RSErrorLog
+}
+
+interface OnlineStructure {
+  category: TransportCategory.ONLINE,
+  context: UserOnlineRecord
+}
+
+interface NavStructutre {
+  category: TransportCategory.LOAD_SPEED
+  context: MPerformanceNavigationTiming
+}
+
+interface PVStructutre {
+  category: TransportCategory.PV,
+  conext: PVData[]
+}
+
+export type TransportStructure = BaseTransportStructure &
+  (PerStrucutre
+    | ErrorStrucutre
+    | ResStructutre
+    | RSErrorStructure
+    | OnlineStructure
+    | NavStructutre
+    | PVStructutre)

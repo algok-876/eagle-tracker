@@ -1,5 +1,7 @@
 import { cloneDeep } from '@eagle-tracker/utils';
-import { TransportCategory, IPageRecord, UserOnlineRecord } from '@eagle-tracker/types';
+import {
+  TransportCategory, IPageRecord, UserOnlineRecord, PVData,
+} from '@eagle-tracker/types';
 import { EagleTracker } from '../../../index';
 import wrapReplaceHistory from './event';
 import groupBy from './group';
@@ -9,9 +11,12 @@ export default class Behavior {
 
   private pageTimeList: IPageRecord[];
 
+  private pvList: PVData[];
+
   constructor(host: EagleTracker) {
     this.host = host;
     this.pageTimeList = [];
+    this.pvList = [];
 
     // 是否需要记录用户在线时长
     if (this.host.configInstance.get('record.timeOnPage') === true) {
@@ -20,6 +25,16 @@ export default class Behavior {
       // 监控用户页面在线时长
       this.mintorTimeOnPage();
     }
+  }
+
+  private recordPV() {
+    const url = window.location.href;
+    const existing = this.pvList.findIndex((value) => value.url === url);
+    if (existing >= 0) return;
+    this.pvList.push({
+      url: window.location.href,
+      time: Date.now(),
+    });
   }
 
   /**
@@ -66,16 +81,19 @@ export default class Behavior {
 
   private mintorTimeOnPage() {
     window.addEventListener('load', () => {
+      this.recordPV();
       this.recordNextPage();
     });
 
     // 单页面应用调用pushState时触发
     window.addEventListener('pushState', () => {
+      this.recordPV();
       this.recordNextPage();
     });
 
     // 单页面应用调用pushState时触发
     window.addEventListener('replaceState', () => {
+      this.recordPV();
       this.recordNextPage();
     });
 
@@ -105,6 +123,8 @@ export default class Behavior {
         });
         this.host.transportInstance.log(TransportCategory.ONLINE, simapleList);
         this.pageTimeList.length = 0;
+        this.host.transportInstance.log(TransportCategory.PV, this.pvList);
+        this.pvList = [];
       } else if (document.visibilityState === 'visible') {
         // 可见时重新开始记录
         this.recordNextPage();

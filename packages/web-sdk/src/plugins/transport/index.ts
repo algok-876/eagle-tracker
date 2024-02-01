@@ -11,6 +11,7 @@ import {
   RSErrorLog,
   MPerformanceNavigationTiming,
   PerformanceMetric,
+  PVData,
 } from '@eagle-tracker/types';
 import { EagleTracker } from '../../../index';
 
@@ -32,6 +33,7 @@ interface LogParamterMapping {
   [TransportCategory.RSERROR]: RSErrorLog,
   [TransportCategory.ONLINE]: UserOnlineRecord
   [TransportCategory.LOAD_SPEED]: MPerformanceNavigationTiming
+  [TransportCategory.PV]: PVData[]
 }
 
 export default class Transport {
@@ -59,7 +61,7 @@ export default class Transport {
    * @returns 格式化后的字符串，即JSON.stringify的输出
    */
   format(category: TransportCategory, context: TransportData) {
-    const structure: TransportStructure = {
+    const structure = {
       appId: this.host.configInstance.get('appId'),
       appVersion: this.host.configInstance.get('appVersion'),
       appName: this.host.configInstance.get('appName'),
@@ -68,7 +70,7 @@ export default class Transport {
       env: this.host.getUserEnv(),
       timestamp: new Date().getTime(),
       category,
-    };
+    } as TransportStructure;
 
     return structure;
   }

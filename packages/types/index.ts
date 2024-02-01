@@ -6,3 +6,4 @@ export * from './src/transport';
 export * from './src/core';
 export * from './src/guard';
 export * from './src/behavior';
+export * from './src/user';
