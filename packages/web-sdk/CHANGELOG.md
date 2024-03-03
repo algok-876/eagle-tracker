@@ -1,5 +1,12 @@
 # @eagle-tracker/core
 
+## 2.1.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @eagle-tracker/types@2.1.3
+
 ## 2.1.2
 
 ### Patch Changes

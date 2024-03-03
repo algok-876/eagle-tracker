@@ -21,7 +21,7 @@ useCatchError((type, log) => {
 })
 app.use(router)
 app.use(EagleTracker, {
-  isTest: true,
+  // isTest: true,
   appId: 'fdsafd',
   dsn: 'http://www.baidu.com'
 }).mount('#app')

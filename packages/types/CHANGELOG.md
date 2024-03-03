@@ -1,5 +1,11 @@
 # @eagle-tracker/types
 
+## 2.1.3
+
+### Patch Changes
+
+- 修改 PV 类型接口属性错误
+
 ## 2.1.1
 
 ### Patch Changes

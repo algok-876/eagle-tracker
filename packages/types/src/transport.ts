@@ -86,7 +86,7 @@ interface NavStructutre {
 
 interface PVStructutre {
   category: TransportCategory.PV,
-  conext: PVData[]
+  context: PVData[]
 }
 
 export type TransportStructure = BaseTransportStructure &
